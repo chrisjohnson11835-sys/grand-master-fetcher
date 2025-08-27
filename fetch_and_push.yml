@@ -1,0 +1,42 @@
+name: Fetch SEC & News, push to Hostinger
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: python -m pip install --upgrade pip requests
+
+      - name: Run fetcher
+        env:
+          UA: ${{ secrets.FETCH_UA }}
+          OUT_DIR: out
+          NEWS_LOOKBACK_HOURS: "30"
+          TOPN_FOR_NEWS: "120"
+        run: |
+          python fetch_sec_and_news.py
+          ls -lh out
+
+      - name: Upload via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          port: ${{ secrets.SFTP_PORT }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          local_path: "./out/*"
+          remote_path: "${{ secrets.SFTP_DIR }}"
+          sftp_only: true
