@@ -2,8 +2,8 @@ name: Fetch SEC & News, push to Hostinger
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
-  workflow_dispatch:
+    - cron: "*/30 * * * *"   # every 30 minutes
+  workflow_dispatch:         # enables the "Run workflow" button
 
 jobs:
   build-and-upload:
@@ -36,20 +36,20 @@ jobs:
           SFTP_PORT: ${{ secrets.SFTP_PORT }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           SFTP_PASS: ${{ secrets.SFTP_PASS }}
-          SFTP_DIR:  ${{ secrets.SFTP_DIR }}
+          SFTP_DIR: ${{ secrets.SFTP_DIR }}
         run: |
           set -e
           sudo apt-get update -y
           sudo apt-get install -y sshpass
           tries=0
           until [ $tries -ge 3 ]; do
-            echo "SFTP attempt $((tries+1))..."
-            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<'EOF' && break
+            echo "SFTP attempt $(($tries+1))..."
+            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<EOF && break
 cd $SFTP_DIR
 lcd out
 mput -q *.json
 EOF
-            tries=$((tries+1))
+            tries=$(($tries+1))
             echo "Retrying in 6s..."
             sleep 6
           done
