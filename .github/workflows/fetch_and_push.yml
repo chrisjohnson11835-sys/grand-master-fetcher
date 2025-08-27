@@ -1,35 +1,10 @@
-      - name: Upload via SFTP (3x retry)
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_PORT: ${{ secrets.SFTP_PORT }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-          SFTP_PASS: ${{ secrets.SFTP_PASS }}
-          SFTP_DIR:  ${{ secrets.SFTP_DIR }}
-        run: |
-          set -e
-          python - <<'PY'
-import os, glob
-files = sorted(glob.glob('out/*.json'))
-open('sftp_batch.txt','w').write(
-    "lcd out\ncd {dir}\n".format(dir=os.environ['SFTP_DIR']) +
-    "".join(f"put -q {os.path.basename(p)}\n" for p in files)
-)
-print("Batch:\n" + open('sftp_batch.txt').read())
-PY
-          sudo apt-get update -y
-          sudo apt-get install -y sshpass
-          tries=0
-          until [ $tries -ge 3 ]; do
-            echo "SFTP attempt $((tries+1))..."
-            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<EOF && break
-cd $SFTP_DIR
-lcd out
-mput -q *.json
-EOF
-            tries=$((tries+1))
-            echo "Retrying in 6s..."
-            sleep 6
-          done
-          if [ $tries -ge 3 ]; then
-            echo "SFTP failed after 3 attempts"; exit 1
-          fi
+name: Fetch SEC & News, push to Hostinger
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "workflow wiring OK"
