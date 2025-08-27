@@ -2,7 +2,7 @@ name: Fetch SEC & News, push to Hostinger
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/30 * * * *"   # every 30 minutes
   workflow_dispatch:
 
 jobs:
@@ -36,19 +36,24 @@ jobs:
           SFTP_PORT: ${{ secrets.SFTP_PORT }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           SFTP_PASS: ${{ secrets.SFTP_PASS }}
-          SFTP_DIR:  ${{ secrets.SFTP_DIR }}
+          SFTP_DIR: ${{ secrets.SFTP_DIR }}
         run: |
           set -e
+          python - <<'PY'
+import os, glob
+files = sorted(glob.glob('out/*.json'))
+open('sftp_batch.txt','w').write(
+    "lcd out\ncd {dir}\n".format(dir=os.environ['SFTP_DIR']) +
+    "".join(f"put -q {os.path.basename(p)}\n" for p in files)
+)
+print("Batch:\n" + open('sftp_batch.txt').read())
+PY
           sudo apt-get update -y
           sudo apt-get install -y sshpass
           tries=0
           until [ $tries -ge 3 ]; do
             echo "SFTP attempt $((tries+1))..."
-            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<'EOF' && break
-cd $SFTP_DIR
-lcd out
-mput -q *.json
-EOF
+            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" < sftp_batch.txt && break
             tries=$((tries+1))
             echo "Retrying in 6s..."
             sleep 6
