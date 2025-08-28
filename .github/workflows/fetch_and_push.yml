@@ -25,8 +25,9 @@ jobs:
         env:
           UA: ${{ secrets.FETCH_UA }}
           OUT_DIR: out
-          NEWS_LOOKBACK_HOURS: "30"
-          TOPN_FOR_NEWS: "120"
+          NEWS_LOOKBACK_HOURS: "168"   # 7 days
+          TOPN_FOR_NEWS: "200"         # adjust as you prefer
+          DEBUG: "1"                   # extra logging
         run: |
           python fetch_sec_and_news.py
           ls -lh out
