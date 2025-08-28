@@ -3,7 +3,7 @@ name: SEC Filings Only — Step 6
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 14 * * *"   # runs daily at 14:00 UTC (09:00 ET)
+    - cron: "0 14 * * *"   # daily 14:00 UTC (09:00 ET)
 
 permissions:
   contents: write
@@ -43,3 +43,14 @@ jobs:
           git add data/sec_filings_snapshot.json data/sec_filings_snapshot.csv || true
           git commit -m "Update SEC filings snapshot [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${GITHUB_REF##*/}
+
+      - name: Deploy to Hostinger via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          server: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          password: ${{ secrets.HOSTINGER_PASS }}
+          port: 22
+          local_path: "data/*"
+          remote_path: "${{ secrets.HOSTINGER_REMOTE_PATH }}/data"
+          sftp_only: true
