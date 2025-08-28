@@ -7,7 +7,7 @@ from typing import List, Dict
 import requests
 
 # ------------ Config ------------
-UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.1 (+contact: you@example.com)")
+UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.2 (+contact: you@example.com)")
 OUT = os.getenv("OUT_DIR", "out")
 NEWS_LOOKBACK_HOURS = int(os.getenv("NEWS_LOOKBACK_HOURS", "36"))  # around-yesterday window
 TOPN_FOR_NEWS       = int(os.getenv("TOPN_FOR_NEWS", "200"))
@@ -57,45 +57,53 @@ def atom_url(start:int, count:int=200) -> str:
     return f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&start={start}&count={count}&output=atom"
 
 def normalize_form(raw: str) -> str:
-    """Make Atom category term comparable to our TARGET_FORMS."""
+    """Normalize SEC Atom category term into a canonical form we can score."""
     if not raw:
         return ""
     u = raw.upper().strip()
 
-    # unify SC13* spacing
+    # unify spacing for schedules
     u = u.replace("SC13D", "SC 13D").replace("SC13G", "SC 13G")
-    # common “Form X” patterns
+    # strip leading "FORM "
     u = re.sub(r"^FORM\s+", "", u)
 
-    # handle amendments
-    is_amend = "/A" in u or re.search(r"\bAMEND(ED|MENT)?\b", u)
+    # detect amendment
+    is_amend = "/A" in u or "AMEND" in u
 
-    # pick base form by substring presence
-    if "8-K" in u:
-        return "8-K/A" if is_amend or "8-K/A" in u else "8-K"
-    if "6-K" in u:
-        return "6-K/A" if is_amend or "6-K/A" in u else "6-K"
-    if "10-Q" in u:
-        return "10-Q/A" if is_amend or "10-Q/A" in u else "10-Q"
-    if "10-K" in u:
-        return "10-K/A" if is_amend or "10-K/A" in u else "10-K"
-    # Forms 3 & 4 sometimes appear as “FORM 4”, “4”, “4/A”
-    if re.search(r"\b4\b", u) or "FORM 4" in u:
-        return "4"
-    if re.search(r"\b3\b", u) or "FORM 3" in u:
-        return "3"
-    if "SC 13D" in u:
-        return "SC 13D/A" if "A" in u and "/A" in u or "AMEND" in u else "SC 13D"
-    if "SC 13G" in u:
-        return "SC 13G/A" if "A" in u and "/A" in u or "AMEND" in u else "SC 13G"
+    # direct tokens first
+    for base in ("8-K","6-K","10-Q","10-K","SC 13D","SC 13G"):
+        if base in u:
+            if base in ("8-K","6-K","10-Q","10-K"):
+                return f"{base}/A" if is_amend or f"{base}/A" in u else base
+            # schedules handle A via is_amend too
+            return f"{base}/A" if is_amend else base
 
-    # sometimes category term includes long descriptions; try first token fallback
-    first = u.split()[0]
-    # normalize first token like "8-K" etc.
-    for base in ["8-K","6-K","10-Q","10-K","3","4","SC","SC 13D","SC 13G"]:
-        if first.startswith(base):
+    # map descriptive labels → canonical forms
+    desc_map = [
+        (r"CURRENT\s+REPORT", "8-K"),
+        (r"REPORT\s+OF\s+FOREIGN", "6-K"),
+        (r"FOREIGN\s+ISSUER", "6-K"),
+        (r"QUARTERLY\s+REPORT", "10-Q"),
+        (r"ANNUAL\s+REPORT", "10-K"),
+        (r"STATEMENT\s+OF\s+CHANGES\s+IN\s+BENEFICIAL\s+OWNERSHIP", "4"),
+        (r"INITIAL\s+STATEMENT\s+OF\s+BENEFICIAL\s+OWNERSHIP", "3"),
+        (r"SCHEDULE\s+13D", "SC 13D"),
+        (r"SCHEDULE\s+13G", "SC 13G"),
+    ]
+    for pat, base in desc_map:
+        if re.search(pat, u):
+            if base in ("8-K","6-K","10-Q","10-K","SC 13D","SC 13G"):
+                return f"{base}/A" if is_amend else base
             return base
-    return u  # last resort (may not match TARGET_FORMS)
+
+    # sometimes first token is enough (e.g., "8-K — Current report")
+    first = u.split()[0]
+    if first in {"8-K","6-K","10-Q","10-K","3","4","SC","SC13D","SC13G","SC"}:
+        if first in ("SC13D","SC13G"):
+            first = first.replace("SC13D","SC 13D").replace("SC13G","SC 13G")
+        return first
+
+    return u  # fallback; may not match TARGET_FORMS
 
 def parse_atom_entries(xml: str) -> List[Dict]:
     out=[]
@@ -128,6 +136,7 @@ def parse_atom_entries(xml: str) -> List[Dict]:
         out.append({
             "company": company,
             "form": form,
+            "form_raw": form_raw,     # keep for debug
             "cik": cik,
             "date": d,                # YYYY-MM-DD
             "index_url": href         # filing index (preferred) or browse link
@@ -196,7 +205,7 @@ def run_sec_atom_only():
     log(f"Yesterday (UTC): {yiso}")
 
     collected: List[Dict] = []
-    stats = {"pages":0, "entries_seen":0, "entries_yesterday":0, "kept_target_forms":0, "docs_fetched":0, "errors":0}
+    stats = {"pages":0, "entries_seen":0, "entries_yday":0, "forms_raw":{}, "forms_norm":{}, "kept_target":0, "docs_fetched":0, "errors":0}
 
     start = 0
     count = 200
@@ -214,13 +223,17 @@ def run_sec_atom_only():
         if not entries:
             break
 
-        any_newer_than_yesterday = False
+        any_newer = False
         for e in entries:
             d = e.get("date") or ""
             if d > yiso:
-                any_newer_than_yesterday = True
+                any_newer = True
             if d == yiso:
-                stats["entries_yesterday"] += 1
+                stats["entries_yday"] += 1
+                raw = e.get("form_raw","") or ""
+                norm = e.get("form","") or ""
+                stats["forms_raw"][raw] = stats["forms_raw"].get(raw,0)+1
+                stats["forms_norm"][norm] = stats["forms_norm"].get(norm,0)+1
 
         # collect yesterday + target forms
         for e in entries:
@@ -228,7 +241,7 @@ def run_sec_atom_only():
                 continue
             if e.get("form","") not in TARGET_FORMS:
                 continue
-            stats["kept_target_forms"] += 1
+            stats["kept_target"] += 1
             idx = e.get("index_url") or ""
             if not idx:
                 continue
@@ -259,7 +272,7 @@ def run_sec_atom_only():
 
         # stop when we've paged past yesterday and there were no newer entries on this page
         oldest_on_page = min((e.get("date","") for e in entries))
-        if oldest_on_page and oldest_on_page < yiso and not any_newer_than_yesterday:
+        if oldest_on_page and oldest_on_page < yiso and not any_newer:
             break
 
         start += count
@@ -277,7 +290,13 @@ def run_sec_atom_only():
     with open(os.path.join(OUT,"step6_full.json"),"w",encoding="utf-8") as f:
         json.dump(uniq, f, indent=2)
     print(f"SEC: wrote {len(uniq)} records (yesterday={yiso})")
-    log(f"Stats — {stats}")
+
+    # compact debug summaries (top 12 items)
+    def topn(d, n=12):
+        return dict(sorted(d.items(), key=lambda kv: kv[1], reverse=True)[:n])
+    log(f"Stats — pages:{stats['pages']} seen:{stats['entries_seen']} yday:{stats['entries_yday']} kept:{stats['kept_target']} docs:{stats['docs_fetched']} err:{stats['errors']}")
+    log(f"Forms raw (yday top): {topn(stats['forms_raw'])}")
+    log(f"Forms norm(yday top): {topn(stats['forms_norm'])}")
 
 # ------------ News overlay (unchanged) ------------
 def yahoo_rss(ticker: str):
