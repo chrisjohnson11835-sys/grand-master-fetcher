@@ -89,7 +89,7 @@ def prev_day_bounds_et() -> Tuple[datetime, datetime, str]:
     prev = et_date - timedelta(days=1)
     start_et = datetime(prev.year, prev.month, prev.day, 0, 0, 0, tzinfo=ZoneInfo("America/New_York"))
     end_et = datetime(prev.year, prev.month, prev.day, 23, 59, 59, tzinfo=ZoneInfo("America/New_York"))
-    return start_et.astimezone(timezone.utc), end_et.astimezone(timezone.utc), prev.isoformat()
+    return start_et.astimezone(timezone.utc), end_utc := end_et.astimezone(timezone.utc), prev.isoformat()
 
 def backoff_get(url: str, **kwargs) -> Optional[requests.Response]:
     for attempt in range(1, MAX_RETRIES + 1):
