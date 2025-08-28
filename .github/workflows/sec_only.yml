@@ -30,6 +30,8 @@ jobs:
           pip install requests pandas lxml beautifulsoup4
 
       - name: Run SEC-only fetch
+        env:
+          FETCH_UA: ${{ secrets.FETCH_UA }}
         run: |
           mkdir -p data
           python sec_only.py
@@ -44,13 +46,11 @@ jobs:
           git commit -m "Update SEC filings snapshot [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${GITHUB_REF##*/}
 
-      - name: Deploy to Hostinger via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          server: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          password: ${{ secrets.HOSTINGER_PASS }}
-          port: 22
-          local_path: "data/*"
-          remote_path: "${{ secrets.HOSTINGER_REMOTE_PATH }}/data"
-          sftp_only: true
+      - name: Deploy to Hostinger via HTTPS webhook
+        if: always()
+        env:
+          DEPLOY_ENDPOINT: ${{ secrets.DEPLOY_ENDPOINT }}
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          echo "Posting snapshot to $DEPLOY_ENDPOINT"
+          curl -sS -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json"             -F "file2=@data/sec_filings_snapshot.csv"             "$DEPLOY_ENDPOINT"
