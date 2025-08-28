@@ -1,9 +1,9 @@
 name: Fetch SEC & News, push to Hostinger
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: "*/30 * * * *"   # every 30 minutes
-  workflow_dispatch:         # enables the "Run workflow" button
 
 jobs:
   build-and-upload:
@@ -18,7 +18,8 @@ jobs:
           python-version: "3.11"
 
       - name: Install deps
-        run: python -m pip install --upgrade pip requests
+        run: |
+          python -m pip install --upgrade pip requests feedparser beautifulsoup4 lxml
 
       - name: Run fetcher
         env:
@@ -36,23 +37,27 @@ jobs:
           SFTP_PORT: ${{ secrets.SFTP_PORT }}
           SFTP_USER: ${{ secrets.SFTP_USER }}
           SFTP_PASS: ${{ secrets.SFTP_PASS }}
-          SFTP_DIR: ${{ secrets.SFTP_DIR }}
+          SFTP_DIR:  ${{ secrets.SFTP_DIR }}
+        shell: bash
         run: |
           set -e
           sudo apt-get update -y
           sudo apt-get install -y sshpass
+
           tries=0
           until [ $tries -ge 3 ]; do
-            echo "SFTP attempt $(($tries+1))..."
-            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<EOF && break
-cd $SFTP_DIR
-lcd out
-mput -q *.json
+            echo "SFTP attempt $((tries+1))..."
+            sshpass -p "$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" "$SFTP_USER@$SFTP_HOST" <<'EOF' && break
+            lcd out
+            cd "$SFTP_DIR"
+            mput -q *.json
+            bye
 EOF
-            tries=$(($tries+1))
+            tries=$((tries+1))
             echo "Retrying in 6s..."
             sleep 6
           done
+
           if [ $tries -ge 3 ]; then
             echo "SFTP failed after 3 attempts"; exit 1
           fi
