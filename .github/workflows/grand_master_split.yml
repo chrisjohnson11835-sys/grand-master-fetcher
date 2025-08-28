@@ -1,0 +1,108 @@
+name: Grand Master (Split) — SEC → News → Deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/30 * * * *"
+
+jobs:
+  sec_fetch:
+    name: Step 6 — SEC (previous day only)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run SEC fetch
+        env:
+          SEC_USER_AGENT: ${{ secrets.FETCH_UA }}
+          MAX_PAGES: "24"
+          COUNT_PER_PAGE: "100"
+        run: |
+          mkdir -p data
+          python fetch_sec_only.py
+          ls -lh data
+
+      - name: Upload step6 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: step6_json
+          path: data/step6_full.json
+          if-no-files-found: error
+
+  news_overlay:
+    name: Step 7 — News overlay
+    needs: sec_fetch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download step6 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: step6_json
+          path: data
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run overlay
+        env:
+          SEC_USER_AGENT: ${{ secrets.FETCH_UA }}
+        run: |
+          python news_overlay_only.py
+          ls -lh data
+
+      - name: Upload step7 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: step7_json
+          path: data/step7_overlay.json
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy JSONs to Hostinger via SFTP
+    needs: [sec_fetch, news_overlay]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download step6
+        uses: actions/download-artifact@v4
+        with:
+          name: step6_json
+          path: data
+
+      - name: Download step7
+        uses: actions/download-artifact@v4
+        with:
+          name: step7_json
+          path: data
+
+      - name: Upload via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          port: ${{ secrets.SFTP_PORT }}
+          local_path: "data/*"
+          remote_path: ${{ secrets.SFTP_DIR }}
+          sftp_only: true
+          delete: false
