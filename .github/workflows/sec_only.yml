@@ -46,7 +46,7 @@ jobs:
           git commit -m "Update SEC filings snapshot [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${GITHUB_REF##*/}
 
-      - name: Deploy to Hostinger via HTTPS webhook (verbose)
+      - name: Deploy to Hostinger via HTTPS webhook (robust)
         if: always()
         env:
           DEPLOY_ENDPOINT: ${{ secrets.DEPLOY_ENDPOINT }}
@@ -54,15 +54,14 @@ jobs:
         run: |
           set -e
           echo "Posting to $DEPLOY_ENDPOINT"
-          curl -sS -w "\nHTTP_STATUS:%{http_code}\n" -o resp.txt             -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json;type=application/json"             -F "file2=@data/sec_filings_snapshot.csv;type=text/csv"             "$DEPLOY_ENDPOINT"
-          echo "----- Response body -----"
-          cat resp.txt || true
-          echo "-------------------------"
-          STATUS=$(tail -n1 resp.txt | sed -n 's/HTTP_STATUS://p')
-          echo "HTTP status: $STATUS"
+          # write status to a separate file to avoid parsing issues
+          curl -sS -o resp.json -w "%{http_code}"             -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json;type=application/json"             -F "file2=@data/sec_filings_snapshot.csv;type=text/csv"             "$DEPLOY_ENDPOINT" > status.txt
+          echo "----- Response body -----"; cat resp.json || true; echo; echo "-------------------------"
+          echo -n "HTTP status: "; cat status.txt; echo
+          STATUS=$(cat status.txt)
           if [ "$STATUS" != "200" ]; then
             echo "Deploy failed: non-200 status"; exit 1
           fi
-          if ! grep -q '"ok":true' resp.txt; then
+          if ! grep -q '"ok":true' resp.json; then
             echo "Deploy failed: server returned not ok"; exit 1
           fi
