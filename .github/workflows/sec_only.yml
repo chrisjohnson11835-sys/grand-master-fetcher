@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "0 14 * * *"   # runs daily at 14:00 UTC (09:00 ET)
 
+permissions:
+  contents: write
+
 jobs:
   sec_only:
     runs-on: ubuntu-latest
