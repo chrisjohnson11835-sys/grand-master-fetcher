@@ -7,7 +7,7 @@ from typing import List, Dict
 import requests
 
 # ------------ Config ------------
-UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.2 (+contact: you@example.com)")
+UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.3 (+contact: you@example.com)")
 OUT = os.getenv("OUT_DIR", "out")
 NEWS_LOOKBACK_HOURS = int(os.getenv("NEWS_LOOKBACK_HOURS", "36"))  # around-yesterday window
 TOPN_FOR_NEWS       = int(os.getenv("TOPN_FOR_NEWS", "200"))
@@ -53,14 +53,46 @@ def iso_yesterday(): return (utc_today() - timedelta(days=1)).strftime("%Y-%m-%d
 
 # ------------ Atom feed (paginated) ------------
 def atom_url(start:int, count:int=200) -> str:
-    # count ~200 is stable; paginate via start=0,200,400,...
     return f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&start={start}&count={count}&output=atom"
 
-def normalize_form(raw: str) -> str:
-    """Normalize SEC Atom category term into a canonical form we can score."""
-    if not raw:
+def infer_form_from_text(text: str) -> str:
+    if not text:
         return ""
-    u = raw.upper().strip()
+    u = text.upper()
+    # Direct tokens and with "FORM "
+    for base in ("8-K","6-K","10-Q","10-K"):
+        if re.search(rf"\b({base})(?:\s*/A)?\b", u):
+            return base + ("/A" if "/A" in u or "AMEND" in u else "")
+        if re.search(rf"\bFORM\s+{base}(?:\s*/A)?\b", u):
+            return base + ("/A" if "/A" in u or "AMEND" in u else "")
+    # Forms 3/4
+    if re.search(r"\bFORM\s+4\b|\b\s4\b", u):
+        return "4"
+    if re.search(r"\bFORM\s+3\b|\b\s3\b", u):
+        return "3"
+    # Schedules 13D/G (+A)
+    if re.search(r"SCHEDULE\s+13D", u) or "SC13D" in u:
+        return "SC 13D" + ("/A" if "/A" in u or "AMEND" in u else "")
+    if re.search(r"SCHEDULE\s+13G", u) or "SC13G" in u:
+        return "SC 13G" + ("/A" if "/A" in u or "AMEND" in u else "")
+    # Descriptive -> canonical
+    if "CURRENT REPORT" in u:
+        return "8-K" + ("/A" if "/A" in u or "AMEND" in u else "")
+    if "REPORT OF FOREIGN" in u or "FOREIGN ISSUER" in u:
+        return "6-K" + ("/A" if "/A" in u or "AMEND" in u else "")
+    if "QUARTERLY REPORT" in u:
+        return "10-Q" + ("/A" if "/A" in u or "AMEND" in u else "")
+    if "ANNUAL REPORT" in u:
+        return "10-K" + ("/A" if "/A" in u or "AMEND" in u else "")
+    return ""
+
+def normalize_form(raw: str, title: str = "", summary: str = "") -> str:
+    """Normalize SEC Atom category term into a canonical form. Fall back to title/summary if missing."""
+    u = (raw or "").upper().strip()
+    # If category missing, infer from title/summary
+    if not u:
+        f = infer_form_from_text(title) or infer_form_from_text(summary)
+        return f
 
     # unify spacing for schedules
     u = u.replace("SC13D", "SC 13D").replace("SC13G", "SC 13G")
@@ -75,10 +107,9 @@ def normalize_form(raw: str) -> str:
         if base in u:
             if base in ("8-K","6-K","10-Q","10-K"):
                 return f"{base}/A" if is_amend or f"{base}/A" in u else base
-            # schedules handle A via is_amend too
             return f"{base}/A" if is_amend else base
 
-    # map descriptive labels → canonical forms
+    # descriptive labels → canonical
     desc_map = [
         (r"CURRENT\s+REPORT", "8-K"),
         (r"REPORT\s+OF\s+FOREIGN", "6-K"),
@@ -96,22 +127,31 @@ def normalize_form(raw: str) -> str:
                 return f"{base}/A" if is_amend else base
             return base
 
-    # sometimes first token is enough (e.g., "8-K — Current report")
-    first = u.split()[0]
-    if first in {"8-K","6-K","10-Q","10-K","3","4","SC","SC13D","SC13G","SC"}:
+    # first token fallback
+    first = u.split()[0] if u else ""
+    if first in {"8-K","6-K","10-Q","10-K","3","4","SC","SC13D","SC13G"}:
         if first in ("SC13D","SC13G"):
             first = first.replace("SC13D","SC 13D").replace("SC13G","SC 13G")
         return first
 
-    return u  # fallback; may not match TARGET_FORMS
+    # final fallback: infer from title/summary
+    f = infer_form_from_text(title) or infer_form_from_text(summary)
+    return f
 
 def parse_atom_entries(xml: str) -> List[Dict]:
     out=[]
     for ent in re.findall(r"<entry>(.*?)</entry>", xml, flags=re.S|re.I):
-        # raw form term
-        m = re.search(r"<category\s+term=\"([^\"]+)\"", ent, flags=re.I)
+        # raw form term (category may carry namespaces/attrs)
+        m = re.search(r"<category[^>]*\sterm=\"([^\"]+)\"", ent, flags=re.I)
         form_raw = m.group(1).strip() if m else ""
-        form = normalize_form(form_raw)
+
+        # title + summary for fallback inference
+        t = re.search(r"<title>(.*?)</title>", ent, flags=re.S|re.I)
+        title = re.sub(r"<.*?>", "", t.group(1)).strip() if t else ""
+        s = re.search(r"<summary>(.*?)</summary>", ent, flags=re.S|re.I)
+        summary = re.sub(r"<.*?>", "", s.group(1)).strip() if s else ""
+
+        form = normalize_form(form_raw, title, summary)
 
         # company, cik
         c = re.search(r"<conformed-name>(.*?)</conformed-name>", ent, flags=re.I)
@@ -137,6 +177,8 @@ def parse_atom_entries(xml: str) -> List[Dict]:
             "company": company,
             "form": form,
             "form_raw": form_raw,     # keep for debug
+            "title": title,
+            "summary": summary,
             "cik": cik,
             "date": d,                # YYYY-MM-DD
             "index_url": href         # filing index (preferred) or browse link
