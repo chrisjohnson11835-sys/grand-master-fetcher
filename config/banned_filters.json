@@ -1,0 +1,17 @@
+{
+  "tickers": [],
+  "industries": [
+    "alcohol",
+    "tobacco",
+    "gambling",
+    "weapons",
+    "adult entertainment",
+    "financial services",
+    "bank",
+    "lender",
+    "insurer",
+    "credit card",
+    "payday loan"
+  ],
+  "companies": []
+}
