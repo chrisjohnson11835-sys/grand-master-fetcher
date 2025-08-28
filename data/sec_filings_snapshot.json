@@ -1,5 +1,115 @@
 [
   {
+    "form": "8-K",
+    "title": "8-K - GBank Financial Holdings Inc. (0001791145) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1791145/000095017025111844/0000950170-25-111844-index.htm",
+    "updated": "2025-08-28T12:51:54-04:00",
+    "score": 5,
+    "recommended": true,
+    "ticker": "",
+    "company": "8-K - GBank Financial Holdings Inc.",
+    "industry": ""
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - UBS AG (0001114446) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1114446/000183988225047233/0001839882-25-047233-index.htm",
+    "updated": "2025-08-28T12:51:46-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "424B2 - UBS AG",
+    "industry": ""
+  },
+  {
+    "form": "8-K",
+    "title": "8-K - FIRST KEYSTONE CORP (0000737875) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/737875/000073787525000039/0000737875-25-000039-index.htm",
+    "updated": "2025-08-28T12:51:36-04:00",
+    "score": 5,
+    "recommended": true,
+    "ticker": "",
+    "company": "8-K - FIRST KEYSTONE CORP",
+    "industry": ""
+  },
+  {
+    "form": "144",
+    "title": "144 - Landman Yoav (0001823008) (Reporting)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1823008/000200731725000988/0002007317-25-000988-index.htm",
+    "updated": "2025-08-28T12:49:28-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "144 - Landman Yoav",
+    "industry": ""
+  },
+  {
+    "form": "144",
+    "title": "144 - JFrog Ltd (0001800667) (Subject)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1800667/000200731725000988/0002007317-25-000988-index.htm",
+    "updated": "2025-08-28T12:49:28-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "144 - JFrog Ltd",
+    "industry": ""
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BANK OF NOVA SCOTIA (0000009631) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/9631/000183988225047231/0001839882-25-047231-index.htm",
+    "updated": "2025-08-28T12:45:31-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "424B2 - BANK OF NOVA SCOTIA",
+    "industry": ""
+  },
+  {
+    "form": "13F-HR",
+    "title": "13F-HR - Stark Wealth Management LLC (0002051783) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/2051783/000166773125001240/0001667731-25-001240-index.htm",
+    "updated": "2025-08-28T12:43:25-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "13F-HR - Stark Wealth Management LLC",
+    "industry": ""
+  },
+  {
+    "form": "497",
+    "title": "497 - Pear Tree Funds (0000722885) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/722885/000199937125012244/0001999371-25-012244-index.htm",
+    "updated": "2025-08-28T12:43:03-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "497 - Pear Tree Funds",
+    "industry": ""
+  },
+  {
+    "form": "SCHEDULE 13D/A",
+    "title": "SCHEDULE 13D/A - Ready Capital Corp (0001527590) (Subject)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1527590/000090485325000006/0000904853-25-000006-index.htm",
+    "updated": "2025-08-28T12:42:57-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "SCHEDULE 13D/A - Ready Capital Corp",
+    "industry": ""
+  },
+  {
+    "form": "SCHEDULE 13D/A",
+    "title": "SCHEDULE 13D/A - Amster Howard (0000904853) (Filed by)",
+    "link": "https://www.sec.gov/Archives/edgar/data/904853/000090485325000006/0000904853-25-000006-index.htm",
+    "updated": "2025-08-28T12:42:57-04:00",
+    "score": 1,
+    "recommended": false,
+    "ticker": "",
+    "company": "SCHEDULE 13D/A - Amster Howard",
+    "industry": ""
+  },
+  {
     "form": "497",
     "title": "497 - Pear Tree Funds (0000722885) (Filer)",
     "link": "https://www.sec.gov/Archives/edgar/data/722885/000199937125012243/0001999371-25-012243-index.htm",
@@ -3707,28 +3817,6 @@
     "industry": ""
   },
   {
-    "form": "424B2",
-    "title": "424B2 - BANK OF NOVA SCOTIA (0000009631) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/9631/000183988225047132/0001839882-25-047132-index.htm",
-    "updated": "2025-08-28T10:38:25-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "424B2 - BANK OF NOVA SCOTIA",
-    "industry": ""
-  },
-  {
-    "form": "497",
-    "title": "497 - BNY MELLON STOCK FUNDS (0001199348) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1199348/000174177325003054/0001741773-25-003054-index.htm",
-    "updated": "2025-08-28T10:37:51-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "497 - BNY MELLON STOCK FUNDS",
-    "industry": ""
-  },
-  {
     "form": "497",
     "title": "497 - BNY MELLON MUNICIPAL FUNDS, INC. (0000878092) (Filer)",
     "link": "https://www.sec.gov/Archives/edgar/data/878092/000174177325003054/0001741773-25-003054-index.htm",
@@ -4595,17 +4683,6 @@
     "recommended": false,
     "ticker": "",
     "company": "424B2 - JPMORGAN CHASE & CO",
-    "industry": ""
-  },
-  {
-    "form": "497K",
-    "title": "497K - Northern Lights Fund Trust IV (0001644419) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1644419/000158064225005569/0001580642-25-005569-index.htm",
-    "updated": "2025-08-28T10:02:11-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "497K - Northern Lights Fund Trust IV",
     "industry": ""
   },
   {
@@ -7994,160 +8071,6 @@
     "recommended": false,
     "ticker": "",
     "company": "13F-HR - ABN AMRO Bank N.V.",
-    "industry": ""
-  },
-  {
-    "form": "8-K",
-    "title": "8-K - Lucky Strike Entertainment Corp (0001840572) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1840572/000184057225000011/0001840572-25-000011-index.htm",
-    "updated": "2025-08-28T07:32:15-04:00",
-    "score": 5,
-    "recommended": true,
-    "ticker": "",
-    "company": "8-K - Lucky Strike Entertainment Corp",
-    "industry": ""
-  },
-  {
-    "form": "13F-HR",
-    "title": "13F-HR - ABN AMRO Bank N.V. (0001561082) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1561082/000156108225000013/0001561082-25-000013-index.htm",
-    "updated": "2025-08-28T07:30:31-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "13F-HR - ABN AMRO Bank N.V.",
-    "industry": ""
-  },
-  {
-    "form": "8-K",
-    "title": "8-K - SpartanNash Co (0000877422) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/877422/000095017025111791/0000950170-25-111791-index.htm",
-    "updated": "2025-08-28T07:30:29-04:00",
-    "score": 5,
-    "recommended": true,
-    "ticker": "",
-    "company": "8-K - SpartanNash Co",
-    "industry": ""
-  },
-  {
-    "form": "8-K",
-    "title": "8-K - Bath & Body Works, Inc. (0000701985) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/701985/000070198525000028/0000701985-25-000028-index.htm",
-    "updated": "2025-08-28T07:29:37-04:00",
-    "score": 5,
-    "recommended": true,
-    "ticker": "",
-    "company": "8-K - Bath & Body Works, Inc.",
-    "industry": ""
-  },
-  {
-    "form": "8-K",
-    "title": "8-K - Titan Machinery Inc. (0001409171) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1409171/000140917125000079/0001409171-25-000079-index.htm",
-    "updated": "2025-08-28T07:27:57-04:00",
-    "score": 5,
-    "recommended": true,
-    "ticker": "",
-    "company": "8-K - Titan Machinery Inc.",
-    "industry": ""
-  },
-  {
-    "form": "13F-HR",
-    "title": "13F-HR - ABN AMRO Bank N.V. (0001561082) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1561082/000156108225000012/0001561082-25-000012-index.htm",
-    "updated": "2025-08-28T07:27:54-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "13F-HR - ABN AMRO Bank N.V.",
-    "industry": ""
-  },
-  {
-    "form": "6-K",
-    "title": "6-K - Kenon Holdings Ltd. (0001611005) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1611005/000117891325003129/0001178913-25-003129-index.htm",
-    "updated": "2025-08-28T07:27:34-04:00",
-    "score": 4,
-    "recommended": false,
-    "ticker": "",
-    "company": "6-K - Kenon Holdings Ltd.",
-    "industry": ""
-  },
-  {
-    "form": "13F-HR",
-    "title": "13F-HR - ABN AMRO Bank N.V. (0001561082) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1561082/000156108225000011/0001561082-25-000011-index.htm",
-    "updated": "2025-08-28T07:25:05-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "13F-HR - ABN AMRO Bank N.V.",
-    "industry": ""
-  },
-  {
-    "form": "13F-HR",
-    "title": "13F-HR - Investors Towarzystwo Funduszy Inwestycyjnych Spolka Akcyjna (0002079571) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2079571/000207957125000003/0002079571-25-000003-index.htm",
-    "updated": "2025-08-28T07:23:12-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "13F-HR - Investors Towarzystwo Funduszy Inwestycyjnych Spolka Akcyjna",
-    "industry": ""
-  },
-  {
-    "form": "6-K",
-    "title": "6-K - HARMONY GOLD MINING CO LTD (0001023514) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1023514/000162828025041241/0001628280-25-041241-index.htm",
-    "updated": "2025-08-28T07:18:36-04:00",
-    "score": 4,
-    "recommended": false,
-    "ticker": "",
-    "company": "6-K - HARMONY GOLD MINING CO LTD",
-    "industry": ""
-  },
-  {
-    "form": "DEF 14A",
-    "title": "DEF 14A - FREQUENCY ELECTRONICS INC (0000039020) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/39020/000118518525001084/0001185185-25-001084-index.htm",
-    "updated": "2025-08-28T07:18:17-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "DEF 14A - FREQUENCY ELECTRONICS INC",
-    "industry": ""
-  },
-  {
-    "form": "13F-HR",
-    "title": "13F-HR - ABN AMRO Bank N.V. (0001561082) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1561082/000156108225000010/0001561082-25-000010-index.htm",
-    "updated": "2025-08-28T07:17:17-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "13F-HR - ABN AMRO Bank N.V.",
-    "industry": ""
-  },
-  {
-    "form": "144",
-    "title": "144 - Benyamini Gil (0001978303) (Reporting)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1978303/000197640825000283/0001976408-25-000283-index.htm",
-    "updated": "2025-08-28T07:13:04-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "144 - Benyamini Gil",
-    "industry": ""
-  },
-  {
-    "form": "144",
-    "title": "144 - GILAT SATELLITE NETWORKS LTD (0000897322) (Subject)",
-    "link": "https://www.sec.gov/Archives/edgar/data/897322/000197640825000283/0001976408-25-000283-index.htm",
-    "updated": "2025-08-28T07:13:04-04:00",
-    "score": 1,
-    "recommended": false,
-    "ticker": "",
-    "company": "144 - GILAT SATELLITE NETWORKS LTD",
     "industry": ""
   }
 ]

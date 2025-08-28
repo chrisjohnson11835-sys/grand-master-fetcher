@@ -1,4 +1,14 @@
 ticker,company,industry,form,score,recommended
+,8-K - GBank Financial Holdings Inc.,,8-K,5,True
+,424B2 - UBS AG,,424B2,1,False
+,8-K - FIRST KEYSTONE CORP,,8-K,5,True
+,144 - Landman Yoav,,144,1,False
+,144 - JFrog Ltd,,144,1,False
+,424B2 - BANK OF NOVA SCOTIA,,424B2,1,False
+,13F-HR - Stark Wealth Management LLC,,13F-HR,1,False
+,497 - Pear Tree Funds,,497,1,False
+,SCHEDULE 13D/A - Ready Capital Corp,,SCHEDULE 13D/A,1,False
+,SCHEDULE 13D/A - Amster Howard,,SCHEDULE 13D/A,1,False
 ,497 - Pear Tree Funds,,497,1,False
 ,424B2 - HSBC USA INC /MD/,,424B2,1,False
 ,424B2 - CITIGROUP INC,,424B2,1,False
@@ -336,8 +346,6 @@ WDI,3 - Western Asset Diversified Income Fund,,3,2,False
 ,424B2 - MORGAN STANLEY,,424B2,1,False
 ,424B2 - BANK OF NOVA SCOTIA,,424B2,1,False
 ,497 - BNY MELLON STOCK FUNDS,,497,1,False
-,424B2 - BANK OF NOVA SCOTIA,,424B2,1,False
-,497 - BNY MELLON STOCK FUNDS,,497,1,False
 ,"497 - BNY MELLON MUNICIPAL FUNDS, INC.",,497,1,False
 ,"497 - BNY Mellon Strategic Funds, Inc.",,497,1,False
 ,"497 - BNY MELLON CALIFORNIA AMT-FREE MUNICIPAL BOND FUND, INC.",,497,1,False
@@ -417,7 +425,6 @@ WDI,3 - Western Asset Diversified Income Fund,,3,2,False
 ,424B4 - GrowHub Ltd,,424B4,1,False
 ,424B2 - JPMorgan Chase Financial Co. LLC,,424B2,1,False
 ,424B2 - JPMORGAN CHASE & CO,,424B2,1,False
-,497K - Northern Lights Fund Trust IV,,497K,1,False
 ,497K - Northern Lights Fund Trust IV,,497K,1,False
 ,424B2 - UBS AG,,424B2,1,False
 ,424B3 - GrowHub Ltd,,424B3,1,False
@@ -726,17 +733,3 @@ WDI,3 - Western Asset Diversified Income Fund,,3,2,False
 ,8-K - BUILD-A-BEAR WORKSHOP INC,,8-K,5,True
 ,10-K - Lucky Strike Entertainment Corp,,10-K,5,True
 ,13F-HR - ABN AMRO Bank N.V.,,13F-HR,1,False
-,8-K - Lucky Strike Entertainment Corp,,8-K,5,True
-,13F-HR - ABN AMRO Bank N.V.,,13F-HR,1,False
-,8-K - SpartanNash Co,,8-K,5,True
-,"8-K - Bath & Body Works, Inc.",,8-K,5,True
-,8-K - Titan Machinery Inc.,,8-K,5,True
-,13F-HR - ABN AMRO Bank N.V.,,13F-HR,1,False
-,6-K - Kenon Holdings Ltd.,,6-K,4,False
-,13F-HR - ABN AMRO Bank N.V.,,13F-HR,1,False
-,13F-HR - Investors Towarzystwo Funduszy Inwestycyjnych Spolka Akcyjna,,13F-HR,1,False
-,6-K - HARMONY GOLD MINING CO LTD,,6-K,4,False
-,DEF 14A - FREQUENCY ELECTRONICS INC,,DEF 14A,1,False
-,13F-HR - ABN AMRO Bank N.V.,,13F-HR,1,False
-,144 - Benyamini Gil,,144,1,False
-,144 - GILAT SATELLITE NETWORKS LTD,,144,1,False
