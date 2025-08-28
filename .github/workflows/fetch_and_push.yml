@@ -31,39 +31,13 @@ jobs:
           python fetch_sec_and_news.py
           ls -lh out
 
-      # Robust SFTP upload with 3 retries (avoids YAML heredoc pitfalls)
-      - name: Upload via SFTP (3x retry)
-        env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_PORT: ${{ secrets.SFTP_PORT }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-          SFTP_PASS: ${{ secrets.SFTP_PASS }}
-          SFTP_DIR:  ${{ secrets.SFTP_DIR }}
-        run: |
-          set -e
-          sudo apt-get update -y
-          sudo apt-get install -y sshpass
-
-          tries=0
-          until [ $tries -ge 3 ]; do
-            echo "SFTP attempt $((tries+1))..."
-
-            # Build SFTP command batch (no YAML heredoc headaches)
-            cat > cmds.sftp <<CMDS
-lcd out
-cd "$SFTP_DIR"
-mput -q *.json
-bye
-CMDS
-
-            SSHPASS="$SFTP_PASS" sftp -oBatchMode=no -oStrictHostKeyChecking=no -P "$SFTP_PORT" \
-              "$SFTP_USER@$SFTP_HOST" -b cmds.sftp && break
-
-            tries=$((tries+1))
-            echo "Retrying in 6s..."
-            sleep 6
-          done
-
-          if [ $tries -ge 3 ]; then
-            echo "SFTP failed after 3 attempts"; exit 1
-          fi
+      - name: Upload via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          port: ${{ secrets.SFTP_PORT }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASS }}
+          local_path: "./out/*"
+          remote_path: ${{ secrets.SFTP_DIR }}
+          sftp_only: true
