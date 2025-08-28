@@ -28,10 +28,10 @@ jobs:
           mkdir -p data
           python sec_only.py
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sec_only_outputs
-          path: |
-            data/sec_filings_snapshot.json
-            data/sec_filings_snapshot.csv
+      - name: Commit and push results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sec_filings_snapshot.json data/sec_filings_snapshot.csv || true
+          git commit -m "Update SEC filings snapshot [skip ci]" || echo "No changes to commit"
+          git push
