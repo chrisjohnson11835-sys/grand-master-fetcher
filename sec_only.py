@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-sec_only.py — Step 6 strict (v12)
-Fixes:
-- BeautifulSoup: replace .findtext() (not supported) with .find(...).text
-- ISO time parsing: support trailing 'Z' by converting to '+00:00'
-- Strict previous ET calendar day filter
-- Tracked forms only (8-K, 6-K, 10-Q, 10-K, 3, 4, SC 13D/G and amendments)
+sec_only.py — Step 6 strict (v13)
+Adds rich debug so we can see *why* zero rows:
+- Saves raw allowed-form rows (unfiltered by date): data/sec_filings_raw.json
+- Saves date histogram + form histogram: data/sec_debug_stats.json
+- Still writes strict previous-ET snapshot: data/sec_filings_snapshot.json / .csv
 """
 import os, re, json
 from datetime import datetime, timedelta
@@ -55,7 +54,7 @@ def parse_iso_to_dt(s: str) -> datetime:
         s = s[:-1] + "+00:00"
     return datetime.fromisoformat(s)
 
-def fetch_sec_filings(max_pages: int = 25):
+def fetch_sec_filings(max_pages: int = 40):
     rows = []
     for p in range(max_pages):
         url = SEC_ATOM.format(p*100)
@@ -105,29 +104,34 @@ def score_row(row: dict) -> dict:
 
 def main():
     target_date = previous_et_date().isoformat()
-    data = fetch_sec_filings()
-    data = [r for r in data if r.get("updated_date_et") == target_date]
-    out = [score_row(r) for r in data]
+    raw_rows = fetch_sec_filings()
 
-    csv_rows = [
-        {
-            "ticker": r["ticker"],
-            "company": r["company"],
-            "industry": r["industry"],
-            "form": r["form"],
-            "score": r["score"],
-            "recommended": r["recommended"],
-        }
-        for r in out
-    ]
-
+    # Write raw allowed-form rows for debugging
     os.makedirs("data", exist_ok=True)
+    with open("data/sec_filings_raw.json","w") as fp:
+        json.dump(raw_rows, fp, indent=2)
+
+    # Histograms
+    by_date = {}
+    by_form = {}
+    for r in raw_rows:
+        by_date[r["updated_date_et"]] = by_date.get(r["updated_date_et"], 0) + 1
+        by_form[r["form"]] = by_form.get(r["form"], 0) + 1
+    debug = {"target_prev_et": target_date, "counts_by_date": by_date, "counts_by_form": by_form, "total_allowed_rows": len(raw_rows)}
+    with open("data/sec_debug_stats.json","w") as fp:
+        json.dump(debug, fp, indent=2)
+
+    # Strict filter
+    filt = [r for r in raw_rows if r.get("updated_date_et") == target_date]
+    out = [score_row(r) for r in filt]
+
+    # CSV projection
+    csv_rows = [{"ticker":r["ticker"],"company":r["company"],"industry":r["industry"],"form":r["form"],"score":r["score"],"recommended":r["recommended"]} for r in out]
+
     with open("data/sec_filings_snapshot.json","w") as fp:
         json.dump(out, fp, indent=2)
-    pd.DataFrame(csv_rows, columns=["ticker","company","industry","form","score","recommended"]).to_csv(
-        "data/sec_filings_snapshot.csv", index=False
-    )
-    print(f"Wrote {len(out)} filings for previous ET date {target_date}")
+    pd.DataFrame(csv_rows, columns=["ticker","company","industry","form","score","recommended"]).to_csv("data/sec_filings_snapshot.csv", index=False)
+    print(f"[Step6] target_prev_et={target_date} raw={len(raw_rows)} snapshot={len(out)}")
 
 if __name__ == "__main__":
     main()
