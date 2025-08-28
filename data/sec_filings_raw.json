@@ -1,6 +1,167 @@
 [
   {
     "form": "424B2",
+    "title": "424B2 - Morgan Stanley Finance LLC (0001666268) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1666268/000183988225047331/0001839882-25-047331-index.htm",
+    "updated_et": "2025-08-28T14:31:38-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - MORGAN STANLEY (0000895421) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/895421/000183988225047331/0001839882-25-047331-index.htm",
+    "updated_et": "2025-08-28T14:31:38-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMorgan Chase Financial Co. LLC (0001665650) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1665650/000121390025081613/0001213900-25-081613-index.htm",
+    "updated_et": "2025-08-28T14:31:36-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMORGAN CHASE & CO (0000019617) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/19617/000121390025081613/0001213900-25-081613-index.htm",
+    "updated_et": "2025-08-28T14:31:36-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - CITIGROUP INC (0000831001) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/831001/000191870425013929/0001918704-25-013929-index.htm",
+    "updated_et": "2025-08-28T14:30:57-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - Citigroup Global Markets Holdings Inc. (0000200245) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/200245/000191870425013929/0001918704-25-013929-index.htm",
+    "updated_et": "2025-08-28T14:30:57-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "485BPOS",
+    "title": "485BPOS - Grandeur Peak Global Trust (0001965454) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1965454/000158064225005588/0001580642-25-005588-index.htm",
+    "updated_et": "2025-08-28T14:30:31-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "485BPOS",
+    "title": "485BPOS - Grandeur Peak Global Trust (0001965454) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1965454/000158064225005588/0001580642-25-005588-index.htm",
+    "updated_et": "2025-08-28T14:30:31-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMorgan Chase Financial Co. LLC (0001665650) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1665650/000121390025081612/0001213900-25-081612-index.htm",
+    "updated_et": "2025-08-28T14:30:24-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMORGAN CHASE & CO (0000019617) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/19617/000121390025081612/0001213900-25-081612-index.htm",
+    "updated_et": "2025-08-28T14:30:24-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BARCLAYS BANK PLC (0000312070) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/312070/000191870425013928/0001918704-25-013928-index.htm",
+    "updated_et": "2025-08-28T14:28:49-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BofA Finance LLC (0001682472) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1682472/000191870425013927/0001918704-25-013927-index.htm",
+    "updated_et": "2025-08-28T14:28:24-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BANK OF AMERICA CORP /DE/ (0000070858) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/70858/000191870425013927/0001918704-25-013927-index.htm",
+    "updated_et": "2025-08-28T14:28:24-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BofA Finance LLC (0001682472) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1682472/000191870425013926/0001918704-25-013926-index.htm",
+    "updated_et": "2025-08-28T14:28:08-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BANK OF AMERICA CORP /DE/ (0000070858) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/70858/000191870425013926/0001918704-25-013926-index.htm",
+    "updated_et": "2025-08-28T14:28:08-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - Morgan Stanley Finance LLC (0001666268) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1666268/000183988225047328/0001839882-25-047328-index.htm",
+    "updated_et": "2025-08-28T14:28:00-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - MORGAN STANLEY (0000895421) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/895421/000183988225047328/0001839882-25-047328-index.htm",
+    "updated_et": "2025-08-28T14:28:00-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMorgan Chase Financial Co. LLC (0001665650) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1665650/000121390025081611/0001213900-25-081611-index.htm",
+    "updated_et": "2025-08-28T14:27:53-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - JPMORGAN CHASE & CO (0000019617) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/19617/000121390025081611/0001213900-25-081611-index.htm",
+    "updated_et": "2025-08-28T14:27:53-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BofA Finance LLC (0001682472) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1682472/000191870425013925/0001918704-25-013925-index.htm",
+    "updated_et": "2025-08-28T14:26:58-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - BANK OF AMERICA CORP /DE/ (0000070858) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/70858/000191870425013925/0001918704-25-013925-index.htm",
+    "updated_et": "2025-08-28T14:26:58-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - Morgan Stanley Finance LLC (0001666268) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/1666268/000183988225047327/0001839882-25-047327-index.htm",
+    "updated_et": "2025-08-28T14:26:56-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
+    "title": "424B2 - MORGAN STANLEY (0000895421) (Filer)",
+    "link": "https://www.sec.gov/Archives/edgar/data/895421/000183988225047327/0001839882-25-047327-index.htm",
+    "updated_et": "2025-08-28T14:26:56-04:00",
+    "updated_date_et": "2025-08-28"
+  },
+  {
+    "form": "424B2",
     "title": "424B2 - JPMorgan Chase Financial Co. LLC (0001665650) (Filer)",
     "link": "https://www.sec.gov/Archives/edgar/data/1665650/000121390025081610/0001213900-25-081610-index.htm",
     "updated_et": "2025-08-28T14:26:21-04:00",
@@ -4715,209 +4876,6 @@
     "title": "4 - NVR INC (0000906163) (Issuer)",
     "link": "https://www.sec.gov/Archives/edgar/data/906163/000090616325000102/0000906163-25-000102-index.htm",
     "updated_et": "2025-08-28T10:34:28-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "424B2",
-    "title": "424B2 - CITIGROUP INC (0000831001) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/831001/000095010325010841/0000950103-25-010841-index.htm",
-    "updated_et": "2025-08-28T10:31:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "6-K",
-    "title": "6-K - HARMONY GOLD MINING CO LTD (0001023514) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1023514/000162828025041245/0001628280-25-041245-index.htm",
-    "updated_et": "2025-08-28T10:30:09-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "10-Q",
-    "title": "10-Q - MOVADO GROUP INC (0000072573) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/72573/000119312525190723/0001193125-25-190723-index.htm",
-    "updated_et": "2025-08-28T10:29:09-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "6-K",
-    "title": "6-K - Sendas Distributor S.A. (0001834048) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1834048/000129281425003172/0001292814-25-003172-index.htm",
-    "updated_et": "2025-08-28T10:28:40-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "4",
-    "title": "4 - Shunk Laura F (0001305554) (Reporting)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1305554/000141588925023199/0001415889-25-023199-index.htm",
-    "updated_et": "2025-08-28T10:27:43-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "4",
-    "title": "4 - SCI Engineered Materials, Inc. (0000830616) (Issuer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/830616/000141588925023199/0001415889-25-023199-index.htm",
-    "updated_et": "2025-08-28T10:27:43-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - CC PMF Splitter Partnership (0002067926) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2067926/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - CC PMF Blocker, LLC (0002067091) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2067091/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - CC PMF Holdings, LLC (0002067079) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2067079/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Offshore Private Equity Fund VII (50/50), L.P. (0002010746) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2010746/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Partnership Fund VII, L.P. (0002010665) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2010665/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Private Equity Fund VII (50/50), L.P. (0002010663) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2010663/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Private Equity Fund VII (80/20), L.P. (0002010637) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2010637/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Co-Investment Fund VII, L.P. (0002010601) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/2010601/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Constitution Capital Equity Partners, LP (0001937408) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1937408/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Constitution Capital Credit Partners, LP (0001937407) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1937407/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Constitution Capital PM, LP (0001937406) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1937406/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Opportunities Offshore Fund II, L.P. (0001933862) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1933862/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Constitution Capital Access Fund, LLC (0001918767) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1918767/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Opportunities Fund II, L.P. (0001842407) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1842407/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Co-Investment Fund VI, L.P. (0001842393) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1842393/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Offshore Partnership Fund VI, L.P. (0001842381) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1842381/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Offshore Co-Investment Fund VI, L.P. (0001842380) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1842380/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Partnership Fund VI, L.P. (0001842379) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1842379/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Direct Investment Fund V - Parallel A, L.P. (0001800451) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1800451/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Partnership Fund V, L.P. (0001738032) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1738032/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Direct Investment Fund V, L.P. (0001738024) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1738024/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Direct Investment Fund IV, L.P. (0001665630) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1665630/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
-    "updated_date_et": "2025-08-28"
-  },
-  {
-    "form": "40-APP/A",
-    "title": "40-APP/A - Ironsides Partnership Fund IV, L.P. (0001665625) (Filer)",
-    "link": "https://www.sec.gov/Archives/edgar/data/1665625/000121390025081449/0001213900-25-081449-index.htm",
-    "updated_et": "2025-08-28T10:27:22-04:00",
     "updated_date_et": "2025-08-28"
   }
 ]
