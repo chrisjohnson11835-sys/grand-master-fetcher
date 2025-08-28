@@ -1,33 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Grand Master — Off-host fetcher (PREVIOUS DAY ONLY)
-- Pull exactly yesterday's SEC daily master index (UTC).
-- If blocked/empty, fall back to SEC Atom and keep entries with date == yesterday (UTC).
-- Read filings (target forms), score catalysts, write step6_full.json.
-- Overlay reachable news to write step7_overlay.json.
-
-Env (set in GitHub Actions):
-  UA, OUT_DIR, NEWS_LOOKBACK_HOURS, TOPN_FOR_NEWS, DEBUG
-Outputs:
-  out/step6_full.json
-  out/step7_overlay.json
-"""
 
 import os, re, json, time
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict
 import requests
 
-# --------- Config from env ----------
-UA  = os.getenv("UA", "GrandMasterFetcher/2.0 (+contact: you@example.com)")
+# ------------ Config (from workflow env) ------------
+UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.0 (+contact: you@example.com)")
 OUT = os.getenv("OUT_DIR", "out")
-NEWS_LOOKBACK_HOURS = int(os.getenv("NEWS_LOOKBACK_HOURS", "36"))  # 36h window around yesterday's news
+NEWS_LOOKBACK_HOURS = int(os.getenv("NEWS_LOOKBACK_HOURS", "36"))  # around-yesterday window
 TOPN_FOR_NEWS       = int(os.getenv("TOPN_FOR_NEWS", "200"))
 DEBUG               = os.getenv("DEBUG", "0") == "1"
 
 TARGET_FORMS = {
-    "8-K","6-K","10-Q","10-K","3","4","SC 13D","SC 13G","SC 13D/A","SC 13G/A"
+    "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A","3","4",
+    "SC 13D","SC 13G","SC 13D/A","SC 13G/A"
 }
 
 HDRS = {
@@ -44,55 +32,59 @@ def log(msg: str):
 def ensure_out():
     os.makedirs(OUT, exist_ok=True)
 
-def fetch(url: str, timeout: int = 25, sleep_ms: int = 300) -> str:
-    time.sleep(sleep_ms/1000.0)
+def fetch(url: str, timeout: int = 25, sleep_ms: int = 200) -> str:
+    time.sleep(sleep_ms/1000.0)  # be polite
     r = requests.get(url, headers=HDRS, timeout=timeout, allow_redirects=True)
     r.raise_for_status()
     return r.text
 
-# --------- SEC helpers ----------
-def utc_today():
-    return datetime.now(timezone.utc).date()
+# ------------ Time helpers (UTC) ------------
+def utc_today(): return datetime.now(timezone.utc).date()
+def iso_yesterday(): return (utc_today() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-def utc_yesterday_str():
-    return (utc_today() - timedelta(days=1)).strftime("%Y%m%d")
+# ------------ Atom feed (paginated) ------------
+def atom_url(start:int, count:int=200) -> str:
+    # count up to ~200 is safer/reliable; we paginate via start=0,200,400,...
+    return f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&start={start}&count={count}&output=atom"
 
-def utc_yesterday_iso():
-    return (utc_today() - timedelta(days=1)).strftime("%Y-%m-%d")
+def parse_atom_entries(xml: str) -> List[Dict]:
+    out=[]
+    for ent in re.findall(r"<entry>(.*?)</entry>", xml, flags=re.S|re.I):
+        # form
+        m = re.search(r"<category\s+term=\"([^\"]+)\"", ent, flags=re.I)
+        form_raw = m.group(1).strip() if m else ""
+        form = form_raw.upper().replace("SC13D","SC 13D").replace("SC13G","SC 13G")
+        # company
+        c = re.search(r"<conformed-name>(.*?)</conformed-name>", ent, flags=re.I)
+        company = c.group(1).strip() if c else ""
+        # cik
+        ck = re.search(r"<cik>(\d+)</cik>", ent, flags=re.I)
+        cik = ck.group(1).strip() if ck else ""
+        # primary link and filing-href
+        fh = re.search(r"<filing-href>(.*?)</filing-href>", ent, flags=re.I)
+        filing_href = fh.group(1).strip() if fh else ""
+        lk = re.search(r"<link[^>]+href=\"([^\"]+)\"", ent, flags=re.I)
+        link = lk.group(1).strip() if lk else ""
+        href = filing_href or link
+        # dates: prefer filing-date, fallback to updated
+        fd = re.search(r"<filing-date>(.*?)</filing-date>", ent, flags=re.I)
+        filing_date = fd.group(1).strip() if fd else ""
+        up = re.search(r"<updated>(.*?)</updated>", ent, flags=re.I)
+        updated = up.group(1).strip() if up else ""
+        d = filing_date or (updated[:10] if updated else "")
 
-def sec_master_idx_url(ymd: str) -> str:
-    dt = datetime.strptime(ymd, "%Y%m%d")
-    q = (dt.month-1)//3 + 1
-    return f"https://www.sec.gov/Archives/edgar/daily-index/{dt.year}/QTR{q}/master.{ymd}.idx"
-
-def parse_master_idx(raw: str) -> List[Dict]:
-    rows=[]; started=False
-    header_pat = re.compile(r"company\s*name\|form\s*type\|cik\|date\s*filed\|filename", re.I)
-    for ln in raw.splitlines():
-        if not started and header_pat.search(ln):
-            started=True
-            continue
-        if not started: 
-            continue
-        ln=ln.strip()
-        if not ln: 
-            continue
-        parts = ln.split("|")
-        if len(parts) >= 5:
-            rows.append({"company":parts[0], "form":parts[1], "cik":parts[2], "date":parts[3], "path":parts[4]})
-    # fallback greedy parse if header missing
-    if not rows:
-        for ln in raw.splitlines():
-            if ln.count("|")>=4:
-                parts = ln.strip().split("|")
-                if len(parts)>=5 and re.match(r"^\d{10}$", parts[2]):
-                    rows.append({"company":parts[0], "form":parts[1], "cik":parts[2], "date":parts[3], "path":parts[4]})
-    log(f"Master parsed rows: {len(rows)}")
-    return rows
+        out.append({
+            "company": company,
+            "form": form,
+            "cik": cik,
+            "date": d,                # YYYY-MM-DD
+            "index_url": href         # filing index (preferred) or browse link
+        })
+    return out
 
 def fetch_doc_from_index(index_or_doc_url: str) -> str:
-    # Accept both index and document URLs
     html = fetch(index_or_doc_url)
+    # If index page has "Document Format Files", grab first .htm doc
     if "Document Format Files" in html:
         m = re.search(r'href="([^"]+\.htm[^"]*)"', html, flags=re.I)
         if m:
@@ -103,12 +95,13 @@ def fetch_doc_from_index(index_or_doc_url: str) -> str:
                 log(f"Doc fetch FAIL (fallback to index): {doc_url} :: {e}")
     return html
 
-def extract_items_8k(txt: str):
-    return sorted(set(m.upper() for m in re.findall(r"Item\s+(\d+\.\d+)", txt, flags=re.I)))
-
+# ------------ Text helpers ------------
 def clean_text(html: str) -> str:
     t = re.sub(r"<[^>]+>", " ", html)
     return re.sub(r"\s+", " ", t).strip()
+
+def extract_items_8k(txt: str):
+    return sorted(set(m.upper() for m in re.findall(r"Item\s+(\d+\.\d+)", txt, flags=re.I)))
 
 def score_context(txt: str) -> int:
     bull = ['raises guidance','beat','beats','acquisition','definitive agreement','buyback',
@@ -123,9 +116,9 @@ def score_context(txt: str) -> int:
         if w in low: s -= 6
     return s
 
-def base_weight(form: str, items: List[str]) -> int:
+def base_weight(form: str, items) -> int:
     f=form.upper(); w=0
-    if f=="8-K":
+    if f in ("8-K","8-K/A"):
         for it in items:
             if it=="2.02": w += 10
             if it in ("1.01","2.01"): w += 12
@@ -133,8 +126,8 @@ def base_weight(form: str, items: List[str]) -> int:
             if it=="3.01": w -= 12
             if it=="3.02": w -= 15
             if it=="5.03": w -= 10
-    elif f=="6-K": w += 6
-    elif f in ("10-Q","10-K"): w += 5
+    elif f in ("6-K","6-K/A"): w += 6
+    elif f in ("10-Q","10-Q/A","10-K","10-K/A"): w += 5
     elif f=="4": w += 2
     elif f.startswith("SC 13D"): w += 10
     elif f.startswith("SC 13G"): w += 2
@@ -144,109 +137,106 @@ def guess_ticker(html: str) -> str:
     m = re.search(r"Trading Symbol[s]?:\s*([A-Z\.]{1,6})", html, flags=re.I)
     return m.group(1).upper() if m else ""
 
-# --------- Atom fallback (filter to yesterday only) ----------
-def sec_atom_url(count=1000):
-    return f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&count={count}&output=atom"
-
-def parse_atom(xml: str) -> List[Dict]:
-    out=[]
-    for ent in re.findall(r"<entry>(.*?)</entry>", xml, flags=re.S|re.I):
-        form = re.search(r"<category\s+term=\"([^\"]+)\"", ent, flags=re.I)
-        form = form.group(1).strip() if form else ""
-        company = re.search(r"<conformed-name>(.*?)</conformed-name>", ent, flags=re.I)
-        company = company.group(1).strip() if company else ""
-        link = re.search(r"<link[^>]+href=\"([^\"]+)\"", ent, flags=re.I)
-        link = link.group(1).strip() if link else ""
-        updt = re.search(r"<updated>(.*?)</updated>", ent, flags=re.I)
-        updt = updt.group(1).strip() if updt else ""
-        cik  = re.search(r"<cik>(\d+)</cik>", ent, flags=re.I)
-        cik  = cik.group(1).strip() if cik else ""
-        out.append({"company":company,"form":form,"cik":cik,"date":updt[:10] if updt else "", "index_url":link})
-    log(f"Atom parsed entries: {len(out)}")
-    return out
-
-# --------- SEC pipeline (YESTERDAY ONLY) ----------
-def run_sec():
-    ymd = utc_yesterday_str()
-    yiso = utc_yesterday_iso()
+# ------------ SEC pipeline: Atom-only, previous day (UTC) ------------
+def run_sec_atom_only():
+    yiso = iso_yesterday()
     log(f"Yesterday (UTC): {yiso}")
 
-    # 1) Try daily master for exactly yesterday
-    wrote = []
-    try:
-        url = sec_master_idx_url(ymd)
-        raw = fetch(url)
-        log(f"SEC master OK: {url}")
-        rows = parse_master_idx(raw)
-        # keep only rows with date == yesterday ISO
-        rows = [r for r in rows if r.get("date","") == yiso]
-        for r in rows:
-            form_u = r["form"].upper().replace("SC13D","SC 13D").replace("SC13G","SC 13G")
-            if form_u not in TARGET_FORMS: 
-                continue
-            filing_url = "https://www.sec.gov/Archives/" + r["path"].lstrip("/")
-            try:
-                html = fetch_doc_from_index(filing_url)
-            except Exception as e:
-                log(f"Filing fetch FAIL: {filing_url} :: {e}")
-                continue
-            text = clean_text(html)
-            items = extract_items_8k(text) if form_u=="8-K" else []
-            score = base_weight(form_u, items) + score_context(text)
-            ticker = guess_ticker(html)
-            dilution = bool(re.search(r"(offering|registered direct|atm|at-the-market|shelf|warrant|reverse split|delisting|deficiency|convertible)", text, flags=re.I))
-            wrote.append({
-                "ticker": ticker, "company": r["company"], "industry":"", "form": r["form"], "cik": r["cik"],
-                "accepted_ts": yiso+"T00:00:00Z", "items": items, "score": score,
-                "reasons": [], "dilution_flags": (["possible_dilution"] if dilution else [])
-            })
-    except Exception as e:
-        log(f"SEC master FAIL (yesterday): {e}")
+    collected: List[Dict] = []
+    stats = {"pages":0, "entries_seen":0, "entries_yesterday":0, "docs_fetched":0, "errors":0}
 
-    # 2) Fallback: Atom, filtered to yesterday
-    if not wrote:
+    # paginate Atom until we pass yesterday (older)
+    start = 0
+    count = 200  # reliable chunk size
+    while True:
+        url = atom_url(start, count)
         try:
-            xml = fetch(sec_atom_url(1000))
-            entries = parse_atom(xml)
-            entries = [e for e in entries if (e.get("date") == yiso)]
-            for e in entries:
-                form_u = e["form"].upper().replace("SC13D","SC 13D").replace("SC13G","SC 13G")
-                if form_u not in TARGET_FORMS: 
-                    continue
-                idx = e.get("index_url") or ""
-                if not idx: 
-                    continue
-                try:
-                    html = fetch_doc_from_index(idx)
-                except Exception as ex:
-                    log(f"Atom filing fetch FAIL: {idx} :: {ex}")
-                    continue
-                text = clean_text(html)
-                items = extract_items_8k(text) if form_u=="8-K" else []
-                score = base_weight(form_u, items) + score_context(text)
-                ticker = guess_ticker(html)
-                dilution = bool(re.search(r"(offering|registered direct|atm|at-the-market|shelf|warrant|reverse split|delisting|deficiency|convertible)", text, flags=re.I))
-                wrote.append({
-                    "ticker": ticker, "company": e["company"], "industry":"", "form": form_u, "cik": e["cik"],
-                    "accepted_ts": yiso+"T00:00:00Z", "items": items, "score": score,
-                    "reasons": [], "dilution_flags": (["possible_dilution"] if dilution else [])
-                })
+            xml = fetch(url, timeout=25)
         except Exception as e:
-            log(f"Atom FAIL: {e}")
+            log(f"Atom page FAIL start={start}: {e}")
+            break
 
-    # de-dup (ticker,form,cik)
+        entries = parse_atom_entries(xml)
+        stats["pages"] += 1
+        stats["entries_seen"] += len(entries)
+
+        if not entries:
+            break
+
+        # entries are newest → oldest; stop when entire page older than yesterday
+        any_newer_than_yesterday = False
+        any_yesterday = False
+        for e in entries:
+            d = e.get("date") or ""
+            if d > yiso:
+                any_newer_than_yesterday = True
+            if d == yiso:
+                any_yesterday = True
+
+        # collect yesterday entries on this page
+        for e in entries:
+            if e.get("date") != yiso:
+                continue
+            if e.get("form","") not in TARGET_FORMS:
+                continue
+            idx = e.get("index_url") or ""
+            if not idx:
+                continue
+            try:
+                html = fetch_doc_from_index(idx)
+                stats["docs_fetched"] += 1
+            except Exception as ex:
+                stats["errors"] += 1
+                log(f"Filing fetch FAIL: {idx} :: {ex}")
+                continue
+            txt = clean_text(html)
+            items = extract_items_8k(txt) if e["form"].startswith("8-K") else []
+            score = base_weight(e["form"], items) + score_context(txt)
+            ticker = guess_ticker(html)
+            dilution = bool(re.search(r"(offering|registered direct|atm|at-the-market|shelf|warrant|reverse split|delisting|deficiency|convertible)", txt, flags=re.I))
+            collected.append({
+                "ticker": ticker,
+                "company": e["company"],
+                "industry": "",
+                "form": e["form"],
+                "cik": e["cik"],
+                "accepted_ts": yiso+"T00:00:00Z",
+                "items": items,
+                "score": score,
+                "reasons": [],
+                "dilution_flags": (["possible_dilution"] if dilution else [])
+            })
+
+        stats["entries_yesterday"] += sum(1 for e in entries if e.get("date")==yiso)
+
+        # stop condition:
+        # - if we saw entries older than yesterday AND no entry newer-than-yesterday (we've paged past),
+        #   OR if this page had no yesterday entries and d < yiso across the page.
+        oldest_on_page = min((e.get("date","") for e in entries))
+        if oldest_on_page and oldest_on_page < yiso and not any_newer_than_yesterday:
+            break
+
+        # otherwise keep paging
+        start += count
+
+        # safety cap to avoid infinite loops (rare)
+        if start > 8000:
+            log("Stop paging at start>8000 for safety")
+            break
+
+    # de-dup by (ticker, form, cik)
     uniq=[]; seen=set()
-    for r in wrote:
-        key=(r["ticker"], r["form"].upper(), r["cik"])
-        if key in seen: 
-            continue
+    for r in collected:
+        key=(r.get("ticker",""), r["form"], r.get("cik",""))
+        if key in seen: continue
         seen.add(key); uniq.append(r)
 
     with open(os.path.join(OUT,"step6_full.json"),"w",encoding="utf-8") as f:
         json.dump(uniq, f, indent=2)
     print(f"SEC: wrote {len(uniq)} records (yesterday={yiso})")
+    log(f"Stats — {stats}")
 
-# --------- News overlay (light) ----------
+# ------------ News overlay (reachable, light) ------------
 def yahoo_rss(ticker: str):
     url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={ticker}&region=US&lang=en-US"
     try:
@@ -288,14 +278,12 @@ def domain(url: str) -> str:
     return re.sub(r"^(www\.|m\.)", "", h)
 
 def run_news():
-    # read step6
     p = os.path.join(OUT, "step6_full.json")
     try:
         sec = json.load(open(p,"r",encoding="utf-8"))
     except Exception:
         sec = []
 
-    # best SEC record per ticker
     best={}
     for r in sec:
         t=(r.get("ticker") or "").upper()
@@ -327,14 +315,13 @@ def run_news():
         for _, base in ENABLED.items():
             hits += search_simple(base, q)
 
-        # dedupe
+        # dedupe + score
         uniq=[]; seen=set()
         for u in hits:
             if not u.startswith("http"): continue
             if u in seen: continue
             seen.add(u); uniq.append(u)
 
-        # quick scoring
         overlay=0; veto=set(); doms=set()
         for u in uniq[:8]:
             try:
@@ -363,9 +350,10 @@ def run_news():
         json.dump(results, f, indent=2)
     print(f"NEWS: wrote {len(results)} tickers")
 
+# ------------ Main ------------
 def main():
     ensure_out()
-    run_sec()
+    run_sec_atom_only()
     run_news()
 
 if __name__ == "__main__":
