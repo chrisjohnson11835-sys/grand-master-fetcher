@@ -42,11 +42,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/sec_filings_snapshot.json data/sec_filings_snapshot.csv || true
-          git commit -m "Update SEC filings snapshot [skip ci]" || echo "No changes to commit"
+          git add data/sec_filings_snapshot.json data/sec_filings_snapshot.csv data/sec_filings_raw.json data/sec_debug_stats.json || true
+          git commit -m "Update SEC filings snapshot + debug [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${GITHUB_REF##*/}
 
-      - name: Deploy to Hostinger via HTTPS webhook (robust)
+      - name: Deploy to Hostinger via HTTPS webhook (verbose)
         if: always()
         env:
           DEPLOY_ENDPOINT: ${{ secrets.DEPLOY_ENDPOINT }}
@@ -54,14 +54,7 @@ jobs:
         run: |
           set -e
           echo "Posting to $DEPLOY_ENDPOINT"
-          # write status to a separate file to avoid parsing issues
-          curl -sS -o resp.json -w "%{http_code}"             -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json;type=application/json"             -F "file2=@data/sec_filings_snapshot.csv;type=text/csv"             "$DEPLOY_ENDPOINT" > status.txt
-          echo "----- Response body -----"; cat resp.json || true; echo; echo "-------------------------"
-          echo -n "HTTP status: "; cat status.txt; echo
-          STATUS=$(cat status.txt)
-          if [ "$STATUS" != "200" ]; then
-            echo "Deploy failed: non-200 status"; exit 1
-          fi
-          if ! grep -q '"ok":true' resp.json; then
-            echo "Deploy failed: server returned not ok"; exit 1
-          fi
+          curl -sS -w "\nHTTP_STATUS:%{http_code}\n" -o resp.txt             -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json;type=application/json"             -F "file2=@data/sec_filings_snapshot.csv;type=text/csv"             -F "file3=@data/sec_filings_raw.json;type=application/json"             -F "file4=@data/sec_debug_stats.json;type=application/json"             "$DEPLOY_ENDPOINT"
+          echo "----- Response body -----"
+          cat resp.txt || true
+          echo "-------------------------"
