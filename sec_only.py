@@ -12,7 +12,7 @@ Outputs (written to ./data/):
 Columns:
   ticker, company, industry, form, score, recommended
 """
-import requests, re, json, csv, os
+import requests, re, json, os
 from datetime import datetime, timedelta, timezone
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -25,7 +25,7 @@ KEYWORDS_NEG = ["dilution", "offering", "register", "shelf", "atm"]
 
 def get_prev_et_day():
     now_utc = datetime.now(timezone.utc)
-    # Convert to ET
+    # naive ET offset; good enough for cutoff
     offset = timedelta(hours=-5)
     now_et = now_utc + offset
     yday_et = now_et.date() - timedelta(days=1)
@@ -63,6 +63,8 @@ def score_filing(f):
     # crude ticker guess
     m = re.search(r"\(([A-Z]{1,5})\)", f["title"])
     f["ticker"] = m.group(1) if m else ""
+    f["company"] = f["title"].split("(")[0].strip()
+    f["industry"] = ""
     return f
 
 def main():
@@ -75,11 +77,11 @@ def main():
             results.append(f)
         except Exception:
             continue
-
     os.makedirs("data", exist_ok=True)
+    import json
     with open("data/sec_filings_snapshot.json","w") as fp:
         json.dump(results, fp, indent=2)
-    pd.DataFrame(results).to_csv("data/sec_filings_snapshot.csv",index=False)
+    pd.DataFrame(results, columns=["ticker","company","industry","form","score","recommended"]).to_csv("data/sec_filings_snapshot.csv",index=False)
     print(f"Wrote {len(results)} filings for {yday}")
 
 if __name__ == "__main__":
