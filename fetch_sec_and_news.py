@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, timezone
 from typing import List, Dict
 import requests
 
-# ------------ Config (from workflow env) ------------
-UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.0 (+contact: you@example.com)")
+# ------------ Config ------------
+UA  = os.getenv("UA", "GrandMasterFetcher/AtomOnly/1.1 (+contact: you@example.com)")
 OUT = os.getenv("OUT_DIR", "out")
 NEWS_LOOKBACK_HOURS = int(os.getenv("NEWS_LOOKBACK_HOURS", "36"))  # around-yesterday window
 TOPN_FOR_NEWS       = int(os.getenv("TOPN_FOR_NEWS", "200"))
@@ -15,7 +15,7 @@ DEBUG               = os.getenv("DEBUG", "0") == "1"
 
 TARGET_FORMS = {
     "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A","3","4",
-    "SC 13D","SC 13G","SC 13D/A","SC 13G/A"
+    "SC 13D","SC 13D/A","SC 13G","SC 13G/A"
 }
 
 HDRS = {
@@ -32,11 +32,20 @@ def log(msg: str):
 def ensure_out():
     os.makedirs(OUT, exist_ok=True)
 
-def fetch(url: str, timeout: int = 25, sleep_ms: int = 200) -> str:
-    time.sleep(sleep_ms/1000.0)  # be polite
-    r = requests.get(url, headers=HDRS, timeout=timeout, allow_redirects=True)
-    r.raise_for_status()
-    return r.text
+def fetch(url: str, timeout: int = 25, sleep_ms: int = 200, retries: int = 2) -> str:
+    err = None
+    for i in range(retries+1):
+        try:
+            time.sleep(sleep_ms/1000.0)  # be polite
+            r = requests.get(url, headers=HDRS, timeout=timeout, allow_redirects=True)
+            r.raise_for_status()
+            return r.text
+        except Exception as e:
+            err = e
+            if i < retries:
+                time.sleep(0.8 + 0.8*i)
+            else:
+                raise err
 
 # ------------ Time helpers (UTC) ------------
 def utc_today(): return datetime.now(timezone.utc).date()
@@ -44,28 +53,71 @@ def iso_yesterday(): return (utc_today() - timedelta(days=1)).strftime("%Y-%m-%d
 
 # ------------ Atom feed (paginated) ------------
 def atom_url(start:int, count:int=200) -> str:
-    # count up to ~200 is safer/reliable; we paginate via start=0,200,400,...
+    # count ~200 is stable; paginate via start=0,200,400,...
     return f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&start={start}&count={count}&output=atom"
+
+def normalize_form(raw: str) -> str:
+    """Make Atom category term comparable to our TARGET_FORMS."""
+    if not raw:
+        return ""
+    u = raw.upper().strip()
+
+    # unify SC13* spacing
+    u = u.replace("SC13D", "SC 13D").replace("SC13G", "SC 13G")
+    # common “Form X” patterns
+    u = re.sub(r"^FORM\s+", "", u)
+
+    # handle amendments
+    is_amend = "/A" in u or re.search(r"\bAMEND(ED|MENT)?\b", u)
+
+    # pick base form by substring presence
+    if "8-K" in u:
+        return "8-K/A" if is_amend or "8-K/A" in u else "8-K"
+    if "6-K" in u:
+        return "6-K/A" if is_amend or "6-K/A" in u else "6-K"
+    if "10-Q" in u:
+        return "10-Q/A" if is_amend or "10-Q/A" in u else "10-Q"
+    if "10-K" in u:
+        return "10-K/A" if is_amend or "10-K/A" in u else "10-K"
+    # Forms 3 & 4 sometimes appear as “FORM 4”, “4”, “4/A”
+    if re.search(r"\b4\b", u) or "FORM 4" in u:
+        return "4"
+    if re.search(r"\b3\b", u) or "FORM 3" in u:
+        return "3"
+    if "SC 13D" in u:
+        return "SC 13D/A" if "A" in u and "/A" in u or "AMEND" in u else "SC 13D"
+    if "SC 13G" in u:
+        return "SC 13G/A" if "A" in u and "/A" in u or "AMEND" in u else "SC 13G"
+
+    # sometimes category term includes long descriptions; try first token fallback
+    first = u.split()[0]
+    # normalize first token like "8-K" etc.
+    for base in ["8-K","6-K","10-Q","10-K","3","4","SC","SC 13D","SC 13G"]:
+        if first.startswith(base):
+            return base
+    return u  # last resort (may not match TARGET_FORMS)
 
 def parse_atom_entries(xml: str) -> List[Dict]:
     out=[]
     for ent in re.findall(r"<entry>(.*?)</entry>", xml, flags=re.S|re.I):
-        # form
+        # raw form term
         m = re.search(r"<category\s+term=\"([^\"]+)\"", ent, flags=re.I)
         form_raw = m.group(1).strip() if m else ""
-        form = form_raw.upper().replace("SC13D","SC 13D").replace("SC13G","SC 13G")
-        # company
+        form = normalize_form(form_raw)
+
+        # company, cik
         c = re.search(r"<conformed-name>(.*?)</conformed-name>", ent, flags=re.I)
         company = c.group(1).strip() if c else ""
-        # cik
         ck = re.search(r"<cik>(\d+)</cik>", ent, flags=re.I)
         cik = ck.group(1).strip() if ck else ""
+
         # primary link and filing-href
         fh = re.search(r"<filing-href>(.*?)</filing-href>", ent, flags=re.I)
         filing_href = fh.group(1).strip() if fh else ""
         lk = re.search(r"<link[^>]+href=\"([^\"]+)\"", ent, flags=re.I)
         link = lk.group(1).strip() if lk else ""
         href = filing_href or link
+
         # dates: prefer filing-date, fallback to updated
         fd = re.search(r"<filing-date>(.*?)</filing-date>", ent, flags=re.I)
         filing_date = fd.group(1).strip() if fd else ""
@@ -129,6 +181,7 @@ def base_weight(form: str, items) -> int:
     elif f in ("6-K","6-K/A"): w += 6
     elif f in ("10-Q","10-Q/A","10-K","10-K/A"): w += 5
     elif f=="4": w += 2
+    elif f=="3": w += 1
     elif f.startswith("SC 13D"): w += 10
     elif f.startswith("SC 13G"): w += 2
     return w
@@ -143,11 +196,10 @@ def run_sec_atom_only():
     log(f"Yesterday (UTC): {yiso}")
 
     collected: List[Dict] = []
-    stats = {"pages":0, "entries_seen":0, "entries_yesterday":0, "docs_fetched":0, "errors":0}
+    stats = {"pages":0, "entries_seen":0, "entries_yesterday":0, "kept_target_forms":0, "docs_fetched":0, "errors":0}
 
-    # paginate Atom until we pass yesterday (older)
     start = 0
-    count = 200  # reliable chunk size
+    count = 200
     while True:
         url = atom_url(start, count)
         try:
@@ -159,26 +211,24 @@ def run_sec_atom_only():
         entries = parse_atom_entries(xml)
         stats["pages"] += 1
         stats["entries_seen"] += len(entries)
-
         if not entries:
             break
 
-        # entries are newest → oldest; stop when entire page older than yesterday
         any_newer_than_yesterday = False
-        any_yesterday = False
         for e in entries:
             d = e.get("date") or ""
             if d > yiso:
                 any_newer_than_yesterday = True
             if d == yiso:
-                any_yesterday = True
+                stats["entries_yesterday"] += 1
 
-        # collect yesterday entries on this page
+        # collect yesterday + target forms
         for e in entries:
             if e.get("date") != yiso:
                 continue
             if e.get("form","") not in TARGET_FORMS:
                 continue
+            stats["kept_target_forms"] += 1
             idx = e.get("index_url") or ""
             if not idx:
                 continue
@@ -207,24 +257,17 @@ def run_sec_atom_only():
                 "dilution_flags": (["possible_dilution"] if dilution else [])
             })
 
-        stats["entries_yesterday"] += sum(1 for e in entries if e.get("date")==yiso)
-
-        # stop condition:
-        # - if we saw entries older than yesterday AND no entry newer-than-yesterday (we've paged past),
-        #   OR if this page had no yesterday entries and d < yiso across the page.
+        # stop when we've paged past yesterday and there were no newer entries on this page
         oldest_on_page = min((e.get("date","") for e in entries))
         if oldest_on_page and oldest_on_page < yiso and not any_newer_than_yesterday:
             break
 
-        # otherwise keep paging
         start += count
-
-        # safety cap to avoid infinite loops (rare)
         if start > 8000:
             log("Stop paging at start>8000 for safety")
             break
 
-    # de-dup by (ticker, form, cik)
+    # de-dup
     uniq=[]; seen=set()
     for r in collected:
         key=(r.get("ticker",""), r["form"], r.get("cik",""))
@@ -236,7 +279,7 @@ def run_sec_atom_only():
     print(f"SEC: wrote {len(uniq)} records (yesterday={yiso})")
     log(f"Stats — {stats}")
 
-# ------------ News overlay (reachable, light) ------------
+# ------------ News overlay (unchanged) ------------
 def yahoo_rss(ticker: str):
     url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={ticker}&region=US&lang=en-US"
     try:
