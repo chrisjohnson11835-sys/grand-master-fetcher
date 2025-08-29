@@ -1,0 +1,27 @@
+name: run-sec-scan
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "5 13 * * 1-5"   # 09:05 ET summer
+    - cron: "5 14 * * 1-5"   # 09:05 ET winter (DST-proof)
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser pandas python-dateutil requests
+      - name: Run until boundary
+        env:
+          RUNNER_MAX_ATTEMPTS: "6"
+          RUNNER_BACKOFFS: "0,45,90,180,300,420"
+        run: |
+          python run_until_boundary.py
