@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.4
-Hotfix: safe CSV when empty + re-added webhook deploy (sends files to your website).
+Grand Master — SEC ONLY (Step 6) v18.5
+Fix: fetch Atom pages using our requests session (with proper User-Agent), then feedparser.parse(text).
+Also keeps: safe CSV when empty + webhook deploy.
 """
 import os, json
 from typing import Any, Dict, List
@@ -49,7 +50,9 @@ def main():
         "banned_kw": 0,
         "errors": 0,
         "hit_boundary": False,
-        "hit_page_limit": False
+        "hit_page_limit": False,
+        "atom_fetch_errors": 0,
+        "atom_http_codes": []
     }
 
     crossed_boundary = False
@@ -57,10 +60,26 @@ def main():
     for p in range(max_pages):
         url = SEC_ATOM.format(start=p*count, count=count)
         stats["pages_fetched"] += 1
-        feed = feedparser.parse(url)
+
+        # Fetch Atom page using requests session (with UA) then parse text
+        try:
+            r = session.get(url, timeout=30)
+            stats["atom_http_codes"].append(r.status_code)
+            if r.status_code != 200 or not r.text.strip():
+                stats["atom_fetch_errors"] += 1
+                # If we get a bad page, stop early to avoid hammering
+                break
+            feed = feedparser.parse(r.text)
+        except Exception:
+            stats["atom_fetch_errors"] += 1
+            break
+
         entries = feed.get("entries", [])
         if not entries:
-            break
+            # empty page; continue to next page just in case, but mark an error if first page
+            if p == 0:
+                stats["atom_fetch_errors"] += 1
+            continue
 
         oldest_et_on_page = None
 
@@ -155,7 +174,7 @@ def main():
 
     print("Outputs written to outputs/.")
 
-    # ---- NEW: Deploy to Hostinger if enabled ----
+    # Deploy to Hostinger if enabled
     if cfg.get("enable_webhook_deploy"):
         try:
             from deploy.webhook_deploy import deploy_files
