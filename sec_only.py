@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.5
-Fix: fetch Atom pages using our requests session (with proper User-Agent), then feedparser.parse(text).
-Also keeps: safe CSV when empty + webhook deploy.
+Grand Master — SEC ONLY (Step 6) v18.7
+- Fetch Atom with User-Agent (requests)
+- Safe CSV when empty
+- Deploy via webhook if enabled
+- **New:** don't stop on the first empty page (allow a few empty pages)
+- **New:** write page time coverage into stats.pages_debug (so we see how far we looked)
 """
 import os, json
 from typing import Any, Dict, List
@@ -31,7 +34,7 @@ def main():
     start_et, end_et = et_window_now_yday(tz)
     session = new_session(ua)
 
-    max_pages = int(cfg.get("max_pages", 60))
+    max_pages = int(cfg.get("max_pages", 120))   # look further back
     count = int(cfg.get("count_per_page", 200))
     allowed_forms = {
         "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A",
@@ -52,48 +55,63 @@ def main():
         "hit_boundary": False,
         "hit_page_limit": False,
         "atom_fetch_errors": 0,
-        "atom_http_codes": []
+        "atom_http_codes": [],
+        "pages_debug": []  # list of {page,p_entries,newest_et,oldest_et}
     }
 
     crossed_boundary = False
+    empty_streak = 0
 
     for p in range(max_pages):
         url = SEC_ATOM.format(start=p*count, count=count)
         stats["pages_fetched"] += 1
 
-        # Fetch Atom page using requests session (with UA) then parse text
+        # Fetch Atom page with UA
         try:
             r = session.get(url, timeout=30)
             stats["atom_http_codes"].append(r.status_code)
             if r.status_code != 200 or not r.text.strip():
                 stats["atom_fetch_errors"] += 1
-                # If we get a bad page, stop early to avoid hammering
-                break
+                empty_streak += 1
+                if empty_streak >= 3:
+                    break
+                else:
+                    continue
             feed = feedparser.parse(r.text)
         except Exception:
             stats["atom_fetch_errors"] += 1
-            break
+            empty_streak += 1
+            if empty_streak >= 3:
+                break
+            else:
+                continue
 
         entries = feed.get("entries", [])
         if not entries:
-            # empty page; continue to next page just in case, but mark an error if first page
-            if p == 0:
-                stats["atom_fetch_errors"] += 1
-            continue
+            empty_streak += 1
+            if empty_streak >= 3:
+                break
+            else:
+                continue
+        else:
+            empty_streak = 0
 
         oldest_et_on_page = None
+        newest_et_on_page = None
 
         for e in entries:
-            stats["entries_seen"] += 1
             ftime = parse_entry_time(e)
             if not ftime:
                 continue
-
             if oldest_et_on_page is None or ftime < oldest_et_on_page:
                 oldest_et_on_page = ftime
+            if newest_et_on_page is None or ftime > newest_et_on_page:
+                newest_et_on_page = ftime
 
             if not within_window(ftime, start_et, end_et, tz):
                 continue
+
+            stats["entries_seen"] += 1
 
             form = entry_form(e)
             if form not in allowed_forms:
@@ -136,6 +154,21 @@ def main():
 
             rec["score"] = score_record(rec, scoring)
             kept_rows.append(rec)
+
+        # Record coverage for this page (ET)
+        def to_et_str(dt):
+            try:
+                from zoneinfo import ZoneInfo
+            except Exception:
+                from backports.zoneinfo import ZoneInfo
+            return dt.astimezone(ZoneInfo(tz)).isoformat() if dt else None
+
+        stats["pages_debug"].append({
+            "page": p,
+            "p_entries": len(entries),
+            "newest_et": to_et_str(newest_et_on_page),
+            "oldest_et": to_et_str(oldest_et_on_page),
+        })
 
         if oldest_et_on_page:
             try:
