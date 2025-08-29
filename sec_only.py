@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v19.4
-Fix: SEC Atom "count" max is 100. We now:
-- cap count to 100 internally, even if config asks for more
-- advance 'start' by the ACTUAL number of entries returned (prevents gaps)
-Keeps: UA fetch + retries, backoff, pages_debug, company enrichment, safe CSV, webhook deploy.
+Grand Master — SEC ONLY (Step 6) v19.6
+Change: EXPAND *SCRAPING* window (scan deeper), keep OUTPUT window fixed at 09:30 ET → 09:30 ET.
+- Uses prev business day 09:30 ET to latest 09:30 ET window for KEEPING results (unchanged).
+- Scans deeper past the start boundary by `scan_extend_days` (calendar days) to survive rate limits/empty pages.
+- Still caps count=100 per page and advances by actual entries returned (no gaps).
+- Keeps: tags-based form detection, company enrichment, safe CSV, webhook deploy, pages_debug.
 """
 import os, json, time
 from typing import Any, Dict, List
 import feedparser
 import pandas as pd
 from utils_sec import (
-    SEC_ATOM, new_session, et_window_now_yday, parse_entry_time, entry_form,
+    SEC_ATOM, new_session, et_window_prev0930_to_latest0930, parse_entry_time, entry_form,
     extract_cik_from_link, load_json, within_window, fetch_submissions_for_cik,
     map_company_meta, banned_by_sic, banned_by_keywords, score_record, fallback_company_from_title
 )
 
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
+
+def cfg_val(cfg, key, default):
+    return cfg.get(key, default)
 
 def main():
     root = os.path.dirname(os.path.abspath(__file__))
@@ -30,16 +34,23 @@ def main():
     ua = cfg.get("user_agent","GrandMasterSEC/1.0 (contact@example.com)")
 
     outdir = os.path.join(root, "outputs"); ensure_dir(outdir)
-    start_et, end_et = et_window_now_yday(tz)
+
+    # KEEP window: prev business day 09:30 -> latest 09:30 <= now
+    start_et, end_et = et_window_prev0930_to_latest0930(tz, cutoff_hour=9, cutoff_minute=30, business_days=True)
     session = new_session(ua)
 
-    max_pages = int(cfg.get("max_pages", 200))
-    requested_count = int(cfg.get("count_per_page", 100))
+    # Scraping depth expansion
+    scan_extend_days = int(cfg_val(cfg, "scan_extend_days", 2))  # calendar days deeper than start_et
+    from datetime import timedelta
+    extended_stop_et = start_et - timedelta(days=scan_extend_days)
+
+    max_pages = int(cfg_val(cfg, "max_pages", 400))
+    requested_count = int(cfg_val(cfg, "count_per_page", 100))
     count = min(max(requested_count, 1), 100)  # SEC caps at 100
-    page_pause = float(cfg.get("page_pause_sec", 1.0))
-    max_empty_pages = int(cfg.get("max_empty_pages", 5))
-    retry_503 = int(cfg.get("retry_503", 3))
-    retry_sleep = float(cfg.get("retry_sleep_sec", 1.5))
+    page_pause = float(cfg_val(cfg, "page_pause_sec", 1.2))
+    max_empty_pages = int(cfg_val(cfg, "max_empty_pages", 8))
+    retry_503 = int(cfg_val(cfg, "retry_503", 5))
+    retry_sleep = float(cfg_val(cfg, "retry_sleep_sec", 1.5))
 
     allowed_forms = {
         "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A",
@@ -49,8 +60,10 @@ def main():
     raw_rows: List[Dict[str,Any]] = []
     kept_rows: List[Dict[str,Any]] = []
     stats = {
+        "window_mode": "prev_0930_to_latest_0930",
         "window_start_et": start_et.isoformat(),
         "window_end_et": end_et.isoformat(),
+        "cutoff_local_time": "09:30",
         "pages_fetched": 0,
         "entries_seen": 0,
         "entries_kept": 0,
@@ -58,15 +71,17 @@ def main():
         "banned_kw": 0,
         "errors": 0,
         "hit_boundary": False,
+        "hit_extended_boundary": False,
         "hit_page_limit": False,
         "atom_fetch_errors": 0,
         "atom_http_codes": [],
         "pages_debug": [],
         "last_oldest_et_scanned": None,
-        "effective_count_used": count
+        "effective_count_used": count,
+        "scan_extend_days": scan_extend_days,
+        "extended_stop_et": extended_stop_et.isoformat(),
     }
 
-    crossed_boundary = False
     empty_streak = 0
     start_idx = 0
 
@@ -74,7 +89,7 @@ def main():
         url = SEC_ATOM.format(start=start_idx, count=count)
         stats["pages_fetched"] += 1
 
-        # Retry fetch
+        # Retry fetch with gentle backoff
         page_text = None
         http_codes_local = []
         for attempt in range(1, retry_503+1):
@@ -121,6 +136,7 @@ def main():
             if newest_et_on_page is None or ftime > newest_et_on_page:
                 newest_et_on_page = ftime
 
+            # KEEP only entries within strict 09:30→09:30 window
             if not within_window(ftime, start_et, end_et, tz):
                 continue
 
@@ -132,7 +148,6 @@ def main():
             summary = e.get("summary","") or e.get("content",[{"value":""}])[0].get("value","")
             link = e.get("link","")
 
-            # Enrichment
             cik = extract_cik_from_link(link)
             ticker = None; sic = None; industry = None; company = None
             if cik:
@@ -144,7 +159,6 @@ def main():
             if not company:
                 company = fallback_company_from_title(title)
 
-            # Ban checks
             banned = False
             if banned_by_sic(sic, ban_pref, ban_exact):
                 banned = True; stats["banned_sic"] += 1
@@ -166,13 +180,13 @@ def main():
                 "link": link
             }
             raw_rows.append(rec)
-            if banned: 
+            if banned:
                 continue
 
             rec["score"] = score_record(rec, scoring)
             kept_rows.append(rec)
 
-        # Page coverage
+        # Page coverage in ET
         def to_et_str(dt):
             try:
                 from zoneinfo import ZoneInfo
@@ -189,7 +203,7 @@ def main():
         })
         stats["last_oldest_et_scanned"] = stats["pages_debug"][-1]["oldest_et"]
 
-        # Boundary reached?
+        # Boundary flags (we DO NOT stop at the first boundary anymore)
         if oldest_et_on_page:
             try:
                 from zoneinfo import ZoneInfo
@@ -197,21 +211,21 @@ def main():
                 from backports.zoneinfo import ZoneInfo
             oldest_et = oldest_et_on_page.astimezone(ZoneInfo(tz))
             if oldest_et < start_et:
-                crossed_boundary = True
                 stats["hit_boundary"] = True
+            if oldest_et < (start_et - (end_et - extended_stop_et)):  # i.e., older than extended_stop_et
+                stats["hit_extended_boundary"] = True
                 break
 
-        # Advance by ACTUAL entries returned to avoid gaps even if SEC caps count to 100
+        # Advance by ACTUAL entries to avoid gaps
         start_idx += n
         time.sleep(page_pause)
 
-    if not crossed_boundary and stats["pages_fetched"] >= max_pages:
-        stats["hit_page_limit"] = True
-
+    # Order by score then time
     kept_rows.sort(key=lambda r: (r.get("score",0), r.get("filing_datetime","")), reverse=True)
     stats["entries_kept"] = len(kept_rows)
 
-    # Write JSON outputs
+    # Write outputs
+    outdir = os.path.join(root, "outputs"); ensure_dir(outdir)
     raw_path = os.path.join(outdir, "sec_filings_raw.json")
     with open(raw_path,"w",encoding="utf-8") as f: f.write(json.dumps(raw_rows, indent=2))
     stats_path = os.path.join(outdir, "sec_debug_stats.json")
@@ -219,7 +233,7 @@ def main():
     snap_path = os.path.join(outdir, "sec_filings_snapshot.json")
     with open(snap_path,"w",encoding="utf-8") as f: f.write(json.dumps(kept_rows, indent=2))
 
-    # CSV with company column
+    # CSV columns
     cols = ["filing_datetime","form","company","ticker","cik","industry","sic","title","score","link"]
     if kept_rows:
         df = pd.DataFrame(kept_rows)
@@ -231,7 +245,7 @@ def main():
 
     print("Outputs written to outputs/.")
 
-    # Deploy to Hostinger if enabled
+    # Deploy
     if cfg.get("enable_webhook_deploy"):
         try:
             from deploy.webhook_deploy import deploy_files
