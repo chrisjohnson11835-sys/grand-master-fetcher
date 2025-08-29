@@ -1,1277 +1,598 @@
 ticker,company,industry,form,score,recommended
-,"First Guaranty Bancshares, Inc.",,4,3,False
-,WALKER ROBERT W,,4,3,False
-,Apollo Diversified Real Estate Fund,,424B3,3,False
-,Radhakrishna Shrisha,,4,3,False
-,Opendoor Technologies Inc.,,4,3,False
-,Patton Gregory Scott,,4,3,False
-,ETF Opportunities Trust,,485BXT,3,False
-,ETF Opportunities Trust,,485BXT,3,False
-,Prairie Operating Co.,,4,3,False
-,Inukonda Ravi,,4,3,False
-,"DoorDash, Inc.",,4,3,False
-,UBS AG,,424B2,3,False
-,Cline Christopher R.,,4,3,False
-,"Travere Therapeutics, Inc.",,4,3,False
-,K - Nvni Group Ltd,,6-K,4,False
-,K - SciSparc Ltd.,,6-K,4,False
-,K - SOS Ltd,,6-K,4,False
-,MICHAS ALEXIS P,,4,3,False
-,"REVVITY, INC.",,4,3,False
-,K - PSYENCE BIOMEDICAL LTD.,,6-K,4,False
-,LICH BRAD A,,4,3,False
-,EASTMAN CHEMICAL CO,,4,3,False
-,Shasta Theodore,,4,3,False
-,MBIA INC,,4,3,False
-,Q - BROWN FORMAN CORP,,10-Q,5,True
-,HSBC USA INC /MD/,,424B2,3,False
-,McLain William Thomas Jr.,,4,3,False
-,EASTMAN CHEMICAL CO,,4,3,False
-,"K - Autodesk, Inc.",,8-K,5,True
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,Clerc Alexandre,,4,3,False
-,"Frontier Group Holdings, Inc.",,4,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,RICHARDS MICHAEL L,,4,3,False
-,STATE STREET CORP,,4,3,False
-,Brazier Allan J,,4,3,False
-,Aptiv PLC,,4,3,False
-,"Calvert Impact Fund, Inc.",,497,3,False
-,"Calvert Responsible Index Series, Inc.",,497,3,False
-,"Calvert World Values Fund, Inc.",,497,3,False
-,Calvert Fund,,497,3,False
-,Calvert Social Investment Fund,,497,3,False
-,Calvert Management Series,,497,3,False
-,Piconi Robert,,4,3,False
-,"Energy Vault Holdings, Inc.",,4,3,False
-,K - IREN Ltd,,8-K,5,True
-,K - ALERUS FINANCIAL CORP,,8-K,5,True
-,"K - Keros Therapeutics, Inc.",,8-K,5,True
-,Hagedorn Christopher,,4,3,False
-,SCOTTS MIRACLE-GRO CO,,4,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,Scheiwer Mark J,,4,3,False
-,SCOTTS MIRACLE-GRO CO,,4,3,False
-,FRISBY JEFFRY D,,4,3,False
-,ASTRONICS CORP,,4,3,False
-,Louissaint Obed D.,,4,3,False
-,Aptiv PLC,,4,3,False
-,UBS AG,,424B2,3,False
-,HAGEDORN JAMES,,4,3,False
-,SCOTTS MIRACLE-GRO CO,,4,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,"Eaton Vance Series Fund, Inc.",,497,3,False
-,UBS AG,,424B2,3,False
-,Eaton Vance Municipals Trust II,,497,3,False
-,Eaton Vance Investment Trust,,497,3,False
-,Eaton Vance Municipals Trust,,497,3,False
-,Eaton Vance Mutual Funds Trust,,497,3,False
-,Eaton Vance Growth Trust,,497,3,False
-,Eaton Vance Series Trust II,,497,3,False
-,Eaton Vance Special Investment Trust,,497,3,False
-,Baxter Nathan Eric,,4,3,False
-,UBS AG,,424B2,3,False
-,SCOTTS MIRACLE-GRO CO,,4,3,False
-,UBS AG,,424B2,3,False
-,Keane Robert S,,4,3,False
-,ASTRONICS CORP,,4,3,False
-,UBS AG,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,K - TFS Financial CORP,,8-K,5,True
-,MORAN MARK J,,4,3,False
-,UBS AG,,424B2,3,False
-,ASTRONICS CORP,,4,3,False
-,BRADY ROBERT T,,4,3,False
-,ASTRONICS CORP,,4,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,UBS AG,,424B2,3,False
-,JOHNSON WARREN C,,4,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,ASTRONICS CORP,,4,3,False
-,"Q - GREIF, INC",,10-Q,5,True
-,Tema ETF Trust,,485BXT,3,False
-,Tema ETF Trust,,485BXT,3,False
-,UBS AG,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,UBS AG,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,UBS AG,,424B2,3,False
-,Costa Mark J,,4,3,False
-,EASTMAN CHEMICAL CO,,4,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,West Fay,,4,3,False
-,ASTRONICS CORP,,4,3,False
-,UBS AG,,424B2,3,False
-,K - Canaan Inc.,,6-K,4,False
-,UBS AG,,424B2,3,False
-,KIM NEIL Y.,,4,3,False
-,ASTRONICS CORP,,4,3,False
-,UBS AG,,424B2,3,False
-,"Weichai Power Co., Ltd.",,4,3,False
-,"Shandong Heavy Industry Group Co., Ltd.",,4,3,False
-,Weichai America Corp.,,4,3,False
-,"POWER SOLUTIONS INTERNATIONAL, INC.",,4,3,False
-,UBS AG,,424B2,3,False
-,K - DeFi Development Corp.,,8-K,5,True
-,UBS AG,,424B2,3,False
-,K - Permian Resources Corp,,8-K,5,True
-,UBS AG,,424B2,3,False
-,Inspirato Inc,,4,3,False
-,Zamani Payam,,4,3,False
-,K/A - Epsium Enterprise Ltd,,6-K/A,4,False
-,Yerdessov Azamat,,4,3,False
-,Freedom Holding Corp.,,4,3,False
-,"K - Pop Culture Group Co., Ltd",,6-K,4,False
-,"Castellum, Inc.",,4,3,False
-,WRIGHT JAY O,,4,3,False
-,K - Cannaisseur Group Inc.,,8-K,5,True
-,UBS AG,,424B2,3,False
-,BULLS HERMAN E,,4,3,False
-,COMFORT SYSTEMS USA INC,,4,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,"APP/A - Fidelity Direct Lending Fund I JSPV, LLC",,40-APP/A,3,False
-,APP/A - Fidelity Direct Lending Fund 1 Blocker LLC,,40-APP/A,3,False
-,APP/A - FDLF CA SPE LLC,,40-APP/A,3,False
-,APP/A - FPCF CA SPE 2 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Direct Lending Tactical 1 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Unlevered Private Credit Fund LP,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit SC LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Tactical 2 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Tactical 1 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Fund GSPV LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Fund CSPV LLC,,40-APP/A,3,False
-,APP/A - Fidelity Multi-Strategy Credit Tactical 1 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Fund BSPV LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Fund Blocker 2 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Multi-Strategy Credit Fund Blocker LLC,,40-APP/A,3,False
-,APP/A - Fidelity Direct Lending Tactical 3 LLC,,40-APP/A,3,False
-,APP/A - Fidelity Direct Lending Tactical 2 LLC,,40-APP/A,3,False
-,"APP/A - Fidelity Real Estate Debt Opportunities Fund II, LP",,40-APP/A,3,False
-,APP/A - Fidelity Convertible Arbitrage Fund LP,,40-APP/A,1,False
-,APP/A - Fidelity Evergreen Private Credit Fund LP,,40-APP/A,3,False
-,APP/A - Fidelity Credit Opportunities Fund II LP,,40-APP/A,3,False
-,APP/A - Fidelity Multi-Strategy Credit Fund,,40-APP/A,3,False
-,APP/A - Fidelity Diversifying Solutions LLC,,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Fund,,40-APP/A,3,False
-,"APP/A - Fidelity Direct Lending Institutional Fund, LP",,40-APP/A,3,False
-,APP/A - Fidelity Private Credit Co LLC,,40-APP/A,3,False
-,"APP/A - Fidelity Real Estate Debt Opportunities Fund I, LP",,40-APP/A,3,False
-,"APP/A - Fidelity Real Estate Opportunistic Income Fund, LP",,40-APP/A,3,False
-,APP/A - FIAM LLC,,40-APP/A,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,UBS AG,,424B2,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BANK OF MONTREAL /CAN/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Tema ETF Trust,,485BXT,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Krane Shares Trust,,485BXT,3,False
-,Krane Shares Trust,,485BXT,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,WisdomTree Digital Trust,,497,3,False
-,Monteagle Funds,,497,3,False
-,Tema ETF Trust,,485BXT,3,False
-,Tema ETF Trust,,485BXT,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Krane Shares Trust,,485BXT,3,False
-,Krane Shares Trust,,485BXT,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,WisdomTree Digital Trust,,485APOS,3,False
-,WisdomTree Digital Trust,,485APOS,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,CANADIAN IMPERIAL BANK OF COMMERCE /CAN/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,K/A - ARTS WAY MANUFACTURING CO INC,,8-K/A,5,True
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,K - Federal Home Loan Bank of Des Moines,,8-K,5,True
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,K - BANCFIRST CORP /OK/,,8-K,5,True
-,ROYAL BANK OF CANADA,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,K - HPS Corporate Capital Solutions Fund,,8-K,5,True
-,Capital Group KKR Multi-Sector,,486BPOS,3,False
-,Capital Group KKR Multi-Sector,,486BPOS,3,False
-,Ali Samir H,,4,3,False
-,Seadrill Ltd,,4,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,"Q - FIVE BELOW, INC",,10-Q,5,True
-,HSBC USA INC /MD/,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,Seadrill Ltd,,4,3,False
-,Strickler Todd D,,4,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,PROSHARES TRUST,,497,3,False
-,Capital Group KKR Core Plus,,486BPOS,3,False
-,Capital Group KKR Core Plus,,486BPOS,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Seadrill Ltd,,4,3,False
-,Johnson Simon,,4,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,PROSHARES TRUST,,497K,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,PROSHARES TRUST,,497K,3,False
-,PROSHARES TRUST,,497K,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Creed Grant R,,4,3,False
-,Seadrill Ltd,,4,3,False
-,Sauer-Petersen Torsten,,4,3,False
-,Seadrill Ltd,,4,3,False
-,PROSHARES TRUST,,497J,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,FIRST TRUST SERIES FUND,,485BXT,3,False
-,FIRST TRUST SERIES FUND,,485BXT,3,False
-,Fabbri Beth Amber L.,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,Mahajan Manmohan,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,Strassman Hunter,,4,3,False
-,"STARTENGINE CROWDFUNDING, INC.",,4,3,False
-,Minnix Lanesha,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,APP/A - HarbourVest Asia Pacific 5 Holdings LLC,,40-APP/A,3,False
-,APP/A - JUNI Tranche 2024 Secondary Holdings LLC,,40-APP/A,3,False
-,APP/A - Dover Street XII L.P.,,40-APP/A,3,False
-,APP/A - HCF6-EDH LLC,,40-APP/A,3,False
-,APP/A - Vanguard HV 2023 Private Equity Holdings LLC,,40-APP/A,3,False
-,APP/A - HIPEP VII AIF Holdings LLC,,40-APP/A,3,False
-,APP/A - HIPEP X Secondary Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Frenchmen Street I-1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV NESPF Tranche I Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Orbit Tranche 2 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Jumpman LLC,,40-APP/A,3,False
-,APP/A - HV Zodiac LLC,,40-APP/A,3,False
-,APP/A - HV Broom LLC,,40-APP/A,3,False
-,APP/A - HV IOF3 Holdings 1 LLC,,40-APP/A,3,False
-,APP/A - HV Blue Ridge Tranche 1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV XIII Secondary Holdings LLC,,40-APP/A,3,False
-,APP/A - HV CI Secondaries Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Xenon LLC,,40-APP/A,3,False
-,APP/A - HV Lungo V Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Meranti III B1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Ontario Private Equity Tranche 1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV PC Secondaries 2024 Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment VI Investment Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Wespath Impact Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2025 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CT Private Debt Partnership L.P.,,40-APP/A,5,True
-,APP/A - HarbourVest Dover Street XII Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest HCS Fund I L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Lungo V Fund SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Mayflower Co-Investment Fund I L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Summit Hill Infra Tranche 1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HCF7 Buyout Investment Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Mountain LLC,,40-APP/A,3,False
-,APP/A - HGPS Secondary Holdings LLC,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2025 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - PECS Delaware Overflow Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2025 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2025 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest AS Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Alberta Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Suncor Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest VSMA1 Credit Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2025 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Small Cap AIF SCSp,,40-APP/A,3,False
-,APP/A - HIPEP IX DE Holdings LLC,,40-APP/A,3,False
-,APP/A - HGPS-DPE Delaware Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Partners,,40-APP/A,3,False
-,APP/A - HarbourVest Private Investments Fund,,40-APP/A,3,False
-,APP/A - HarbourVest Zebra 2 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Braemar Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Registered Advisers L.P.,,40-APP/A,1,False
-,APP/A - Pacific Coast Senior Credit L.P.,,40-APP/A,3,False
-,APP/A - Pacific Coast Senior Credit Finance 1 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Global Private Solution SICAV S.A. - Diversified Private Equity Fund,,40-APP/A,3,False
-,APP/A - HarbourVest Canada Growth Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners,,40-APP/A,3,False
-,APP/A - HarbourVest COF III Investment L.P.,,40-APP/A,3,False
-U,APP/A - HarbourVest DL II Investment Holding A,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2021 Private Equity Holdings LLC,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2022 Private Equity Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Z Global Private Equity Holdings LLC,,40-APP/A,3,False
-,APP/A - CSC Private Investments L.P.,,40-APP/A,3,False
-A,APP/A - NPS Co-Investment,,40-APP/A,3,False
-,APP/A - Dover Street 2014 Overflow Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CT Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Advisers L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment Fund IV AIV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment Fund V AIV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment VI Aggregator L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2018 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2022 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2023 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Investment VII Buyout Aggregator L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Zebra 3 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2019 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2020 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2021 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2022 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2023 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2024 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - Great Lakes Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Guardian Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CI Secondaries L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Harvest Fund II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Harvest Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Income Portfolio 1 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Income Portfolio 1 Holdings L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Income Portfolio 2 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Income Portfolio 3 L.P.,,40-APP/A,3,False
-,APP/A - HIPEP IX Investment Holding L.P.,,40-APP/A,3,False
-,APP/A - HIPEP IX Secondary L.P.,,40-APP/A,3,False
-,APP/A - HIPEP Select Asia Fund L.P.,,40-APP/A,3,False
-,APP/A - HIPEP Select Asia Fund II L.P.,,40-APP/A,3,False
-,APP/A - HIPEP Select Asia Fund III L.P.,,40-APP/A,3,False
-,APP/A - HIPEP VII Secondary L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Homestead Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Blue Secondary 2018 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CB Global Co-Inv Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street L.P.,,40-APP/A,3,False
-,APP/A - HVSHP L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest IOF3 Holdings L.P.,,40-APP/A,3,False
-USD,APP/A - JUNI Private Equity Fund H,,40-APP/A,3,False
-USD,APP/A - JUNI Private Equity Fund H,,40-APP/A,3,False
-,APP/A - KPI-HarbourVest Multi-Strategy Fund I L.P.,,40-APP/A,3,False
-,APP/A - KPS-HarbourVest Multi-Strategy Fund I L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest KTCU Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - Kwasa Nexus Fund L.P.,,40-APP/A,3,False
-,APP/A - Longhorn HV Co-Investment 1 L.P.,,40-APP/A,3,False
-,APP/A - Longhorn HV Co-Investment 2 L.P.,,40-APP/A,3,False
-,APP/A - Longhorn HV Co-Investment Opps A L.P.,,40-APP/A,3,False
-,"APP/A - HV Z Global Private Equity Fund, L.P.",,40-APP/A,3,False
-,APP/A - HV Special Situations Fund L.P.,,40-APP/A,3,False
-,APP/A - HV SI - Apollo Sengai Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Red Dragon L.P.,,40-APP/A,3,False
-,APP/A - CHV Investments Fund L.P.,,40-APP/A,3,False
-,APP/A - HV International VIII Secondary L.P.,,40-APP/A,3,False
-,APP/A - HIPEP X Secondary L.P.,,40-APP/A,3,False
-,APP/A - HV 2018 Global Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Venture Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Small Cap Fund L.P.,,40-APP/A,3,False
-,APP/A - HV XIII Secondary L.P.,,40-APP/A,3,False
-,APP/A - Lindenstone PE SCSp,,40-APP/A,3,False
-,APP/A - PECS Overflow Fund L.P.,,40-APP/A,3,False
-,APP/A - Peninsula HarbourVest Fund L.P.,,40-APP/A,3,False
-,APP/A - VRS HV 2013 Separate Account LLC,,40-APP/A,3,False
-,APP/A - HV XI Secondary L.P.,,40-APP/A,3,False
-,APP/A - HV XII Secondary L.P.,,40-APP/A,3,False
-,APP/A - DENSO HV PEP L.P.,,40-APP/A,3,False
-,APP/A - DENSO HV PEP II L.P.,,40-APP/A,3,False
-,APP/A - MVPF 2 SCSp,,40-APP/A,3,False
-,APP/A - Dover Street VIII Holdings L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest SLO Fund L.P.,,40-APP/A,3,False
-,APP/A - MVPE 6 SCSp,,40-APP/A,3,False
-,APP/A - STC HarbourVest PECS Fund L.P.,,40-APP/A,3,False
-,APP/A - STC HarbourVest Private Debt Fund L.P.,,40-APP/A,3,False
-,APP/A - HVSHP Holdings LLC,,40-APP/A,3,False
-,APP/A - KPI-HarbourVest Multi-Strategy Investment Holdings LLC,,40-APP/A,3,False
-,APP/A - Meranti Holdings LLC,,40-APP/A,3,False
-,APP/A - Meranti II Holdings LLC,,40-APP/A,3,False
-,APP/A - Migdal-HarbourVest 2016 Holdings LLC,,40-APP/A,3,False
-,APP/A - MVPE 6 Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific 5 Investment Holding L.P.,,40-APP/A,3,False
-A,APP/A - NPS Co-Investment,,40-APP/A,3,False
-,"APP/A - CalSTRS Lower Middle Market Fund V, L.P.",,40-APP/A,3,False
-,APP/A - HarbourVest Air Canada Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CT Private Debt Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest D2022 Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Dai-ichi Life PE Fund L.P.,,40-APP/A,3,False
-L,APP/A - HarbourVest DL II Investment Holding A,,40-APP/A,3,False
-U,APP/A - HarbourVest DL II Investment Holding B,,40-APP/A,3,False
-,APP/A - HarbourVest Dover Street XI Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest EMMPT PE Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest FFV Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street AIV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street II AIV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street III AIV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Finance Street III L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Frenchmen Street Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners X Secondary L.P.,,40-APP/A,3,False
-,APP/A - NYSCRF Transition Annex Fund L.P.,,40-APP/A,3,False
-,APP/A - NYSCRF Pioneer Partnership Fund III L.P.,,40-APP/A,5,True
-,APP/A - NPS Fund II Holdings L.P.,,40-APP/A,3,False
-,APP/A - NPS Co-Investment Fund II L.P.,,40-APP/A,3,False
-B,APP/A - NPS Co-Investment,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - VRS HV 2016 Separate Account LLC,,40-APP/A,3,False
-,APP/A - HV Great Lakes Series I 2020 Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest VSMA1 Asia Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest FFV Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Red Dragon Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest TJU Declaration Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Centre Street Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Citrine Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2017 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2019 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2020 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2021 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest/NYSTRS Co-Invest Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest/NYSTRS Co-Invest Fund II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest/NYSTRS Co-Invest Fund III L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Ontario Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest PA Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Buyout AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest L Global PE SMA L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest PC Secondaries 2022 Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XIII Venture AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Dover Street IX Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest BVK Co-Investment Fund 2022 SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest PC Secondaries 2024 Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Private Equity Continuation Solutions Aggregator L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Lungo III Fund SCS,,40-APP/A,3,False
-,APP/A - HarbourVest Lungo IV Fund SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest PERSLA PE Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest EMMPT PE Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest POBA Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest New Street Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest MVPE 5 SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets - Energy Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets - Energy Fund II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest RA4 Holdings L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets Olive Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Reynolds Fund I L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest MVPF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Skew Base AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Secondary 2017 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Orbit AIF SCSp,,40-APP/A,3,False
-,APP/A - HV SI - Apollo Sengai Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Secondary 2018 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Secondary 2019 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Amitim Fund L.P.,,40-APP/A,3,False
-,APP/A - Sunvest LLC,,40-APP/A,3,False
-,"APP/A - CalSTRS Lower Middle Market Fund IV, LLC",,40-APP/A,3,False
-,APP/A - HCF6 Holdings LLC,,40-APP/A,3,False
-,APP/A - Longhorn HV Reveille 1 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest CC Portfolio Fund L.P.,,40-APP/A,3,False
-,APP/A - Maple Fund L.P.,,40-APP/A,3,False
-,APP/A - HCF5 Holdings LLC,,40-APP/A,3,False
-,APP/A - Meranti Fund II L.P.,,40-APP/A,3,False
-,APP/A - Meranti Fund III L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Mercurius L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest NESPF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Nest Co-Investment L.P.,,40-APP/A,3,False
-,APP/A - DENSO HV PEP II Holdings LLC,,40-APP/A,3,False
-L,APP/A - HarbourVest DL II Investment Holding B,,40-APP/A,3,False
-L,APP/A - HarbourVest DL Investment Holding I,,40-APP/A,3,False
-,APP/A - Dover Street 2014 Holdings LLC,,40-APP/A,3,False
-,APP/A - Dover VII Holdings LLC,,40-APP/A,3,False
-,APP/A - Enervest LLC,,40-APP/A,3,False
-,APP/A - HarbourVest FRS R3 LLC,,40-APP/A,3,False
-,APP/A - GF2018 Holdings LLC,,40-APP/A,3,False
-,APP/A - GF2019 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV 2019 Global Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Braemar Holdings LLC,,40-APP/A,3,False
-,APP/A - HGPS-DPE Luxembourg Holdings SCSp,,40-APP/A,3,False
-,APP/A - HIPEP X Holdings LLC,,40-APP/A,3,False
-,APP/A - HIPEP VII Secondary Holdings LLC,,40-APP/A,3,False
-,APP/A - HIPEP VII Partnership Holdings LLC,,40-APP/A,5,True
-,APP/A - HIPEP VII Europe Holdings LLC,,40-APP/A,3,False
-,APP/A - HIPEP VII EM Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Stewardship Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Summit Hill Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest TBW L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest TJU Declaration Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest AP7 PE Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific 5 Secondary L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Blue Ridge Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest MVPE 5 Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Broadway Co-Investment L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest MVPF Holdings LLC,,40-APP/A,3,False
-,APP/A - RA4 Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest L Global PE Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest SLO Holdings LLC,,40-APP/A,3,False
-,APP/A - SMRS-CAPP LLC,,40-APP/A,3,False
-,APP/A - SMRS-HVDL LLC,,40-APP/A,3,False
-,APP/A - CalSTRS Lower Middle Market Fund VI L.P.,,40-APP/A,3,False
-,APP/A - CalSTRS Lower Middle Market Fund VII L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Homestead Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest TMRS Polaris SMA L.P.,,40-APP/A,3,False
-,APP/A - HV 2022 Global Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest VSMA1 Asia Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Vulcanus L.P.,,40-APP/A,3,False
-,APP/A - HV 2023 Global Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Wespath Impact Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Invest 2024 Private Equity Partners L.P.,,40-APP/A,3,False
-,APP/A - HV Amitim Uniform Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest AP7 Holdings 2 LLC,,40-APP/A,3,False
-,APP/A - HV Harvest Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Meranti III A1 Holdings LLC,,40-APP/A,3,False
-,APP/A - HV Nest Uniform Holdings LLC,,40-APP/A,3,False
-,APP/A - Sunvest II LLC,,40-APP/A,3,False
-,APP/A - SMRS-NCRP LLC,,40-APP/A,3,False
-,APP/A - Migdal-HarbourVest 2016 Fund L.P.,,40-APP/A,3,False
-,APP/A - HV VIII Holdings LLC,,40-APP/A,3,False
-,APP/A - HV RA II LLC,,40-APP/A,3,False
-,APP/A - Nour Fund I L.P.,,40-APP/A,3,False
-,APP/A - Anggerik HV L.P.,,40-APP/A,3,False
-,APP/A - HCF4 Holdings LLC,,40-APP/A,3,False
-,APP/A - TRSL Co-Investment Fund L.P.,,40-APP/A,3,False
-,APP/A - HV New Street Franklin Series Holdings LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Pathway Holdings LLC,,40-APP/A,3,False
-,APP/A - Longhorn HV Co-Investment Opps B L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Investment Fund VII Growth L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Investment Fund VII Buyout L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Investment Fund VII Combined L.P.,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2024 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2024 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest 2024 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Private Equity Continuation Solutions L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Private Equity Continuation Solutions AIF SCSp,,40-APP/A,3,False
-,APP/A - HARBOURVEST CANADA GROWTH FUND III L.P.,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2023 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2023 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2023 Global AIF SCSp,,40-APP/A,3,False
-U,APP/A - HarbourVest Direct Lending II AIF,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Opportunities Fund III L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Infrastructure Opportunities III AIF SCSp,,40-APP/A,3,False
-L,APP/A - HarbourVest Direct Lending Fund II,,40-APP/A,3,False
-,APP/A - HIPEP X Fund L.P.,,40-APP/A,3,False
-U,APP/A - HarbourVest Direct Lending II Parallel Fund,,40-APP/A,3,False
-U,APP/A - HarbourVest Direct Lending Fund II,,40-APP/A,3,False
-L,APP/A - HarbourVest Direct Lending II Parallel Fund,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Stewardship AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Stewardship Fund L.P.,,40-APP/A,3,False
-,APP/A - Secondary Overflow Fund V L.P.,,40-APP/A,3,False
-,APP/A - Dover Street XI L.P.,,40-APP/A,3,False
-,APP/A - Dover Street XI AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Zebra 1 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Credit Opportunities III AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Credit Opportunities Fund III L.P.,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2022 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2022 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2022 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2021 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific Fund 5 L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific 5 AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Micro Buyout AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Venture AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Buyout AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Venture Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Micro Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XII Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment Fund VI L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment VI AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest 2021 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2021 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest PC Secondaries 2020 Fund L.P.,,40-APP/A,3,False
-,APP/A - Vanguard HarbourVest 2020 Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HIPEP IX Fund L.P.,,40-APP/A,3,False
-,APP/A - HIPEP IX AIF SCSp,,40-APP/A,3,False
-L,APP/A - HarbourVest Direct Lending AIF,,40-APP/A,3,False
-L,APP/A - HarbourVest Direct Lending Fund,,40-APP/A,3,False
-,APP/A - HarbourVest 2020 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2020 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Credit Opportunities II AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest Credit Opportunities Fund II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets Fund IV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets IV AIF SCSp,,40-APP/A,3,False
-,APP/A - HarbourVest 2019 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2019 Global AIF SCSp,,40-APP/A,3,False
-,APP/A - Secondary Overflow Fund IV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Canada Growth Fund II L.P.,,40-APP/A,3,False
-,APP/A - Dover Street X AIF SCSp,,40-APP/A,3,False
-,APP/A - Dover Street X L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Dover Street X Investment L.P.,,40-APP/A,3,False
-,APP/A - HVST-TOPE LLC,,40-APP/A,3,False
-,APP/A - Meranti Fund L.P.,,40-APP/A,3,False
-A,APP/A - NPS Co-Investment,,40-APP/A,3,False
-,APP/A - SMRS-TOPE LLC,,40-APP/A,3,False
-,APP/A - HarbourVest Adelaide L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment Fund V L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment V AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Venture AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Venture Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Micro Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Micro Buyout AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Buyout AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners XI Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2018 Global AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2018 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Co-Investment Opportunities Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2017 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific Fund VIII L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2017 Global AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Asia Pacific VIII AIF L.P.,,40-APP/A,3,False
-,APP/A - HIPEP VIII Partnership AIF L.P.,,40-APP/A,5,True
-,APP/A - HIPEP VIII Partnership Fund L.P.,,40-APP/A,5,True
-,APP/A - SECONDARY OVERFLOW FUND III L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment IV AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2016 Global Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Co-Investment Fund IV L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Real Assets Fund III L.P.,,40-APP/A,3,False
-,APP/A - Dover Street IX L.P.,,40-APP/A,3,False
-,APP/A - Dover Street IX AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Mezzanine Income Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners X AIF Venture L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners X AIF Buyout L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Canada Parallel Growth Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners X Venture Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners X Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2016 Global AIF L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest 2015 Global Fund L.P.,,40-APP/A,3,False
-,"APP/A - NYSCRF Pioneer Partnership Fund A-II, L.P.",,40-APP/A,5,True
-,"APP/A - Horizon Impact Fund, L.P.",,40-APP/A,3,False
-AIF,APP/A - HIPEP VII,,40-APP/A,3,False
-AIF,APP/A - HIPEP VII,,40-APP/A,5,True
-,APP/A - HarbourVest Partners L.P.,,40-APP/A,3,False
-,APP/A - HIPEP VII Asia Pacific Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Global Annual Private Equity Fund L.P.,,40-APP/A,3,False
-,APP/A - HIPEP VII Partnership Fund L.P.,,40-APP/A,5,True
-,APP/A - HIPEP VII Europe Fund L.P.,,40-APP/A,3,False
-,APP/A - HIPEP VII Emerging Markets Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners Cleantech Fund II L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners 2013 Direct Fund L.P.,,40-APP/A,3,False
-,"APP/A - First Capital Access Fund, L.P.",,40-APP/A,3,False
-,APP/A - HarbourVest Partners IX-Venture Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners IX-Credit Opportunities Fund L.P.,,40-APP/A,3,False
-,APP/A - HarbourVest Partners IX-Buyout Fund L.P.,,40-APP/A,3,False
-,APP/A - HARBOURVEST PARTNERS LLC,,40-APP/A,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,REALTY ADVISORS INC,,4,3,False
-,"New Concept Energy, Inc.",,4,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,FIRST TRUST EXCHANGE-TRADED FUND,,485BXT,3,False
-,FIRST TRUST EXCHANGE-TRADED FUND,,485BXT,3,False
-,K - Federal Home Loan Bank of Boston,,8-K,5,True
-,K - United States Commodity Index Funds Trust,,8-K,5,True
-,BLACKROCK FUNDS,,485BPOS,3,False
-,BLACKROCK FUNDS,,485BPOS,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,"K - United States Brent Oil Fund, LP",,8-K,5,True
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,WENTWORTH TIMOTHY C,,4,3,False
-,Heckman Todd,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"K - United States 12 Month Natural Gas Fund, LP",,8-K,5,True
-,Langowksi Mary,,4,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,"K - United States Gasoline Fund, LP",,8-K,5,True
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,"K - United States 12 Month Oil Fund, LP",,8-K,5,True
-,CITIZENS & NORTHERN CORP,,424B3,3,False
-,BANK OF NOVA SCOTIA,,424B2,3,False
-,PROSHARES TRUST,,485BPOS,3,False
-,PROSHARES TRUST,,485BPOS,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,"K - United States Natural Gas Fund, LP",,8-K,5,True
-,HSBC USA INC /MD/,,424B2,3,False
-,FundVantage Trust,,485BPOS,3,False
-,FundVantage Trust,,485BPOS,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,Burger Elizabeth,,4,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,"K - United States Oil Fund, LP",,8-K,5,True
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BlackRock ETF Trust,,485BPOS,3,False
-,BlackRock ETF Trust,,485BPOS,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,ABS Long/Short Strategies Fund,,486BPOS,3,False
-,ABS Long/Short Strategies Fund,,486BPOS,3,False
-,"GoHealth, Inc.",,3,2,False
-,Truong Bao Dinh,,3,2,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,ROYAL BANK OF CANADA,,424B2,3,False
-,Brown Tracey D,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Ivanov Penko Krassimir,,4,3,False
-,ARROW FINANCIAL CORP,,4,3,False
-,INVESCO EXCHANGE-TRADED FUND TRUST,,497J,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Gates Richard P.,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Antares Private Credit Fund,,424B3,3,False
-,K - CIMG Inc.,,8-K,5,True
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Polen Credit Opportunities Fund,,486BPOS,3,False
-,Polen Credit Opportunities Fund,,486BPOS,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,CITIGROUP INC,,424B3,3,False
-,Citigroup Global Markets Holdings Inc.,,424B3,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,Witczak Eric James,,4,3,False
-,NICOLET BANKSHARES INC,,4,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,K - Federal Home Loan Bank of Topeka,,8-K,5,True
-,Nelson Jonathan Michael,,4,3,False
-,"Avidia Bancorp, Inc.",,4,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,TRANSAMERICA FUNDS,,497,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,CANADIAN IMPERIAL BANK OF COMMERCE /CAN/,,424B2,3,False
-,BANK OF MONTREAL /CAN/,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,AFA ASSET BASED LENDING FUND,,486BPOS,3,False
-,AFA ASSET BASED LENDING FUND,,486BPOS,3,False
-,TRANSAMERICA SERIES TRUST,,497,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,K - GILAT SATELLITE NETWORKS LTD,,6-K,4,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,TRANSAMERICA FUNDS,,497,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,Pacer Funds Trust,,485BPOS,3,False
-,Pacer Funds Trust,,485BPOS,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,K - CASELLA WASTE SYSTEMS INC,,8-K,5,True
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - TORONTO DOMINION BANK,,6-K,4,False
-,BLACKROCK FUNDS,,485BPOS,3,False
-,BLACKROCK FUNDS,,485BPOS,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GUINNESS ATKINSON FUNDS,,497,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,K - LIVEPERSON INC,,8-K,5,True
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,STAHL MURRAY,,4,3,False
-,Horizon Kinetics Holding Corp,,4,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,"STEWARD FUNDS, INC.",,497K,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,"K - Gaucho Group Holdings, Inc.",,8-K,5,True
-,Barra Ornella,,4,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,"Walgreens Boots Alliance, Inc.",,4,3,False
-,Pessina Stefano,,4,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,UBS AG,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,K - GILAT SATELLITE NETWORKS LTD,,6-K,4,False
-,BLACKROCK EQUITY DIVIDEND FUND,,485BPOS,3,False
-,BLACKROCK EQUITY DIVIDEND FUND,,485BPOS,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,GUINNESS ATKINSON FUNDS,,497,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,SSGA Active Trust,,497K,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,K - LEHMAN BROTHERS HOLDINGS INC. PLAN TRUST,,8-K,5,True
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,K - Greenbacker Renewable Energy Co LLC,,8-K,5,True
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Grandeur Peak Global Trust,,485BPOS,3,False
-,Grandeur Peak Global Trust,,485BPOS,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Zhou Jeff,,4,3,False
-,MONOLITHIC POWER SYSTEMS INC,,4,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Dreyfus Institutional Liquidity Funds,,497,3,False
-,Dreyfus Institutional Reserves Funds,,497,3,False
-,CITIZENSSELECT FUNDS,,497,3,False
-,BNY MELLON OPPORTUNITY FUNDS,,497,3,False
-,DREYFUS INSTITUTIONAL PREFERRED MONEY MARKET FUNDS,,497,3,False
-,"BNY Mellon Investment Funds VII, Inc.",,497,3,False
-,DREYFUS TREASURY SECURITIES CASH MANAGEMENT,,497,3,False
-,BNY MELLON SHORT TERM MUNICIPAL BOND FUND,,497,3,False
-,Dreyfus Treasury Obligations Cash Management,,497,3,False
-,DREYFUS GOVERNMENT CASH MANAGEMENT FUNDS,,497,3,False
-,"BNY Mellon Sustainable U.S. Equity Fund, Inc.",,497,3,False
-,"BNY Mellon Large Cap Securities Fund, Inc.",,497,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,JPMorgan Chase Financial Co. LLC,,424B2,3,False
-,JPMORGAN CHASE & CO,,424B2,3,False
-,"Cycurion, Inc.",,3,2,False
-,McHenry Emmit J.,,3,2,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - ATS Corp /ATS,,6-K,4,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Levitt Randall James,,4,3,False
-,Capital Bancorp Inc,,4,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,"BLACKROCK MID-CAP VALUE SERIES, INC.",,485BPOS,3,False
-,"BLACKROCK MID-CAP VALUE SERIES, INC.",,485BPOS,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Gannon Robert T.,,4,3,False
-,Fidelity Private Credit Fund,,4,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - Eaton Vance Tax-Managed Global Diversified Equity Income Fund,,8-K,5,True
-,K - Eaton Vance Tax-Managed Global Buy-Write Opportunities Fund,,8-K,5,True
-,K - Federal Home Loan Bank of San Francisco,,8-K,5,True
-,K - Eaton Vance Tax-Managed Diversified Equity Income Fund,,8-K,5,True
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - Eaton Vance Tax-Managed Buy-Write Opportunities Fund,,8-K,5,True
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - Eaton Vance Tax-Managed Buy-Write Income Fund,,8-K,5,True
-,K - Eaton Vance Tax-Advantaged Global Dividend Opportunities Fund,,8-K,5,True
-,UBS AG,,424B2,3,False
-,ETF Opportunities Trust,,485BXT,3,False
-,ETF Opportunities Trust,,485BXT,3,False
-,K - Eaton Vance Tax-Advantaged Global Dividend Income Fund,,8-K,5,True
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - Eaton Vance Tax-Advantaged Dividend Income Fund,,8-K,5,True
-,K - Eaton Vance Short Duration Diversified Income Fund,,8-K,5,True
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,K - Eaton Vance Senior Income Trust,,8-K,5,True
-,K - Eaton Vance Senior Floating-Rate Trust,,8-K,5,True
-,K - Eaton Vance Risk-Managed Diversified Equity Income Fund,,8-K,5,True
-,K - Eaton Vance New York Municipal Bond Fund,,8-K,5,True
-,K - Eaton Vance National Municipal Opportunities Trust,,8-K,5,True
-,K - Eaton Vance Municipal Income Trust,,8-K,5,True
-,K - Eaton Vance Municipal Income 2028 Term Trust,,8-K,5,True
-,K - Eaton Vance Municipal Bond Fund,,8-K,5,True
-,K - Eaton Vance Ltd Duration Income Fund,,8-K,5,True
-,K - Eaton Vance Floating-Rate Income Trust,,8-K,5,True
-,K - Eaton Vance Enhanced Equity Income Fund II,,8-K,5,True
-,BARCLAYS BANK PLC,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,K - Eaton Vance Enhanced Equity Income Fund,,8-K,5,True
-,Q - HORMEL FOODS CORP /DE/,,10-Q,5,True
-,K - Eaton Vance California Municipal Income Trust,,8-K,5,True
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,K - Eaton Vance California Municipal Bond Fund,,8-K,5,True
-,BARCLAYS BANK PLC,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"Energy Vault Holdings, Inc.",,4,3,False
-,Ertel Thomas R,,4,3,False
-,K - INNEOVA Holdings Ltd,,6-K,4,False
-,POMINSKI LISA,,4,3,False
-,WILSON BANK HOLDING CO,,4,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,K - HPS Corporate Lending Fund,,8-K,5,True
-,17G - DIAMOND HILL FUNDS,,40-17G,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,17G - Diamond Hill Securitized Credit Fund,,40-17G,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,K - NatWest Group plc,,6-K,4,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,TORONTO DOMINION BANK,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,ADVISORS SERIES TRUST,,497K,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,ADVISORS SERIES TRUST,,485BPOS,3,False
-,ADVISORS SERIES TRUST,,485BPOS,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,GS Finance Corp.,,424B2,3,False
-,GOLDMAN SACHS GROUP INC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,BARCLAYS BANK PLC,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,BofA Finance LLC,,424B2,3,False
-,BANK OF AMERICA CORP /DE/,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,K - HSBC HOLDINGS PLC,,6-K,4,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,CITIGROUP INC,,424B2,3,False
-,Citigroup Global Markets Holdings Inc.,,424B2,3,False
-,"Cohen & Steers Preferred Securities & Income SMA Shares, Inc.",,497,3,False
-,"Cohen & Steers Future of Energy Fund, INC",,497,3,False
-,"Cohen & Steers Real Assets Fund, Inc.",,497,3,False
-,"COHEN & STEERS PREFERRED SECURITIES & INCOME FUND, INC.",,497,3,False
-,"Cohen & Steers International Realty Fund, Inc.",,497,3,False
-,COHEN & STEERS GLOBAL INFRASTRUCTURE FUND INC,,497,3,False
-,COHEN & STEERS INSTITUTIONAL REALTY SHARES INC,,497,3,False
-,COHEN & STEERS REAL ESTATE SECURITIES FUND INC,,497,3,False
-,"COHEN & STEERS GLOBAL REALTY SHARES, INC",,497,3,False
-,COHEN & STEERS REALTY SHARES INC,,497,3,False
-,Morgan Stanley Finance LLC,,424B2,3,False
-,MORGAN STANLEY,,424B2,3,False
-,HSBC USA INC /MD/,,424B2,3,False
+,497K - VanEck ETF Trust,,497K,3,False
+,497 - Calamos ETF Trust,,497,3,False
+,497K - FIDELITY HASTINGS STREET TRUST,,497K,3,False
+,497K - FIDELITY HASTINGS STREET TRUST,,497K,3,False
+,497 - Calamos Antetokounmpo Sustainable Equities Trust,,497,3,False
+,497K - VanEck ETF Trust,,497K,3,False
+,497 - CALAMOS ADVISORS TRUST/IL,,497,3,False
+,40-17G - Privacore VPC Asset Backed Credit Fund,,40-17G,3,False
+,497K - JNL SERIES TRUST,,497K,3,False
+,497 - CALAMOS INVESTMENT TRUST/IL,,497,3,False
+,497K - JNL SERIES TRUST,,497K,3,False
+,40-17G - Privacore PCAAM Alternative Growth Fund,,40-17G,3,False
+,497K - JNL SERIES TRUST,,497K,3,False
+,497K - VanEck ETF Trust,,497K,3,False
+KEQU,KEWAUNEE SCIENTIFIC CORP /DE/,Laboratory Apparatus & Furniture,8-K,5,True
+,40-17G - Privacore PCAAM Alternative Income Fund,,40-17G,3,False
+,497J - Federated Hermes Short-Intermediate Duration Municipal Trust,,497J,3,False
+,497J - Federated Hermes ETF Trust,,497J,3,False
+PBR-A,PETROBRAS - PETROLEO BRASILEIRO SA,Crude Petroleum & Natural Gas,6-K,4,False
+GEF-B,"GREIF, INC","Metal Shipping Barrels, Drums, Kegs & Pails",8-K,5,True
+GTX,Garrett Motion Inc.,Motor Vehicle Parts & Accessories,8-K,5,True
+,497 - Columbia Funds Series Trust II,,497,3,False
+,497 - Columbia Funds Series Trust II,,497,3,False
+,497 - COLUMBIA FUNDS SERIES TRUST,,497,3,False
+,485APOS - J.P. Morgan Exchange-Traded Fund Trust,,485APOS,3,False
+,485APOS - J.P. Morgan Exchange-Traded Fund Trust,,485APOS,3,False
+VERB,"Verb Technology Company, Inc.",Services-Personal Services,8-K,5,True
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497 - JNL INVESTORS SERIES TRUST,,497,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+LEG,LEGGETT & PLATT INC,Household Furniture,8-K,5,True
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497 - COLUMBIA FUNDS SERIES TRUST I,,497,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+CHSCO,CHS INC,Wholesale-Farm Product Raw Materials,8-K,5,True
+,497J - Dreyfus Institutional Reserves Funds,,497J,3,False
+,497K - Tidal Trust II,,497K,3,False
+,"8-K - Hancock Park Corporate Income, Inc.",,8-K,5,True
+UMAC,"Unusual Machines, Inc.",Radio & Tv Broadcasting & Communications Equipment,424B5,3,False
+POST,"Post Holdings, Inc.",Grain Mill Products,8-K,5,True
+,497K - Tidal Trust II,,497K,3,False
+ITOS,"iTeos Therapeutics, Inc.","Biological Products, (No Diagnostic Substances)",8-K,5,True
+,497K - Tidal Trust II,,497K,3,False
+LINMF,Linear Minerals Corp,Metal Mining,6-K,4,False
+GMHS,Gamehaus Holdings Inc.,Services-Computer Processing & Data Preparation,6-K,4,False
+BTO,JOHN HANCOCK FINANCIAL OPPORTUNITIES FUND,,424B3,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,"497J - BNY Mellon Absolute Insight Funds, Inc.",,497J,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497 - JNL SERIES TRUST,,497,3,False
+,497J - Tidal Trust I,,497J,3,False
+,"497J - Cohen & Steers Low Duration Preferred & Income Fund, Inc.",,497J,3,False
+,4 - Lampert Todd,,4,3,False
+,497K - Tidal Trust II,,497K,3,False
+,497J - BNY Mellon Opportunistic Municipal Securities Fund,,497J,3,False
+BLNC,"Balance Labs, Inc.",Services-Management Consulting Services,8-K,5,True
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+,497K - John Hancock Exchange-Traded Fund Trust,,497K,3,False
+TRUE,"TrueCar, Inc.","Services-Computer Programming, Data Processing, Etc.",8-K,5,True
+,497K - Voya EQUITY TRUST,,497K,3,False
+,497K - Voya EQUITY TRUST,,497K,3,False
+,497K - Voya VARIABLE PORTFOLIOS INC,,497K,3,False
+,497K - Voya EQUITY TRUST,,497K,3,False
+,497K - Voya MUTUAL FUNDS,,497K,3,False
+,497K - Voya INVESTORS TRUST,,497K,3,False
+,497K - Voya VARIABLE FUNDS,,497K,3,False
+,4 - Moeller Philip D,,4,3,False
+BWSN,"Babcock & Wilcox Enterprises, Inc.","Heating Equipment, Except Electric & Warm Air Furnaces",4,3,False
+RDPTF,Radiopharm Theranostics Ltd,Pharmaceutical Preparations,6-K,4,False
+,497 - JP MORGAN MUTUAL FUND INVESTMENT TRUST,,497,3,False
+,497 - JP MORGAN FLEMING MUTUAL FUND GROUP INC,,497,3,False
+BLDEW,"Blade Air Mobility, Inc.","Air Transportation, Nonscheduled",8-K,5,True
+SVREW,SaverOne 2014 Ltd.,Services-Computer Programming Services,6-K,4,False
+,497 - JPMORGAN TRUST IV,,497,3,False
+RR,RICHTECH ROBOTICS INC.,"General Industrial Machinery & Equipment, NEC",8-K,5,True
+JOBY-WT,"Joby Aviation, Inc.",Aircraft,8-K,5,True
+BLDEW,"Blade Air Mobility, Inc.","Air Transportation, Nonscheduled",8-K/A,5,True
+,497 - JPMORGAN TRUST II,,497,3,False
+,497 - JPMorgan Trust I,,497,3,False
+,"497 - Cohen & Steers Future of Energy Fund, INC",,497,3,False
+,"497 - Cohen & Steers Real Assets Fund, Inc.",,497,3,False
+,"497 - COHEN & STEERS PREFERRED SECURITIES & INCOME FUND, INC.",,497,3,False
+,"497 - Cohen & Steers International Realty Fund, Inc.",,497,3,False
+,497 - COHEN & STEERS GLOBAL INFRASTRUCTURE FUND INC,,497,3,False
+,497 - COHEN & STEERS REAL ESTATE SECURITIES FUND INC,,497,3,False
+,"497 - COHEN & STEERS GLOBAL REALTY SHARES, INC",,497,3,False
+,497 - COHEN & STEERS REALTY SHARES INC,,497,3,False
+LTRX,LANTRONIX INC,Computer Communications Equipment,10-K,5,True
+NUKKW,Nukkleus Inc.,Services-Management Consulting Services,8-K,5,True
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",8-K,5,True
+MRAI,"Marpai, Inc.","Services-Misc Health & Allied Services, NEC",8-K,5,True
+GHM,GRAHAM CORP,General Industrial Machinery & Equipment,8-K,5,True
+YYAI,Connexa Sports Technologies Inc.,"Services-Computer Programming, Data Processing, Etc.",8-K,5,True
+APLD,Applied Digital Corp.,Services-Computer Processing & Data Preparation,8-K,5,True
+SAIC,Science Applications International Corp,Services-Computer Integrated Systems Design,8-K,5,True
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",424B5,3,False
+CVI,CVR ENERGY INC,Petroleum Refining,8-K,5,True
+,3 - Sorbe Brian James,,3,2,False
+AGCO,AGCO CORP /DE,Farm Machinery & Equipment,3,2,False
+SASOF,SASOL LTD,Crude Petroleum & Natural Gas,6-K,4,False
+,424B3 - FS Credit Income Fund,,424B3,3,False
+SASOF,SASOL LTD,Crude Petroleum & Natural Gas,6-K,4,False
+CYTOF,Altamira Therapeutics Ltd.,Pharmaceutical Preparations,6-K,4,False
+CROX,"Crocs, Inc.",Rubber & Plastics Footwear,8-K,5,True
+LANV-WT,Lanvin Group Holdings Ltd,Apparel & Other Finishd Prods of  Fabrics & Similar Matl,6-K,4,False
+SPRC,SciSparc Ltd.,Retail-Auto Dealers & Gasoline Stations,6-K,4,False
+LANV-WT,Lanvin Group Holdings Ltd,Apparel & Other Finishd Prods of  Fabrics & Similar Matl,6-K,4,False
+FI,FISERV INC,"Services-Business Services, NEC",8-K,5,True
+JFBRW,Jeffs' Brands Ltd,Retail-Miscellaneous Retail,424B3,3,False
+CHA,Chagee Holdings Ltd.,Retail-Eating & Drinking Places,6-K,4,False
+JFBRW,Jeffs' Brands Ltd,Retail-Miscellaneous Retail,6-K,4,False
+,4 - Chao James,,4,3,False
+WLK,WESTLAKE CORP,Industrial Organic Chemicals,4,3,False
+,424B2 - ONTARIO PROVINCE OF,Foreign Governments,424B2,3,False
+DD,"DuPont de Nemours, Inc.","Plastic Materials, Synth Resins & Nonvulcan Elastomers",8-K,5,True
+DOOO,BRP Inc.,Miscellaneous Transportation Equipment,6-K,4,False
+GHRS,GH Research PLC,Pharmaceutical Preparations,6-K,4,False
+DOOO,BRP Inc.,Miscellaneous Transportation Equipment,6-K,4,False
+MEOBF,MESOBLAST LTD,"Biological Products, (No Diagnostic Substances)",6-K,4,False
+BEIGF,BeOne Medicines Ltd.,Pharmaceutical Preparations,8-K,5,True
+TRINI,Trinity Capital Inc.,,8-K,5,True
+TRINI,Trinity Capital Inc.,,424B2,3,False
+RDY,DR REDDYS LABORATORIES LTD,Pharmaceutical Preparations,6-K,4,False
+GLAXF,GSK plc,Pharmaceutical Preparations,6-K,4,False
+LOTWW,Lotus Technology Inc.,Motor Vehicles & Passenger Car Bodies,6-K,4,False
+GRFXY,Graphex Group Ltd,Electrical Industrial Apparatus,6-K,4,False
+,"424B3 - FedEx Office & Print Services, Inc",Air Courier Services,424B3,3,False
+,424B3 - FEDEX FREIGHT INC,Air Courier Services,424B3,3,False
+,424B3 - FEDERAL EXPRESS INTERNATIONAL INC,Air Courier Services,424B3,3,False
+,"424B3 - FEDERAL EXPRESS HOLDINGS S A, LLC",Air Courier Services,424B3,3,False
+,424B3 - FEDERAL EXPRESS EUROPE INC,Air Courier Services,424B3,3,False
+FDX,FEDEX CORP,Air Courier Services,424B3,3,False
+,424B3 - FEDERAL EXPRESS CORP,Air Courier Services,424B3,3,False
+VSEEW,"VSEE HEALTH, INC.",Services-Health Services,10-K/A,5,True
+UTSI,UTSTARCOM HOLDINGS CORP.,"Communications Equipment, NEC",6-K,4,False
+,497J - iSHARES TRUST,,497J,3,False
+CKDXF,Opthea Ltd,"Biological Products, (No Diagnostic Substances)",6-K,4,False
+HLNCF,Haleon plc,"Perfumes, Cosmetics & Other Toilet Preparations",6-K,4,False
+,"497J - iShares, Inc.",,497J,3,False
+IMPPP,Imperial Petroleum Inc./Marshall Islands,Deep Sea Foreign Transportation of  Freight,6-K,4,False
+GASS,StealthGas Inc.,Deep Sea Foreign Transportation of  Freight,6-K,4,False
+CISS,C3is Inc.,Deep Sea Foreign Transportation of  Freight,6-K,4,False
+,4 - Frommer Richard N.,,4,3,False
+PROP,Prairie Operating Co.,Crude Petroleum & Natural Gas,4,3,False
+,3 - LEBENSBURGER KENNETH E JR,,3,2,False
+GCT,GigaCloud Technology Inc,Retail-Catalog & Mail-Order Houses,3,2,False
+ZDAI,Primega Group Holdings Ltd,General Bldg Contractors - Nonresidential Bldgs,6-K,4,False
+BHPLF,BHP Group Ltd,Metal Mining,6-K,4,False
+PKX,POSCO HOLDINGS INC.,"Steel Works, Blast Furnaces & Rolling Mills (Coke Ovens)",6-K,4,False
+MSC,STUDIO CITY INTERNATIONAL HOLDINGS Ltd,Hotels & Motels,6-K,4,False
+MLCO,Melco Resorts & Entertainment LTD,Hotels & Motels,6-K,4,False
+GCLWW,GCL Global Holdings Ltd,Services-Prepackaged Software,6-K,4,False
+ARCT,Arcturus Therapeutics Holdings Inc.,Pharmaceutical Preparations,8-K,5,True
+THH,TryHard Holdings Ltd,Services-Miscellaneous Amusement & Recreation,424B5,3,False
+,4 - Burke Russell John,,4,3,False
+LIFX,"Life360, Inc.",Services-Computer Processing & Data Preparation,4,3,False
+ECDAW,"ECD Automotive Design, Inc.",Motor Vehicles & Passenger Car Bodies,10-K/A,5,True
+,4 - Nonghyup Bank as trustee of DBAM Vista Credit Investment Trust No. 2,,4,3,False
+,4 - VISTA CREDIT STRATEGIC LENDING CORP.,,4,3,False
+,4 - Dizon Romeo R,,4,3,False
+IRIX,IRIDEX CORP,Electromedical & Electrotherapeutic Apparatus,4,3,False
+LITE,Lumentum Holdings Inc.,"Communications Equipment, NEC",4,3,False
+,4 - Wupen Yuen,,4,3,False
+LITE,Lumentum Holdings Inc.,"Communications Equipment, NEC",4,3,False
+,4 - Ali Wajid,,4,3,False
+LBSR,LIBERTY STAR URANIUM & METALS CORP.,Metal Mining,8-K,5,True
+,4 - Ruemler Timothy James,,4,3,False
+STSSW,Sharps Technology Inc.,Surgical & Medical Instruments & Apparatus,4,3,False
+IVF,"INVO Fertility, Inc.",Surgical & Medical Instruments & Apparatus,4,3,False
+,4 - Szot Matthew K,,4,3,False
+,4 - Ryan Barbara,,4,3,False
+IVF,"INVO Fertility, Inc.",Surgical & Medical Instruments & Apparatus,4,3,False
+IVF,"INVO Fertility, Inc.",Surgical & Medical Instruments & Apparatus,4,3,False
+,4 - Goren Andrea,,4,3,False
+IVF,"INVO Fertility, Inc.",Surgical & Medical Instruments & Apparatus,4,3,False
+,4 - DAVIS TRENT D,,4,3,False
+,4 - Messina Rebecca,,4,3,False
+IVF,"INVO Fertility, Inc.",Surgical & Medical Instruments & Apparatus,4,3,False
+,4 - Neufeld Alissa,,4,3,False
+LFVN,Lifevantage Corp,Pharmaceutical Preparations,4,3,False
+,4 - Boyster Julie,,4,3,False
+LFVN,Lifevantage Corp,Pharmaceutical Preparations,4,3,False
+,4 - Fife Steven R,,4,3,False
+LFVN,Lifevantage Corp,Pharmaceutical Preparations,4,3,False
+,4 - Cunningham Kristen,,4,3,False
+LFVN,Lifevantage Corp,Pharmaceutical Preparations,4,3,False
+,4 - Aure Carl,,4,3,False
+LFVN,Lifevantage Corp,Pharmaceutical Preparations,4,3,False
+,"4 - Connect Midstream, LLC",,4,3,False
+SMC,Summit Midstream Corp,Natural Gas Transmission,4,3,False
+,4 - Tailwater Energy Fund III LP,,4,3,False
+,4 - Tailwater Capital LLC,,4,3,False
+,4 - Herring Edward,,4,3,False
+,4 - Downie Jason H,,4,3,False
+IONQ-WT,"IonQ, Inc.",Services-Computer Integrated Systems Design,4,3,False
+,4 - TEUBER WILLIAM J JR,,4,3,False
+IONQ-WT,"IonQ, Inc.",Services-Computer Integrated Systems Design,4,3,False
+,4 - FRANKOLA JIM,,4,3,False
+IONQ-WT,"IonQ, Inc.",Services-Computer Integrated Systems Design,3,2,False
+,3 - TEUBER WILLIAM J JR,,3,2,False
+TRLEF,Trillion Energy International Inc.,Crude Petroleum & Natural Gas,6-K,4,False
+,4 - Morben Paul Keith,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+IONQ-WT,"IonQ, Inc.",Services-Computer Integrated Systems Design,3,2,False
+,3 - FRANKOLA JIM,,3,2,False
+,4 - Okawa Cary M.,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - Johnson Cole Wayne,,4,3,False
+,4 - Grindstaff Glenn,,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - Stock James L,,4,3,False
+,4 - Tran Benjamin B,,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+,4 - Bannerman Montgomery L,,4,3,False
+,4 - POTTER VAN H,,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+,4 - SZE VICTOR S,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - EDRICK ALAN I,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - CHOPRA DEEPAK,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - MEHRA AJAY,,4,3,False
+OSIS,OSI SYSTEMS INC,Semiconductors & Related Devices,4,3,False
+,4 - BRILON ROBERT J,,4,3,False
+BESS,Bimergen Energy Corp,Electric Services,4,3,False
+,3/A - Skaggs Bernard,,3/A,2,False
+PMI,"Picard Medical, Inc.",Surgical & Medical Instruments & Apparatus,3/A,2,False
+,3/A - Schuster Matt,,3/A,2,False
+PMI,"Picard Medical, Inc.",Surgical & Medical Instruments & Apparatus,3/A,2,False
+PMI,"Picard Medical, Inc.",Surgical & Medical Instruments & Apparatus,3/A,2,False
+,3/A - SCHNEGELSBERG PATRICK NJ,,3/A,2,False
+,"3 - Apollo S3 RIC Management, L.P.",,3,2,False
+,3 - Fortress Private Lending Fund,,3,2,False
+,3 - APO Corp.,,3,2,False
+,"3 - Apollo Principal Holdings B GP, LLC",,3,2,False
+,"3 - Apollo Principal Holdings B, L.P.",,3,2,False
+,"3 - Apollo Capital Management, L.P.",,3,2,False
+,"3 - Apollo Capital Management GP, LLC",,3,2,False
+,"3 - Apollo Management Holdings, L.P.",,3,2,False
+,"3 - Apollo Management Holdings GP, LLC",,3,2,False
+,"4 - Decheng Capital Global Healthcare GP, LLC",,4,3,False
+,4 - Decheng Capital Global Healthcare Fund,,4,3,False
+,4 - Decheng Capital Management III,,4,3,False
+,"4 - Decheng Capital China Life Sciences USD Fund III, L.P.",,4,3,False
+BYSI,BeyondSpring Inc.,Pharmaceutical Preparations,4,3,False
+,"4 - Decheng Capital China Life Sciences USD Fund II, L.P.",,4,3,False
+,4 - Cui Xiangmin,,4,3,False
+,4 - Schwab Charles R.,,4,3,False
+,4 - LANGER JACK,,4,3,False
+TMCWW,TMC the metals Co Inc.,Metal Mining,8-K12B,5,True
+,4 - Moak Donald Lee,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - RESSLER ANTONY P,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - Lauria Kristen,,4,3,False
+,4 - Kedzior Brian Joseph,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - O'Brien Brandon,,4,3,False
+,4 - Holtz David L,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - Godsman David,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - Gibson Christopher,,4,3,False
+RXRX,"RECURSION PHARMACEUTICALS, INC.","Biological Products, (No Diagnostic Substances)",4,3,False
+,4 - Briffa Mark,,4,3,False
+WSUPW,Wheels Up Experience Inc.,"Air Transportation, Nonscheduled",4,3,False
+,4 - O'Sullivan Anthony,,4,3,False
+TMCWW,TMC the metals Co Inc.,Metal Mining,4,3,False
+SRFM,SURF AIR MOBILITY INC.,"Air Transportation, Nonscheduled",4,3,False
+,4 - D'AGOSTINO JOHN J.,,4,3,False
+,4 - Emerald Green Trust,,4,3,False
+XOSWW,"Xos, Inc.",Motor Vehicle Parts & Accessories,4,3,False
+,3 - Bibb John T,,3,2,False
+ZYXI,ZYNEX INC,Electromedical & Electrotherapeutic Apparatus,3,2,False
+,4 - Labe James,,4,3,False
+TPVG,TriplePoint Venture Growth BDC Corp.,,4,3,False
+,4 - Srivastava Sajal,,4,3,False
+TPVG,TriplePoint Venture Growth BDC Corp.,,4,3,False
+,3/A - Cabell Christopher,,3/A,2,False
+IKT,"Inhibikase Therapeutics, Inc.","Biological Products, (No Diagnostic Substances)",3/A,2,False
+IKT,"Inhibikase Therapeutics, Inc.","Biological Products, (No Diagnostic Substances)",3/A,2,False
+,3/A - Aurentz Vincent,,3/A,2,False
+IKT,"Inhibikase Therapeutics, Inc.","Biological Products, (No Diagnostic Substances)",4,3,False
+,4 - Munshi Amit,,4,3,False
+GTCH,GBT Technologies Inc.,Services-Management Consulting Services,8-K,5,True
+,4 - Rainer David I,,4,3,False
+QTTB,Q32 Bio Inc.,Pharmaceutical Preparations,4,3,False
+,4 - Morrison Jodie Pope,,4,3,False
+VALE,Vale S.A.,Metal Mining,6-K,4,False
+,4 - Williams Laura A,,4,3,False
+ARDX,"ARDELYX, INC.",Pharmaceutical Preparations,4,3,False
+NWSAL,NEWS CORP,Newspapers: Publishing or  Publishing & Printing,8-K,5,True
+,4 - Kelliher Mike,,4,3,False
+ARDX,"ARDELYX, INC.",Pharmaceutical Preparations,4,3,False
+UAMY,UNITED STATES ANTIMONY CORP,Primary Smelting & Refining of  Nonferrous Metals,8-K,5,True
+,4 - Violette Shelia M.,,4,3,False
+QTTB,Q32 Bio Inc.,Pharmaceutical Preparations,4,3,False
+,3 - Schmit Jennifer Laura,,3,2,False
+RBA,RB GLOBAL INC.,"Services-Business Services, NEC",3,2,False
+ALAB,"Astera Labs, Inc.",Semiconductors & Related Devices,4,3,False
+,4 - LAZAR JACK R,,4,3,False
+QTTB,Q32 Bio Inc.,Pharmaceutical Preparations,4,3,False
+,4 - Kalowski Lee,,4,3,False
+,4 - SHEETS JUSTIN D,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+,4 - AUSTIN NANCY E,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+PAY,"Paymentus Holdings, Inc.","Services-Business Services, NEC",4,3,False
+,4 - Palumbo Robert,,4,3,False
+,4 - MONTALBANO DOUGLAS J,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+PAY,"Paymentus Holdings, Inc.","Services-Business Services, NEC",4,3,False
+,4 - Barnds Thomas,,4,3,False
+,4 - Malinowski Adam,,4,3,False
+PAY,"Paymentus Holdings, Inc.","Services-Business Services, NEC",4,3,False
+,4 - PAYNE SHAWN P,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+,4 - Cavanah Kevin S,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+,4 - Chase Valerie,,4,3,False
+,4 - Klein Jason,,4,3,False
+PAY,"Paymentus Holdings, Inc.","Services-Business Services, NEC",4,3,False
+,4 - HEWITT JOHN R,,4,3,False
+MTRX,MATRIX SERVICE CO,Construction - Special Trade Contractors,4,3,False
+,4 - AKKR SC GPI HoldCo LP,,4,3,False
+,4 - AKKR STRATEGIC CAPITAL LP,,4,3,False
+,"4 - Accel-KKR Holdings GP, LLC",,4,3,False
+,"4 - Accel-KKR Members Fund, LLC",,4,3,False
+PAY,"Paymentus Holdings, Inc.","Services-Business Services, NEC",4,3,False
+,"4 - ACCEL-KKR CAPITAL PARTNERS CV III, LP",,4,3,False
+,"4 - ACCEL-KKR GROWTH CAPITAL PARTNERS III, LP",,4,3,False
+,"4 - Accel-KKR Growth Capital Partners II Strategic Fund, LP",,4,3,False
+,"4 - Accel-KKR Growth Capital Partners II, LP",,4,3,False
+,4 - Daul Ty P.,,4,3,False
+,4 - Tompkins Mark N.,,4,3,False
+,4 - Jacobs Ian Seth,,4,3,False
+,4 - WATSON CHARLES L.,,4,3,False
+,4 - Tompkins Mark N.,,4,3,False
+,4 - Jacobs Ian Seth,,4,3,False
+,4 - MURDOCH JAMES R,,4,3,False
+TSLA,"Tesla, Inc.",Motor Vehicles & Passenger Car Bodies,4,3,False
+,3 - Raciti Frank B.,,3,2,False
+,3 - Mallinckrodt plc,Pharmaceutical Preparations,3,2,False
+,4 - Nicolas Andrea Liria,,4,3,False
+,4 - Richmond C Bradford,,4,3,False
+BJRI,BJs RESTAURANTS INC,Retail-Eating  Places,4,3,False
+,4 - Xie Jian,,4,3,False
+FLGT,"Fulgent Genetics, Inc.",Services-Medical Laboratories,4,3,False
+FLGT,"Fulgent Genetics, Inc.",Services-Medical Laboratories,4,3,False
+,4 - Hsieh Ming,,4,3,False
+FLGT,"Fulgent Genetics, Inc.",Services-Medical Laboratories,4,3,False
+,4 - Kim Paul,,4,3,False
+,4 - Gao Hanlin,,4,3,False
+FLGT,"Fulgent Genetics, Inc.",Services-Medical Laboratories,4,3,False
+MBRX,"Moleculin Biotech, Inc.",Pharmaceutical Preparations,8-K,5,True
+HOTH,"Hoth Therapeutics, Inc.",Pharmaceutical Preparations,4,3,False
+,4 - Knie Robb,,4,3,False
+BAK,BRASKEM SA,Industrial Organic Chemicals,6-K,4,False
+,4 - Liu Liang Chiu-Chu Sara,,4,3,False
+SMCI,"Super Micro Computer, Inc.",Electronic Computers,4,3,False
+,4 - Liang Charles,,4,3,False
+SMCI,"Super Micro Computer, Inc.",Electronic Computers,4,3,False
+HLIO,"HELIOS TECHNOLOGIES, INC.",Miscellaneous Fabricated Metal Products,8-K,5,True
+,4 - Anderson Aaron,,4,3,False
+META,"Meta Platforms, Inc.","Services-Computer Programming, Data Processing, Etc.",4,3,False
+,4 - Noto Anthony,,4,3,False
+MYPSW,"PLAYSTUDIOS, Inc.",Services-Prepackaged Software,4,3,False
+,4 - PASCAL ANDREW S,,4,3,False
+,4 - Oh Irene H,,4,3,False
+,4 - Newstead Jennifer,,4,3,False
+META,"Meta Platforms, Inc.","Services-Computer Programming, Data Processing, Etc.",4,3,False
+SVIIW,Spring Valley Acquisition Corp. II,Miscellaneous Metal Ores,425,3,False
+,4 - TEO GARY,,4,3,False
+,4 - Tomey Alex,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - ADINA STORCH,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Shetty Manoj,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Mercier Laurent,,4,3,False
+COTY,COTY INC.,"Perfumes, Cosmetics & Other Toilet Preparations",4,3,False
+,4 - Longhito Christopher,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Hughes Claudia,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Clark Thomas Eugene,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Fielding Donna,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - AXMACHER THOMAS,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - West Tony,,4,3,False
+UBER,"Uber Technologies, Inc","Services-Business Services, NEC",4,3,False
+,4 - ARMSTRONG LISA,,4,3,False
+GIC,GLOBAL INDUSTRIAL Co,Wholesale-Industrial Machinery & Equipment,4,3,False
+,4 - Zamiska Gene M.,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Tregillis Cynthia L,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Tan Irving,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Shihab Ahmed Mohammed,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Sennesael Kris,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Gubbi Vidyadhara K,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+,4 - Davis Brian Scott,,4,3,False
+WDC,WESTERN DIGITAL CORP,Computer Storage Devices,4,3,False
+ALKT,"ALKAMI TECHNOLOGY, INC.",Services-Prepackaged Software,4,3,False
+,4 - Shootman Alex,,4,3,False
+,3 - Suhadolnik Kate Eileen,,3,2,False
+GWH-WT,"ESS Tech, Inc.","Miscellaneous Electrical Machinery, Equipment & Supplies",3,2,False
+,3 - Trivedi Jigish Dhirajlal,,3,2,False
+GWH-WT,"ESS Tech, Inc.","Miscellaneous Electrical Machinery, Equipment & Supplies",3,2,False
+,4 - MCNEILL BRIAN W,,4,3,False
+UONEK,"URBAN ONE, INC.",Radio Broadcasting Stations,4,3,False
+,4 - Grasso Alfred,,4,3,False
+NTCT,NETSCOUT SYSTEMS INC,Services-Computer Integrated Systems Design,4,3,False
+,4 - Abdalla Zein,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+,3 - Paszterko John Andrew,,3,2,False
+NRDY,Nerdy Inc.,Services-Educational Services,3,2,False
+,4 - MOW RAYMOND,,4,3,False
+,4 - BAKKEN SCOTT,,4,3,False
+UUUU,ENERGY FUELS INC,Mining & Quarrying of  Nonmetallic Minerals (No Fuels),4,3,False
+,4 - Bates Jonathan Robert,,4,3,False
+,4 - Innovative Digital Investors Emerging Technology LP,,4,3,False
+,4 - Stanton Marshall S.,,4,3,False
+AORT,"ARTIVION, INC.",Surgical & Medical Instruments & Apparatus,4,3,False
+,3 - Carlson Christopher,,3,2,False
+RBA,RB GLOBAL INC.,"Services-Business Services, NEC",3,2,False
+MYSEW,"Myseum, Inc.",Telegraph & Other Message Communications,4,3,False
+,4 - Myman Darin M,,4,3,False
+JHIUF,James Hardie Industries plc,"Concrete Products, Except Block & Brick",6-K,4,False
+,4 - Wren Chris,,4,3,False
+PLNH,Planet 13 Holdings Inc.,Agricultural Production-Crops,4,3,False
+,3 - Sprung Lloyd A.,,3,2,False
+CMTL,COMTECH TELECOMMUNICATIONS CORP /DE/,Radio & Tv Broadcasting & Communications Equipment,3,2,False
+,4 - SIEGERT PAUL ERIC,,4,3,False
+KOSS,KOSS CORP,Household Audio & Video Equipment,10-K,5,True
+,4 - Groesbeck Robert,,4,3,False
+PLNH,Planet 13 Holdings Inc.,Agricultural Production-Crops,4,3,False
+,4 - Benioff Marc,,4,3,False
+CRM,"Salesforce, Inc.",Services-Prepackaged Software,4,3,False
+,485APOS - Janus Detroit Street Trust,,485APOS,3,False
+,485APOS - Janus Detroit Street Trust,,485APOS,3,False
+PRVA,"Privia Health Group, Inc.",Services-Health Services,8-K,5,True
+,4 - KELLOGG W K FOUNDATION TRUST,,4,3,False
+,4 - KELLOGG W K FOUNDATION,,4,3,False
+K,KELLANOVA,Grain Mill Products,4,3,False
+,497VPI - FS VARIABLE SEPARATE ACCOUNT,,497VPI,3,False
+,497 - FS VARIABLE SEPARATE ACCOUNT,,497,3,False
+,4 - Gottschalk Max,,4,3,False
+PMNT,Perfect Moment Ltd.,Apparel & Other Finishd Prods of  Fabrics & Similar Matl,4,3,False
+SION,"Sionna Therapeutics, Inc.",Pharmaceutical Preparations,4,3,False
+,4 - Cloonan Michael,,4,3,False
+SION,"Sionna Therapeutics, Inc.",Pharmaceutical Preparations,4,3,False
+,4 - Ridloff Elena,,4,3,False
+,497VPU - FS VARIABLE SEPARATE ACCOUNT,,497VPU,3,False
+,4 - GARCIA ERNEST C. III,,4,3,False
+CVNA,CARVANA CO.,Retail-Auto Dealers & Gasoline Stations,4,3,False
+,4 - GARCIA ERNEST C. III,,4,3,False
+CVNA,CARVANA CO.,Retail-Auto Dealers & Gasoline Stations,4,3,False
+,4 - VELLI JOSEPH M,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+,4 - Merdian Charles Michael,,4,3,False
+LGIH,"LGI Homes, Inc.",Operative Builders,4,3,False
+,4 - Silbermann Benjamin,,4,3,False
+PINS,"PINTEREST, INC.","Services-Computer Programming, Data Processing, Etc.",4,3,False
+,4 - Alagoz Halide,,4,3,False
+RL,RALPH LAUREN CORP,"Men's & Boys' Furnishgs, Work Clothg, & Allied Garments",4,3,False
+,4 - Deskus Archana,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+EP-PC,"KINDER MORGAN, INC.",Natural Gas Transmission,8-K,5,True
+,4 - Jones Mark E. Jr.,,4,3,False
+,4 - Dineen John M.,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+VSEEW,"VSEE HEALTH, INC.",Services-Health Services,10-K,5,True
+,4 - WIJNBERG SANDRA S,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+DERM,Journey Medical Corp,Pharmaceutical Preparations,8-K,5,True
+,4 - ROHLEDER STEPHEN J,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+DERM,Journey Medical Corp,Pharmaceutical Preparations,424B3,3,False
+ICUCW,SeaStar Medical Holding Corp,Surgical & Medical Instruments & Apparatus,4,3,False
+,4 - Van Heel Kenneth,,4,3,False
+,10-K/A - HOOPS SCOUTING USA,Services-Computer Processing & Data Preparation,10-K/A,5,True
+,485BPOS - FINANCIAL INVESTORS TRUST,,485BPOS,3,False
+,485BPOS - FINANCIAL INVESTORS TRUST,,485BPOS,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+MITI,"Mitesco, Inc.","Services-Computer Programming, Data Processing, Etc.",8-K,5,True
+,4 - Branderiz Eric,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+THH,TryHard Holdings Ltd,Services-Miscellaneous Amusement & Recreation,424B4,3,False
+BDL,FLANIGANS ENTERPRISES INC,Retail-Eating  Places,8-K,5,True
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,4 - Haning G Courtney,,4,3,False
+RCKY,"ROCKY BRANDS, INC.","Footwear, (No Rubber)",4,3,False
+SATS,EchoStar CORP,"Communications Services, NEC",4,3,False
+,4 - ORBAN PAUL W,,4,3,False
+,"425 - Strive Enterprises, Inc. / OH",,425,3,False
+,4 - Schot Abraham,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+,4 - Warden Andrew,,4,3,False
+SEMR,"SEMrush Holdings, Inc.",Services-Prepackaged Software,4,3,False
+CINGW,Cingulate Inc.,Pharmaceutical Preparations,8-K,5,True
+,485BXT - Krane Shares Trust,,485BXT,3,False
+,485BXT - Krane Shares Trust,,485BXT,3,False
+ENVXW,Enovix Corp,"Miscellaneous Electrical Machinery, Equipment & Supplies",8-K,5,True
+OLO,Olo Inc.,"Services-Business Services, NEC",8-K,5,True
+VENU,Venu Holding Corp,Services-Amusement & Recreation Services,8-K,5,True
+,4 - Dolphin James G,,4,3,False
+GNK,GENCO SHIPPING & TRADING LTD,Deep Sea Foreign Transportation of  Freight,4,3,False
+KOSS,KOSS CORP,Household Audio & Video Equipment,8-K,5,True
+,485APOS - DoubleLine Funds Trust,,485APOS,3,False
+,485APOS - DoubleLine Funds Trust,,485APOS,3,False
+BXC,BlueLinx Holdings Inc.,"Wholesale-Lumber, Plywood, Millwork & Wood Panels",8-K,5,True
+,4 - Bali Vinita,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+RDNW,"RideNow Group, Inc.",Services-Computer Programming Services,8-K,5,True
+EBR-B,BRAZILIAN ELECTRIC POWER CO,Electric Services,6-K,4,False
+CCJ,CAMECO CORP,Miscellaneous Metal Ores,6-K,4,False
+SYM,Symbotic Inc.,"General Industrial Machinery & Equipment, NEC",4,3,False
+,4 - Ross Andrew D,,4,3,False
+ROLR,"High Roller Technologies, Inc.",Services-Amusement & Recreation Services,8-K,5,True
+,3 - Badugu Nihanth,,3,2,False
+ASTC,ASTROTECH Corp,Laboratory Analytical Instruments,3,2,False
+SYM,Symbotic Inc.,"General Industrial Machinery & Equipment, NEC",3,2,False
+,3 - Ross Andrew D,,3,2,False
+,4 - Silvent Karima,,4,3,False
+CTSH,COGNIZANT TECHNOLOGY SOLUTIONS CORP,Services-Computer Programming Services,4,3,False
+,10-Q - Vertical Data Inc.,Services-Management Consulting Services,10-Q,5,True
+,3 - FITTIN PETER ANDRE JR,,3,2,False
+BOXL,Boxlight Corp,Services-Educational Services,3,2,False
+SSSSL,SURO CAPITAL CORP.,,40-17G,3,False
+SABSW,"SAB Biotherapeutics, Inc.","Biological Products, (No Diagnostic Substances)",4,3,False
+,4 - Reich Samuel J,,4,3,False
+,3 - Ye George Tiancheng,,3,2,False
+PMI,"Picard Medical, Inc.",Surgical & Medical Instruments & Apparatus,3,2,False
+EBR-B,BRAZILIAN ELECTRIC POWER CO,Electric Services,6-K,4,False
+,485BPOS - World Funds Trust,,485BPOS,3,False
+,485BPOS - World Funds Trust,,485BPOS,3,False
+WAT,WATERS CORP /DE/,Laboratory Analytical Instruments,425,3,False
+NSC,NORFOLK SOUTHERN CORP,"Railroads, Line-Haul Operating",425,3,False
+UNP,UNION PACIFIC CORP,"Railroads, Line-Haul Operating",425,3,False
+PMI,"Picard Medical, Inc.",Surgical & Medical Instruments & Apparatus,3,2,False
+,3 - Van Sam,,3,2,False
+,485BPOS - Cambria ETF Trust,,485BPOS,3,False
+,485BPOS - Cambria ETF Trust,,485BPOS,3,False
+,4 - BRESSLER BENJAMIN,,4,3,False
+LIND,"LINDBLAD EXPEDITIONS HOLDINGS, INC.",Transportation Services,4,3,False
+,3/A - Katitus Robert L,,3/A,2,False
+,4 - Pigg Randy L.,,4,3,False
+VMC,Vulcan Materials CO,Mining & Quarrying of  Nonmetallic Minerals (No Fuels),4,3,False
+,4 - Vizi Bradley,,4,3,False
+RCMT,"RCM TECHNOLOGIES, INC.",Services-Help Supply Services,4,3,False
+,3 - Rubin Jeffrey Edward,,3,2,False
+SOWG,Sow Good Inc.,Food and Kindred Products,3,2,False
