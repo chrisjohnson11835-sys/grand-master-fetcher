@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.3
-Hotfix: write CSV safely even when no rows are kept.
+Grand Master — SEC ONLY (Step 6) v18.4
+Hotfix: safe CSV when empty + re-added webhook deploy (sends files to your website).
 """
 import os, json
 from typing import Any, Dict, List
@@ -145,15 +145,23 @@ def main():
 
     # Safe CSV (write headers even if zero rows)
     cols = ["filing_datetime","form","ticker","cik","industry","sic","title","score","link"]
-    import pandas as pd
     if kept_rows:
         df = pd.DataFrame(kept_rows)
     else:
         df = pd.DataFrame(columns=cols)
     df = df.reindex(columns=cols)
-    df.to_csv(os.path.join(outdir, "sec_filings_snapshot.csv"), index=False)
+    csv_path = os.path.join(outdir, "sec_filings_snapshot.csv")
+    df.to_csv(csv_path, index=False)
 
-    print("Done. See outputs/.")
+    print("Outputs written to outputs/.")
+
+    # ---- NEW: Deploy to Hostinger if enabled ----
+    if cfg.get("enable_webhook_deploy"):
+        try:
+            from deploy.webhook_deploy import deploy_files
+            deploy_files(cfg, [snap_path, csv_path, raw_path, stats_path])
+        except Exception as e:
+            print(f"Deploy skipped/error: {e}")
 
 if __name__ == "__main__":
     main()
