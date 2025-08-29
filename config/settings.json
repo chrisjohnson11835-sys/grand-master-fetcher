@@ -11,6 +11,7 @@
   "retry_503": 5,
   "max_empty_pages": 8,
   "page_pause_sec": 1.2,
+  "scan_extend_days": 2,
   "hostinger_allowed_filenames": [
     "sec_filings_snapshot.json",
     "sec_filings_snapshot.csv",
