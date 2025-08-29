@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.1
-- Captures amendments (*/A) and numeric 3/4 forms
-- Boundary-driven paging to ensure complete window coverage
+Grand Master — SEC ONLY (Step 6) v18.3
+Hotfix: write CSV safely even when no rows are kept.
 """
 import os, json
 from typing import Any, Dict, List
@@ -63,7 +62,6 @@ def main():
         if not entries:
             break
 
-        # Track oldest entry time on this page to test boundary
         oldest_et_on_page = None
 
         for e in entries:
@@ -72,7 +70,6 @@ def main():
             if not ftime:
                 continue
 
-            # Track oldest
             if oldest_et_on_page is None or ftime < oldest_et_on_page:
                 oldest_et_on_page = ftime
 
@@ -96,7 +93,6 @@ def main():
                 except Exception:
                     stats["errors"] += 1
 
-            # Bans
             banned = False
             if banned_by_sic(sic, ban_pref, ban_exact):
                 banned = True; stats["banned_sic"] += 1
@@ -122,13 +118,7 @@ def main():
             rec["score"] = score_record(rec, scoring)
             kept_rows.append(rec)
 
-        # After page processed: check boundary condition
         if oldest_et_on_page:
-            from datetime import timezone as tzmod
-            # Convert to ET inside within_window logic indirectly:
-            # If oldest entry is older than start_et when converted to ET, we've crossed the boundary.
-            # We reuse within_window: if it's below, within_window==False; detect by comparing in ET directly.
-            # Simpler: compute bool "older_than_start" by transforming in-place:
             try:
                 from zoneinfo import ZoneInfo
             except Exception:
@@ -145,18 +135,23 @@ def main():
     kept_rows.sort(key=lambda r: (r.get("score",0), r.get("filing_datetime","")), reverse=True)
     stats["entries_kept"] = len(kept_rows)
 
-    # Outputs
+    # Write JSON outputs
     raw_path = os.path.join(outdir, "sec_filings_raw.json")
-    with open(raw_path, "w", encoding="utf-8") as f: json.dump(raw_rows, f, indent=2)
+    with open(raw_path,"w",encoding="utf-8") as f: f.write(json.dumps(raw_rows, indent=2))
     stats_path = os.path.join(outdir, "sec_debug_stats.json")
-    with open(stats_path, "w", encoding="utf-8") as f: json.dump(stats, f, indent=2)
+    with open(stats_path,"w",encoding="utf-8") as f: f.write(json.dumps(stats, indent=2))
     snap_path = os.path.join(outdir, "sec_filings_snapshot.json")
-    with open(snap_path, "w", encoding="utf-8") as f: json.dump(kept_rows, f, indent=2)
+    with open(snap_path,"w",encoding="utf-8") as f: f.write(json.dumps(kept_rows, indent=2))
 
-    # CSV
+    # Safe CSV (write headers even if zero rows)
     cols = ["filing_datetime","form","ticker","cik","industry","sic","title","score","link"]
     import pandas as pd
-    pd.DataFrame(kept_rows)[cols].to_csv(os.path.join(outdir, "sec_filings_snapshot.csv"), index=False)
+    if kept_rows:
+        df = pd.DataFrame(kept_rows)
+    else:
+        df = pd.DataFrame(columns=cols)
+    df = df.reindex(columns=cols)
+    df.to_csv(os.path.join(outdir, "sec_filings_snapshot.csv"), index=False)
 
     print("Done. See outputs/.")
 
