@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.7
-- Fetch Atom with User-Agent (requests)
-- Safe CSV when empty
-- Deploy via webhook if enabled
-- **New:** don't stop on the first empty page (allow a few empty pages)
-- **New:** write page time coverage into stats.pages_debug (so we see how far we looked)
+Grand Master — SEC ONLY (Step 6) v18.9
+Adds explicit company name enrichment and CSV column.
+Keeps: UA fetch + retries, safe CSV, webhook deploy, pages_debug.
 """
-import os, json
+import os, json, time
 from typing import Any, Dict, List
 import feedparser
 import pandas as pd
 from utils_sec import (
     SEC_ATOM, new_session, et_window_now_yday, parse_entry_time, entry_form,
     extract_cik_from_link, load_json, within_window, fetch_submissions_for_cik,
-    map_ticker_industry, banned_by_sic, banned_by_keywords, score_record
+    map_company_meta, banned_by_sic, banned_by_keywords, score_record, fallback_company_from_title
 )
 
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
@@ -34,8 +31,13 @@ def main():
     start_et, end_et = et_window_now_yday(tz)
     session = new_session(ua)
 
-    max_pages = int(cfg.get("max_pages", 120))   # look further back
+    max_pages = int(cfg.get("max_pages", 200))
     count = int(cfg.get("count_per_page", 200))
+    page_pause = float(cfg.get("page_pause_sec", 0.8))
+    max_empty_pages = int(cfg.get("max_empty_pages", 5))
+    retry_503 = int(cfg.get("retry_503", 3))
+    retry_sleep = float(cfg.get("retry_sleep_sec", 1.5))
+
     allowed_forms = {
         "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A",
         "SC 13D","SC 13D/A","SC 13G","SC 13G/A","Form 3","3/A","Form 4","4/A"
@@ -56,7 +58,8 @@ def main():
         "hit_page_limit": False,
         "atom_fetch_errors": 0,
         "atom_http_codes": [],
-        "pages_debug": []  # list of {page,p_entries,newest_et,oldest_et}
+        "pages_debug": [],
+        "last_oldest_et_scanned": None
     }
 
     crossed_boundary = False
@@ -66,33 +69,35 @@ def main():
         url = SEC_ATOM.format(start=p*count, count=count)
         stats["pages_fetched"] += 1
 
-        # Fetch Atom page with UA
-        try:
-            r = session.get(url, timeout=30)
-            stats["atom_http_codes"].append(r.status_code)
-            if r.status_code != 200 or not r.text.strip():
-                stats["atom_fetch_errors"] += 1
-                empty_streak += 1
-                if empty_streak >= 3:
+        # Retry fetch
+        page_text = None
+        for attempt in range(1, retry_503+1):
+            try:
+                r = session.get(url, timeout=30)
+                stats["atom_http_codes"].append(r.status_code)
+                if r.status_code == 200 and r.text.strip():
+                    page_text = r.text
                     break
-                else:
-                    continue
-            feed = feedparser.parse(r.text)
-        except Exception:
+            except Exception:
+                pass
+            time.sleep(retry_sleep * attempt)
+
+        if page_text is None:
             stats["atom_fetch_errors"] += 1
             empty_streak += 1
-            if empty_streak >= 3:
+            if empty_streak >= max_empty_pages:
                 break
-            else:
-                continue
+            time.sleep(page_pause)
+            continue
 
+        feed = feedparser.parse(page_text)
         entries = feed.get("entries", [])
         if not entries:
             empty_streak += 1
-            if empty_streak >= 3:
+            if empty_streak >= max_empty_pages:
                 break
-            else:
-                continue
+            time.sleep(page_pause)
+            continue
         else:
             empty_streak = 0
 
@@ -111,8 +116,6 @@ def main():
             if not within_window(ftime, start_et, end_et, tz):
                 continue
 
-            stats["entries_seen"] += 1
-
             form = entry_form(e)
             if form not in allowed_forms:
                 continue
@@ -121,41 +124,48 @@ def main():
             summary = e.get("summary","") or e.get("content",[{"value":""}])[0].get("value","")
             link = e.get("link","")
 
+            # Enrichment
             cik = extract_cik_from_link(link)
-            ticker = None; sic = None; industry = None
+            ticker = None; sic = None; industry = None; company = None
             if cik:
                 try:
                     sub_json = fetch_submissions_for_cik(session, cik)
-                    ticker, industry, sic = map_ticker_industry(sub_json)
+                    ticker, industry, sic, company = map_company_meta(sub_json)
                 except Exception:
                     stats["errors"] += 1
+            if not company:
+                # last-resort: pull from title
+                company = fallback_company_from_title(title)
 
+            # Ban checks
             banned = False
             if banned_by_sic(sic, ban_pref, ban_exact):
                 banned = True; stats["banned_sic"] += 1
             else:
-                blob = " ".join([title or "", summary or "", industry or ""])
+                blob = " ".join([title or "", summary or "", industry or "", company or ""])
                 if banned_by_keywords(blob, ban_kw):
                     banned = True; stats["banned_kw"] += 1
 
             rec = {
                 "filing_datetime": ftime.isoformat(),
                 "form": form,
-                "title": title,
-                "summary": summary,
-                "link": link,
-                "cik": cik,
+                "company": company,
                 "ticker": ticker,
+                "cik": cik,
                 "industry": industry,
                 "sic": sic,
+                "title": title,
+                "summary": summary,
+                "link": link
             }
             raw_rows.append(rec)
-            if banned: continue
+            if banned: 
+                continue
 
             rec["score"] = score_record(rec, scoring)
             kept_rows.append(rec)
 
-        # Record coverage for this page (ET)
+        # Page coverage
         def to_et_str(dt):
             try:
                 from zoneinfo import ZoneInfo
@@ -169,6 +179,7 @@ def main():
             "newest_et": to_et_str(newest_et_on_page),
             "oldest_et": to_et_str(oldest_et_on_page),
         })
+        stats["last_oldest_et_scanned"] = stats["pages_debug"][-1]["oldest_et"]
 
         if oldest_et_on_page:
             try:
@@ -180,6 +191,8 @@ def main():
                 crossed_boundary = True
                 stats["hit_boundary"] = True
                 break
+
+        time.sleep(page_pause)
 
     if not crossed_boundary and stats["pages_fetched"] >= max_pages:
         stats["hit_page_limit"] = True
@@ -195,8 +208,8 @@ def main():
     snap_path = os.path.join(outdir, "sec_filings_snapshot.json")
     with open(snap_path,"w",encoding="utf-8") as f: f.write(json.dumps(kept_rows, indent=2))
 
-    # Safe CSV (write headers even if zero rows)
-    cols = ["filing_datetime","form","ticker","cik","industry","sic","title","score","link"]
+    # CSV with company column
+    cols = ["filing_datetime","form","company","ticker","cik","industry","sic","title","score","link"]
     if kept_rows:
         df = pd.DataFrame(kept_rows)
     else:
