@@ -1,4 +1,4 @@
-# utils_sec.py (v18.1)
+# utils_sec.py (v18.6)
 import re, time, json
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Tuple, Dict, Any, List
@@ -50,7 +50,8 @@ def entry_form(entry) -> str:
 
     for source in candidates:
         s = source.upper()
-        # Handle common forms and their amendments
+
+        # Handle standard forms and their amendments
         patterns = [
             r'\b8-K(?:/A)?\b',
             r'\b6-K(?:/A)?\b',
@@ -60,16 +61,15 @@ def entry_form(entry) -> str:
             r'\bSC 13G(?:/A)?\b',
             r'\bFORM?\s*3(?:/A)?\b',
             r'\bFORM?\s*4(?:/A)?\b',
-            r'(?<=\s|\b)3(?:/A)?(?=\s|\b)',
-            r'(?<=\s|\b)4(?:/A)?(?=\s|\b)',
+            r'\b3(?:/A)?\b',   # fixed: no variable-width look-behind
+            r'\b4(?:/A)?\b',   # fixed: no variable-width look-behind
         ]
         for pat in patterns:
             m = re.search(pat, s, flags=re.IGNORECASE)
             if m:
                 val = m.group(0).upper()
-                # Normalize "FORM 3"/"FORM 4"
-                if val in ("FORM 3","3"): return "Form 3"
-                if val in ("FORM 4","4"): return "Form 4"
+                if val in ("FORM 3","3","3/A"): return "Form 3" if val != "3/A" else "3/A"
+                if val in ("FORM 4","4","4/A"): return "Form 4" if val != "4/A" else "4/A"
                 return val
     return ""
 
@@ -160,7 +160,7 @@ def score_record(rec: Dict[str,Any], scoring: Dict[str,Any]) -> int:
     if any(df in text for df in scoring["dilution_flags"]):
         score -= scoring["dilution_penalty"]
 
-    if form in ("FORM 4","4","4/A"):
+    if form in ("FORM 4","4","4/A","Form 4"):
         if any(t in text for t in scoring.get("form4_pos_boost_terms", [])):
             score += scoring.get("form4_pos_boost", 0)
 
