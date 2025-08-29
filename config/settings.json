@@ -5,7 +5,7 @@
   "max_pages": 60,
   "count_per_page": 200,
   "min_score_for_recommend": 60,
-  "enable_webhook_deploy": false,
+  "enable_webhook_deploy": true,
   "webhook_url": "https://YOUR_DOMAIN.com/deploy/receiver.php",
   "webhook_secret": "CHANGE_ME",
   "hostinger_allowed_filenames": [
