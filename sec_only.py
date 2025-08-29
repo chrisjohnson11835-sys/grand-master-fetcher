@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Grand Master — SEC ONLY (Step 6) v19.6
-Change: EXPAND *SCRAPING* window (scan deeper), keep OUTPUT window fixed at 09:30 ET → 09:30 ET.
-- Uses prev business day 09:30 ET to latest 09:30 ET window for KEEPING results (unchanged).
-- Scans deeper past the start boundary by `scan_extend_days` (calendar days) to survive rate limits/empty pages.
-- Still caps count=100 per page and advances by actual entries returned (no gaps).
-- Keeps: tags-based form detection, company enrichment, safe CSV, webhook deploy, pages_debug.
+- Output window: prev business day 09:30 ET -> latest 09:30 ET
+- Expanded scraping depth via scan_extend_days (default 2)
+- 100-per-page cap + advance by actual items (no skips)
+- Tags-based form detection; enrichment; safe CSV; webhook deploy; pages_debug
 """
 import os, json, time
 from typing import Any, Dict, List
@@ -35,18 +34,17 @@ def main():
 
     outdir = os.path.join(root, "outputs"); ensure_dir(outdir)
 
-    # KEEP window: prev business day 09:30 -> latest 09:30 <= now
     start_et, end_et = et_window_prev0930_to_latest0930(tz, cutoff_hour=9, cutoff_minute=30, business_days=True)
     session = new_session(ua)
 
-    # Scraping depth expansion
-    scan_extend_days = int(cfg_val(cfg, "scan_extend_days", 2))  # calendar days deeper than start_et
+    # Depth extension
     from datetime import timedelta
+    scan_extend_days = int(cfg_val(cfg, "scan_extend_days", 2))
     extended_stop_et = start_et - timedelta(days=scan_extend_days)
 
     max_pages = int(cfg_val(cfg, "max_pages", 400))
     requested_count = int(cfg_val(cfg, "count_per_page", 100))
-    count = min(max(requested_count, 1), 100)  # SEC caps at 100
+    count = min(max(requested_count, 1), 100)
     page_pause = float(cfg_val(cfg, "page_pause_sec", 1.2))
     max_empty_pages = int(cfg_val(cfg, "max_empty_pages", 8))
     retry_503 = int(cfg_val(cfg, "retry_503", 5))
@@ -136,7 +134,6 @@ def main():
             if newest_et_on_page is None or ftime > newest_et_on_page:
                 newest_et_on_page = ftime
 
-            # KEEP only entries within strict 09:30→09:30 window
             if not within_window(ftime, start_et, end_et, tz):
                 continue
 
@@ -186,7 +183,7 @@ def main():
             rec["score"] = score_record(rec, scoring)
             kept_rows.append(rec)
 
-        # Page coverage in ET
+        # Debug coverage
         def to_et_str(dt):
             try:
                 from zoneinfo import ZoneInfo
@@ -203,7 +200,6 @@ def main():
         })
         stats["last_oldest_et_scanned"] = stats["pages_debug"][-1]["oldest_et"]
 
-        # Boundary flags (we DO NOT stop at the first boundary anymore)
         if oldest_et_on_page:
             try:
                 from zoneinfo import ZoneInfo
@@ -212,19 +208,16 @@ def main():
             oldest_et = oldest_et_on_page.astimezone(ZoneInfo(tz))
             if oldest_et < start_et:
                 stats["hit_boundary"] = True
-            if oldest_et < (start_et - (end_et - extended_stop_et)):  # i.e., older than extended_stop_et
+            if oldest_et < extended_stop_et:
                 stats["hit_extended_boundary"] = True
                 break
 
-        # Advance by ACTUAL entries to avoid gaps
         start_idx += n
         time.sleep(page_pause)
 
-    # Order by score then time
     kept_rows.sort(key=lambda r: (r.get("score",0), r.get("filing_datetime","")), reverse=True)
     stats["entries_kept"] = len(kept_rows)
 
-    # Write outputs
     outdir = os.path.join(root, "outputs"); ensure_dir(outdir)
     raw_path = os.path.join(outdir, "sec_filings_raw.json")
     with open(raw_path,"w",encoding="utf-8") as f: f.write(json.dumps(raw_rows, indent=2))
@@ -233,7 +226,6 @@ def main():
     snap_path = os.path.join(outdir, "sec_filings_snapshot.json")
     with open(snap_path,"w",encoding="utf-8") as f: f.write(json.dumps(kept_rows, indent=2))
 
-    # CSV columns
     cols = ["filing_datetime","form","company","ticker","cik","industry","sic","title","score","link"]
     if kept_rows:
         df = pd.DataFrame(kept_rows)
@@ -245,7 +237,6 @@ def main():
 
     print("Outputs written to outputs/.")
 
-    # Deploy
     if cfg.get("enable_webhook_deploy"):
         try:
             from deploy.webhook_deploy import deploy_files
