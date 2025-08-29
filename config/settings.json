@@ -2,16 +2,21 @@
   "user_agent": "GrandMasterSEC/1.0 (contact: chrisjohnson11835@gmail.com)",
   "contact_email": "chrisjohnson11835@gmail.com",
   "timezone": "America/New_York",
-  "max_pages": 400,
+
   "count_per_page": 100,
+  "max_pages": 1200,
+
+  "retry_503": 10,
+  "retry_sleep_sec": 2.0,
+  "max_empty_pages": 40,
+  "page_pause_sec": 2.0,
+
+  "scan_extend_days": 2,
+
   "min_score_for_recommend": 60,
   "enable_webhook_deploy": true,
   "webhook_url": "https://royalblue-lion-727879.hostingersite.com/deploy/receiver.php",
   "webhook_secret": "CHANGE_ME",
-  "retry_503": 5,
-  "max_empty_pages": 8,
-  "page_pause_sec": 1.2,
-  "scan_extend_days": 2,
   "hostinger_allowed_filenames": [
     "sec_filings_snapshot.json",
     "sec_filings_snapshot.csv",
