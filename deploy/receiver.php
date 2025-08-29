@@ -1,1 +1,0 @@
-<?php /* receiver.php same as v18; place in /public_html/deploy/ */ ?>
