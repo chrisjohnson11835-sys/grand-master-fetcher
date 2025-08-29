@@ -1,4 +1,4 @@
-# utils_sec.py (v19.1)
+# utils_sec.py (v19.5)
 import re, time, json
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Tuple, Dict, Any, List
@@ -16,10 +16,32 @@ def new_session(user_agent: str):
     s.headers.update({"User-Agent": user_agent, "Accept-Encoding":"gzip, deflate", "Accept":"*/*"})
     return s
 
-def et_window_now_yday(tz: str) -> Tuple[datetime, datetime]:
+def _prev_business_date(d: datetime) -> datetime:
+    one = timedelta(days=1)
+    d2 = d - one
+    while d2.weekday() >= 5:
+        d2 -= one
+    return d2
+
+def et_window_prev0930_to_latest0930(tz: str, cutoff_hour: int = 9, cutoff_minute: int = 30, business_days: bool = True) -> Tuple[datetime, datetime]:
     now_et = datetime.now(ZoneInfo(tz))
-    yday_start = datetime(now_et.year, now_et.month, now_et.day, 0, 0, 0, tzinfo=now_et.tzinfo) - timedelta(days=1)
-    return (yday_start, now_et)
+    today_cut = datetime(now_et.year, now_et.month, now_et.day, cutoff_hour, cutoff_minute, tzinfo=now_et.tzinfo)
+
+    if now_et >= today_cut:
+        end_et = today_cut
+    else:
+        end_et = today_cut - timedelta(days=1)
+        if business_days:
+            while end_et.weekday() >= 5:
+                end_et -= timedelta(days=1)
+
+    if business_days:
+        prev_biz = _prev_business_date(end_et)
+        start_et = datetime(prev_biz.year, prev_biz.month, prev_biz.day, cutoff_hour, cutoff_minute, tzinfo=end_et.tzinfo)
+    else:
+        start_et = end_et - timedelta(days=1)
+
+    return (start_et, end_et)
 
 def parse_entry_time(entry) -> Optional[datetime]:
     for key in ("updated","published"):
@@ -37,36 +59,52 @@ def parse_entry_time(entry) -> Optional[datetime]:
             return None
     return None
 
+_FORM_PATTERNS = [
+    r'\b8-K(?:/A)?\b',
+    r'\b6-K(?:/A)?\b',
+    r'\b10-Q(?:/A)?\b',
+    r'\b10-K(?:/A)?\b',
+    r'\bSC 13D(?:/A)?\b',
+    r'\bSC 13G(?:/A)?\b',
+    r'\bFORM?\s*3(?:/A)?\b',
+    r'\bFORM?\s*4(?:/A)?\b',
+    r'\b3(?:/A)?\b',
+    r'\b4(?:/A)?\b',
+]
+
+def _match_form(s: str) -> Optional[str]:
+    if not s: return None
+    s_up = s.upper()
+    for pat in _FORM_PATTERNS:
+        m = re.search(pat, s_up, flags=re.IGNORECASE)
+        if m:
+            val = m.group(0).upper()
+            if val in ("FORM 3","3"): return "Form 3"
+            if val in ("FORM 4","4"): return "Form 4"
+            return val
+    return None
+
 def entry_form(entry) -> str:
-    # Try category.term first
+    tags = entry.get("tags") or entry.get("categories")
+    if isinstance(tags, list):
+        for t in tags:
+            term = (t.get("term") or t.get("label") or "").strip()
+            f = _match_form(term)
+            if f: return f
     cat = entry.get("category")
-    candidates = []
     if isinstance(cat, dict):
-        t = (cat.get("term") or "").strip()
-        if t: candidates.append(t)
-    # Fallback: title text
-    title = entry.get("title","")
-    candidates.append(title)
-
-    for source in candidates:
-        s = source.upper()
-
-        # Handle standard forms and their amendments (no look-behind)
-        patterns = [
-            r'\b(8-K(?:/A)?|6-K(?:/A)?|10-Q(?:/A)?|10-K(?:/A)?|SC 13D(?:/A)?|SC 13G(?:/A)?)\b',
-            r'\bFORM?\s*3(?:/A)?\b',
-            r'\bFORM?\s*4(?:/A)?\b',
-            r'\b3(?:/A)?\b',
-            r'\b4(?:/A)?\b',
-        ]
-        for pat in patterns:
-            m = re.search(pat, s, flags=re.IGNORECASE)
-            if m:
-                val = m.group(1).upper() if m.groups() else m.group(0).upper()
-                if val in ("FORM 3","3","3/A"): return "Form 3" if val != "3/A" else "3/A"
-                if val in ("FORM 4","4","4/A"): return "Form 4" if val != "4/A" else "4/A"
-                return val
-    return ""
+        f = _match_form((cat.get("term") or "").strip())
+        if f: return f
+    f = _match_form(entry.get("title",""))
+    if f: return f
+    f = _match_form(entry.get("summary",""))
+    if f: return f
+    content = entry.get("content") or []
+    if isinstance(content, list) and content:
+        f = _match_form(content[0].get("value",""))
+        if f: return f
+    f = _match_form(entry.get("link",""))
+    return f or ""
 
 def extract_cik_from_link(href: str) -> Optional[str]:
     if not href: return None
@@ -97,9 +135,6 @@ def fetch_submissions_for_cik(session: requests.Session, cik: str) -> Optional[D
         return None
 
 def map_company_meta(sub_json: Dict[str,Any]) -> Tuple[Optional[str], Optional[str], Optional[int], Optional[str]]:
-    """
-    Returns (ticker, sicDescription, sic, company)
-    """
     if not sub_json: return (None, None, None, None)
     ticker = None
     if "tickers" in sub_json and isinstance(sub_json["tickers"], list) and sub_json["tickers"]:
@@ -122,9 +157,6 @@ def load_json(path: str) -> Any:
         return json.load(f)
 
 def within_window(dt: datetime, start_et: datetime, end_et: datetime, local_tz: str) -> bool:
-    """
-    Compare a timestamp to the ET window. If the timestamp has no timezone, assume UTC.
-    """
     if dt.tzinfo is None:
         dt = dt.replace(tzinfo=timezone.utc)
     dt_et = dt.astimezone(ZoneInfo(local_tz))
