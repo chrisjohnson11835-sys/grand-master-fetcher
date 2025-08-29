@@ -1,167 +1,164 @@
-# utils_sec.py (v18.1)
-import re, time, json
-from datetime import datetime, timedelta, timezone
-from typing import Optional, Tuple, Dict, Any, List
-import requests
-from dateutil import parser as dtparser
-try:
-    from zoneinfo import ZoneInfo
-except Exception:
-    from backports.zoneinfo import ZoneInfo
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Grand Master — SEC ONLY (Step 6) v18.1
+- Captures amendments (*/A) and numeric 3/4 forms
+- Boundary-driven paging to ensure complete window coverage
+"""
+import os, json
+from typing import Any, Dict, List
+import feedparser
+import pandas as pd
+from utils_sec import (
+    SEC_ATOM, new_session, et_window_now_yday, parse_entry_time, entry_form,
+    extract_cik_from_link, load_json, within_window, fetch_submissions_for_cik,
+    map_ticker_industry, banned_by_sic, banned_by_keywords, score_record
+)
 
-SEC_ATOM = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&output=atom&start={start}&count={count}"
+def ensure_dir(p): os.makedirs(p, exist_ok=True)
 
-def new_session(user_agent: str):
-    s = requests.Session()
-    s.headers.update({"User-Agent": user_agent, "Accept-Encoding":"gzip, deflate", "Accept":"*/*"})
-    return s
+def main():
+    root = os.path.dirname(os.path.abspath(__file__))
+    cfg = load_json(os.path.join(root, "config", "settings.json"))
+    scoring = load_json(os.path.join(root, "config", "scoring.json"))
+    ban_pref = load_json(os.path.join(root, "config", "banned_sic_prefixes.json"))
+    ban_exact = load_json(os.path.join(root, "config", "banned_sic_exact.json"))
+    ban_kw = load_json(os.path.join(root, "config", "banned_keywords.json"))
+    tz = cfg.get("timezone","America/New_York")
+    ua = cfg.get("user_agent","GrandMasterSEC/1.0 (contact@example.com)")
 
-def et_window_now_yday(tz: str) -> Tuple[datetime, datetime]:
-    now_et = datetime.now(ZoneInfo(tz))
-    yday_start = datetime(now_et.year, now_et.month, now_et.day, 0, 0, 0, tzinfo=now_et.tzinfo) - timedelta(days=1)
-    return (yday_start, now_et)
+    outdir = os.path.join(root, "outputs"); ensure_dir(outdir)
+    start_et, end_et = et_window_now_yday(tz)
+    session = new_session(ua)
 
-def parse_entry_time(entry) -> Optional[datetime]:
-    for key in ("updated","published"):
-        if key in entry:
+    max_pages = int(cfg.get("max_pages", 60))
+    count = int(cfg.get("count_per_page", 200))
+    allowed_forms = {
+        "8-K","8-K/A","6-K","6-K/A","10-Q","10-Q/A","10-K","10-K/A",
+        "SC 13D","SC 13D/A","SC 13G","SC 13G/A","Form 3","3/A","Form 4","4/A"
+    }
+
+    raw_rows: List[Dict[str,Any]] = []
+    kept_rows: List[Dict[str,Any]] = []
+    stats = {
+        "window_start_et": start_et.isoformat(),
+        "window_end_et": end_et.isoformat(),
+        "pages_fetched": 0,
+        "entries_seen": 0,
+        "entries_kept": 0,
+        "banned_sic": 0,
+        "banned_kw": 0,
+        "errors": 0,
+        "hit_boundary": False,
+        "hit_page_limit": False
+    }
+
+    crossed_boundary = False
+
+    for p in range(max_pages):
+        url = SEC_ATOM.format(start=p*count, count=count)
+        stats["pages_fetched"] += 1
+        feed = feedparser.parse(url)
+        entries = feed.get("entries", [])
+        if not entries:
+            break
+
+        # Track oldest entry time on this page to test boundary
+        oldest_et_on_page = None
+
+        for e in entries:
+            stats["entries_seen"] += 1
+            ftime = parse_entry_time(e)
+            if not ftime:
+                continue
+
+            # Track oldest
+            if oldest_et_on_page is None or ftime < oldest_et_on_page:
+                oldest_et_on_page = ftime
+
+            if not within_window(ftime, start_et, end_et, tz):
+                continue
+
+            form = entry_form(e)
+            if form not in allowed_forms:
+                continue
+
+            title = e.get("title","")
+            summary = e.get("summary","") or e.get("content",[{"value":""}])[0].get("value","")
+            link = e.get("link","")
+
+            cik = extract_cik_from_link(link)
+            ticker = None; sic = None; industry = None
+            if cik:
+                try:
+                    sub_json = fetch_submissions_for_cik(session, cik)
+                    ticker, industry, sic = map_ticker_industry(sub_json)
+                except Exception:
+                    stats["errors"] += 1
+
+            # Bans
+            banned = False
+            if banned_by_sic(sic, ban_pref, ban_exact):
+                banned = True; stats["banned_sic"] += 1
+            else:
+                blob = " ".join([title or "", summary or "", industry or ""])
+                if banned_by_keywords(blob, ban_kw):
+                    banned = True; stats["banned_kw"] += 1
+
+            rec = {
+                "filing_datetime": ftime.isoformat(),
+                "form": form,
+                "title": title,
+                "summary": summary,
+                "link": link,
+                "cik": cik,
+                "ticker": ticker,
+                "industry": industry,
+                "sic": sic,
+            }
+            raw_rows.append(rec)
+            if banned: continue
+
+            rec["score"] = score_record(rec, scoring)
+            kept_rows.append(rec)
+
+        # After page processed: check boundary condition
+        if oldest_et_on_page:
+            from datetime import timezone as tzmod
+            # Convert to ET inside within_window logic indirectly:
+            # If oldest entry is older than start_et when converted to ET, we've crossed the boundary.
+            # We reuse within_window: if it's below, within_window==False; detect by comparing in ET directly.
+            # Simpler: compute bool "older_than_start" by transforming in-place:
             try:
-                dt = dtparser.parse(entry[key])
-                return dt
+                from zoneinfo import ZoneInfo
             except Exception:
-                pass
-    up = entry.get("updated_parsed") or entry.get("published_parsed")
-    if up:
-        try:
-            return datetime(*up[:6], tzinfo=timezone.utc)
-        except Exception:
-            return None
-    return None
+                from backports.zoneinfo import ZoneInfo
+            oldest_et = oldest_et_on_page.astimezone(ZoneInfo(tz))
+            if oldest_et < start_et:
+                crossed_boundary = True
+                stats["hit_boundary"] = True
+                break
 
-def entry_form(entry) -> str:
-    # Try category.term first
-    cat = entry.get("category")
-    candidates = []
-    if isinstance(cat, dict):
-        t = (cat.get("term") or "").strip()
-        if t: candidates.append(t)
-    # Fallback: title text
-    title = entry.get("title","")
-    candidates.append(title)
+    if not crossed_boundary and stats["pages_fetched"] >= max_pages:
+        stats["hit_page_limit"] = True
 
-    for source in candidates:
-        s = source.upper()
-        # Handle common forms and their amendments
-        patterns = [
-            r'\b8-K(?:/A)?\b',
-            r'\b6-K(?:/A)?\b',
-            r'\b10-Q(?:/A)?\b',
-            r'\b10-K(?:/A)?\b',
-            r'\bSC 13D(?:/A)?\b',
-            r'\bSC 13G(?:/A)?\b',
-            r'\bFORM?\s*3(?:/A)?\b',
-            r'\bFORM?\s*4(?:/A)?\b',
-            r'(?<=\s|\b)3(?:/A)?(?=\s|\b)',
-            r'(?<=\s|\b)4(?:/A)?(?=\s|\b)',
-        ]
-        for pat in patterns:
-            m = re.search(pat, s, flags=re.IGNORECASE)
-            if m:
-                val = m.group(0).upper()
-                # Normalize "FORM 3"/"FORM 4"
-                if val in ("FORM 3","3"): return "Form 3"
-                if val in ("FORM 4","4"): return "Form 4"
-                return val
-    return ""
+    kept_rows.sort(key=lambda r: (r.get("score",0), r.get("filing_datetime","")), reverse=True)
+    stats["entries_kept"] = len(kept_rows)
 
-def extract_cik_from_link(href: str) -> Optional[str]:
-    if not href: return None
-    m = re.search(r'[?&]CIK=(\d{1,10})\b', href, re.I)
-    if m: return m.group(1).zfill(10)
-    m = re.search(r'/data/(\d{1,10})/', href)
-    if m: return m.group(1).zfill(10)
-    return None
+    # Outputs
+    raw_path = os.path.join(outdir, "sec_filings_raw.json")
+    with open(raw_path, "w", encoding="utf-8") as f: json.dump(raw_rows, f, indent=2)
+    stats_path = os.path.join(outdir, "sec_debug_stats.json")
+    with open(stats_path, "w", encoding="utf-8") as f: json.dump(stats, f, indent=2)
+    snap_path = os.path.join(outdir, "sec_filings_snapshot.json")
+    with open(snap_path, "w", encoding="utf-8") as f: json.dump(kept_rows, f, indent=2)
 
-def load_json(path: str) -> Any:
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+    # CSV
+    cols = ["filing_datetime","form","ticker","cik","industry","sic","title","score","link"]
+    import pandas as pd
+    pd.DataFrame(kept_rows)[cols].to_csv(os.path.join(outdir, "sec_filings_snapshot.csv"), index=False)
 
-def within_window(dt: datetime, start_et: datetime, end_et: datetime, local_tz: str) -> bool:
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    dt_et = dt.astimezone(ZoneInfo(local_tz))
-    return start_et <= dt_et <= end_et
+    print("Done. See outputs/.")
 
-def safe_get(session: requests.Session, url: str, tries: int = 3, sleep: float = 0.8) -> Optional[requests.Response]:
-    for i in range(tries):
-        try:
-            r = session.get(url, timeout=20)
-            if r.status_code == 200:
-                return r
-        except Exception:
-            pass
-        time.sleep(sleep * (i+1))
-    return None
-
-def fetch_submissions_for_cik(session: requests.Session, cik: str) -> Optional[Dict[str,Any]]:
-    url = f"https://data.sec.gov/submissions/CIK{cik}.json"
-    r = safe_get(session, url, tries=3)
-    if not r: return None
-    try:
-        return r.json()
-    except Exception:
-        return None
-
-def map_ticker_industry(sub_json: Dict[str,Any]) -> Tuple[Optional[str], Optional[str], Optional[int]]:
-    if not sub_json: return (None, None, None)
-    ticker = None
-    if "tickers" in sub_json and isinstance(sub_json["tickers"], list) and sub_json["tickers"]:
-        ticker = sub_json["tickers"][0]
-    sic = sub_json.get("sic")
-    try:
-        sic = int(sic) if sic is not None else None
-    except Exception:
-        sic = None
-    sic_desc = sub_json.get("sicDescription")
-    return (ticker, sic_desc, sic)
-
-def banned_by_sic(sic: Optional[int], prefixes: List[str], exact: List[int]) -> bool:
-    if sic is None: return False
-    if sic in exact: return True
-    s = str(sic)
-    return any(s.startswith(p) for p in prefixes)
-
-def banned_by_keywords(text: str, kw: Dict[str, List[str]]) -> bool:
-    text_l = text.lower()
-    for group in kw.values():
-        for term in group:
-            if term in text_l:
-                return True
-    return False
-
-def item_codes_from_text(text: str) -> List[str]:
-    return re.findall(r'\b([1-9]\.\d{2})\b', text)
-
-def score_record(rec: Dict[str,Any], scoring: Dict[str,Any]) -> int:
-    score = 0
-    form = rec.get("form","").upper()
-    score += scoring["form_weights"].get(form, scoring["form_weights"].get(form.replace("/A",""), 0))
-
-    text = f"{rec.get('title','')} {rec.get('summary','')}".lower()
-
-    if form.startswith("8-K"):
-        for item in item_codes_from_text(text):
-            score += scoring["item_boosts_8k"].get(item, 0)
-
-    if any(pk in text for pk in scoring["positive_keywords"]):
-        score += scoring["pos_keyword_boost"]
-    if any(nk in text for nk in scoring["negative_keywords"]):
-        score -= scoring["neg_keyword_penalty"]
-
-    if any(df in text for df in scoring["dilution_flags"]):
-        score -= scoring["dilution_penalty"]
-
-    if form in ("FORM 4","4","4/A"):
-        if any(t in text for t in scoring.get("form4_pos_boost_terms", [])):
-            score += scoring.get("form4_pos_boost", 0)
-
-    return max(score, 0)
+if __name__ == "__main__":
+    main()
