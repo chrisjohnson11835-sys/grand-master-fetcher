@@ -1,4 +1,4 @@
-# utils_sec.py (v19.0)
+# utils_sec.py (v19.1)
 import re, time, json
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Tuple, Dict, Any, List
@@ -121,6 +121,15 @@ def load_json(path: str) -> Any:
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+def within_window(dt: datetime, start_et: datetime, end_et: datetime, local_tz: str) -> bool:
+    """
+    Compare a timestamp to the ET window. If the timestamp has no timezone, assume UTC.
+    """
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    dt_et = dt.astimezone(ZoneInfo(local_tz))
+    return start_et <= dt_et <= end_et
+
 def banned_by_sic(sic: Optional[int], prefixes: List[str], exact: List[int]) -> bool:
     if sic is None: return False
     if sic in exact: return True
@@ -141,7 +150,6 @@ def item_codes_from_text(text: str) -> List[str]:
 def score_record(rec: Dict[str,Any], scoring: Dict[str,Any]) -> int:
     score = 0
     form = rec.get("form","").upper()
-    # handle amendments with same base weight if missing
     score += scoring["form_weights"].get(form, scoring["form_weights"].get(form.replace("/A",""), 0))
 
     text = f"{rec.get('title','')} {rec.get('summary','')}".lower()
