@@ -1,0 +1,17 @@
+{
+  "user_agent": "GrandMasterSEC/1.0 (contact: youremail@example.com)",
+  "contact_email": "youremail@example.com",
+  "timezone": "America/New_York",
+  "max_pages": 60,
+  "count_per_page": 200,
+  "min_score_for_recommend": 60,
+  "enable_webhook_deploy": false,
+  "webhook_url": "https://YOUR_DOMAIN.com/deploy/receiver.php",
+  "webhook_secret": "CHANGE_ME",
+  "hostinger_allowed_filenames": [
+    "sec_filings_snapshot.json",
+    "sec_filings_snapshot.csv",
+    "sec_filings_raw.json",
+    "sec_debug_stats.json"
+  ]
+}

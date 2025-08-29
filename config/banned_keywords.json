@@ -1,0 +1,70 @@
+{
+  "industry_terms": [
+    "bank",
+    "insurance",
+    "insurer",
+    "reinsurance",
+    "mortgage",
+    "lending",
+    "lender",
+    "credit card",
+    "credit cards",
+    "card issuer",
+    "payday",
+    "pawn",
+    "broker-dealer",
+    "asset management",
+    "hedge fund",
+    "private equity",
+    "venture capital",
+    "mutual fund",
+    "investment adviser",
+    "financing",
+    "finance company"
+  ],
+  "weapons_terms": [
+    "ammunition",
+    "ordnance",
+    "firearms",
+    "rifle",
+    "pistol",
+    "weapon",
+    "defense contractor",
+    "missile"
+  ],
+  "adult_terms": [
+    "adult entertainment",
+    "porn",
+    "explicit content",
+    "sex work",
+    "escort"
+  ],
+  "gambling_terms": [
+    "casino",
+    "wagering",
+    "betting",
+    "sportsbook",
+    "pari-mutuel",
+    "lottery",
+    "gaming revenue"
+  ],
+  "alcohol_terms": [
+    "brewery",
+    "beer",
+    "distillery",
+    "whiskey",
+    "vodka",
+    "gin",
+    "wine",
+    "winery",
+    "spirits",
+    "alcoholic"
+  ],
+  "tobacco_terms": [
+    "tobacco",
+    "cigarette",
+    "cigar",
+    "vape",
+    "nicotine"
+  ]
+}
