@@ -1,4 +1,4 @@
-# utils_sec.py (v18.9)
+# utils_sec.py (v19.0)
 import re, time, json
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Tuple, Dict, Any, List
@@ -51,7 +51,7 @@ def entry_form(entry) -> str:
     for source in candidates:
         s = source.upper()
 
-        # Handle standard forms and their amendments
+        # Handle standard forms and their amendments (no look-behind)
         patterns = [
             r'\b(8-K(?:/A)?|6-K(?:/A)?|10-Q(?:/A)?|10-K(?:/A)?|SC 13D(?:/A)?|SC 13G(?:/A)?)\b',
             r'\bFORM?\s*3(?:/A)?\b',
@@ -78,13 +78,11 @@ def extract_cik_from_link(href: str) -> Optional[str]:
 
 def fallback_company_from_title(title: str) -> Optional[str]:
     if not title: return None
-    # Try "Company Name ("
     m = re.match(r'\s*([^(\[]+?)\s*[\(\[]', title)
     if m:
         name = m.group(1).strip()
         if name and len(name) > 1:
             return name
-    # Otherwise, strip trailing " - Form X" patterns
     t = re.sub(r'\s*-\s*Form\s+.*$', '', title, flags=re.IGNORECASE).strip()
     return t or None
 
@@ -101,7 +99,6 @@ def fetch_submissions_for_cik(session: requests.Session, cik: str) -> Optional[D
 def map_company_meta(sub_json: Dict[str,Any]) -> Tuple[Optional[str], Optional[str], Optional[int], Optional[str]]:
     """
     Returns (ticker, sicDescription, sic, company)
-    Tries multiple fields for company name.
     """
     if not sub_json: return (None, None, None, None)
     ticker = None
@@ -113,12 +110,56 @@ def map_company_meta(sub_json: Dict[str,Any]) -> Tuple[Optional[str], Optional[s
     except Exception:
         sic = None
     sic_desc = sub_json.get("sicDescription")
-
-    # company name candidates
     company = sub_json.get("name") or sub_json.get("companyName") or sub_json.get("entityName")
     if isinstance(company, str):
         company = company.strip()
     else:
         company = None
-
     return (ticker, sic_desc, sic, company)
+
+def load_json(path: str) -> Any:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def banned_by_sic(sic: Optional[int], prefixes: List[str], exact: List[int]) -> bool:
+    if sic is None: return False
+    if sic in exact: return True
+    s = str(sic)
+    return any(s.startswith(p) for p in prefixes)
+
+def banned_by_keywords(text: str, kw: Dict[str, List[str]]) -> bool:
+    text_l = text.lower()
+    for group in kw.values():
+        for term in group:
+            if term in text_l:
+                return True
+    return False
+
+def item_codes_from_text(text: str) -> List[str]:
+    return re.findall(r'\b([1-9]\.\d{2})\b', text)
+
+def score_record(rec: Dict[str,Any], scoring: Dict[str,Any]) -> int:
+    score = 0
+    form = rec.get("form","").upper()
+    # handle amendments with same base weight if missing
+    score += scoring["form_weights"].get(form, scoring["form_weights"].get(form.replace("/A",""), 0))
+
+    text = f"{rec.get('title','')} {rec.get('summary','')}".lower()
+
+    if form.startswith("8-K"):
+        for item in item_codes_from_text(text):
+            score += scoring["item_boosts_8k"].get(item, 0)
+
+    if any(pk in text for pk in scoring["positive_keywords"]):
+        score += scoring["pos_keyword_boost"]
+    if any(nk in text for nk in scoring["negative_keywords"]):
+        score -= scoring["neg_keyword_penalty"]
+
+    if any(df in text for df in scoring["dilution_flags"]):
+        score -= scoring["dilution_penalty"]
+
+    if form in ("FORM 4","4","4/A","Form 4"):
+        if any(t in text for t in scoring.get("form4_pos_boost_terms", [])):
+            score += scoring.get("form4_pos_boost", 0)
+
+    return max(score, 0)
