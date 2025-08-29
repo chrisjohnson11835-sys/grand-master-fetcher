@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Grand Master — SEC ONLY (Step 6) v18.9
-Adds explicit company name enrichment and CSV column.
-Keeps: UA fetch + retries, safe CSV, webhook deploy, pages_debug.
+Grand Master — SEC ONLY (Step 6) v19.4
+Fix: SEC Atom "count" max is 100. We now:
+- cap count to 100 internally, even if config asks for more
+- advance 'start' by the ACTUAL number of entries returned (prevents gaps)
+Keeps: UA fetch + retries, backoff, pages_debug, company enrichment, safe CSV, webhook deploy.
 """
 import os, json, time
 from typing import Any, Dict, List
@@ -32,8 +34,9 @@ def main():
     session = new_session(ua)
 
     max_pages = int(cfg.get("max_pages", 200))
-    count = int(cfg.get("count_per_page", 200))
-    page_pause = float(cfg.get("page_pause_sec", 0.8))
+    requested_count = int(cfg.get("count_per_page", 100))
+    count = min(max(requested_count, 1), 100)  # SEC caps at 100
+    page_pause = float(cfg.get("page_pause_sec", 1.0))
     max_empty_pages = int(cfg.get("max_empty_pages", 5))
     retry_503 = int(cfg.get("retry_503", 3))
     retry_sleep = float(cfg.get("retry_sleep_sec", 1.5))
@@ -59,28 +62,32 @@ def main():
         "atom_fetch_errors": 0,
         "atom_http_codes": [],
         "pages_debug": [],
-        "last_oldest_et_scanned": None
+        "last_oldest_et_scanned": None,
+        "effective_count_used": count
     }
 
     crossed_boundary = False
     empty_streak = 0
+    start_idx = 0
 
     for p in range(max_pages):
-        url = SEC_ATOM.format(start=p*count, count=count)
+        url = SEC_ATOM.format(start=start_idx, count=count)
         stats["pages_fetched"] += 1
 
         # Retry fetch
         page_text = None
+        http_codes_local = []
         for attempt in range(1, retry_503+1):
             try:
                 r = session.get(url, timeout=30)
-                stats["atom_http_codes"].append(r.status_code)
+                http_codes_local.append(r.status_code)
                 if r.status_code == 200 and r.text.strip():
                     page_text = r.text
                     break
             except Exception:
-                pass
+                http_codes_local.append("EXC")
             time.sleep(retry_sleep * attempt)
+        stats["atom_http_codes"].extend(http_codes_local)
 
         if page_text is None:
             stats["atom_fetch_errors"] += 1
@@ -91,8 +98,9 @@ def main():
             continue
 
         feed = feedparser.parse(page_text)
-        entries = feed.get("entries", [])
-        if not entries:
+        entries = feed.get("entries", []) or []
+        n = len(entries)
+        if n == 0:
             empty_streak += 1
             if empty_streak >= max_empty_pages:
                 break
@@ -134,7 +142,6 @@ def main():
                 except Exception:
                     stats["errors"] += 1
             if not company:
-                # last-resort: pull from title
                 company = fallback_company_from_title(title)
 
             # Ban checks
@@ -175,12 +182,14 @@ def main():
 
         stats["pages_debug"].append({
             "page": p,
-            "p_entries": len(entries),
+            "start_idx": start_idx,
+            "returned_entries": n,
             "newest_et": to_et_str(newest_et_on_page),
             "oldest_et": to_et_str(oldest_et_on_page),
         })
         stats["last_oldest_et_scanned"] = stats["pages_debug"][-1]["oldest_et"]
 
+        # Boundary reached?
         if oldest_et_on_page:
             try:
                 from zoneinfo import ZoneInfo
@@ -192,6 +201,8 @@ def main():
                 stats["hit_boundary"] = True
                 break
 
+        # Advance by ACTUAL entries returned to avoid gaps even if SEC caps count to 100
+        start_idx += n
         time.sleep(page_pause)
 
     if not crossed_boundary and stats["pages_fetched"] >= max_pages:
