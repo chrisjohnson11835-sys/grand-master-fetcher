@@ -1,63 +1,27 @@
-name: SEC Filings Only — Step 6
+name: Grand Master — SEC ONLY (Step 6)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 14 * * *"   # daily 14:00 UTC (09:00 ET)
-
-permissions:
-  contents: write
+    - cron: '5 13 * * 1-5'
 
 jobs:
-  sec_only:
+  run-sec-scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-          fetch-depth: 0
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-
-      - name: Install dependencies
+          python-version: '3.11'
+      - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install requests pandas lxml beautifulsoup4
-
-      - name: Run SEC-only fetch (yesterday+today ET, SEC-SIC bans)
+          pip install -r requirements.txt
+      - name: Run SEC-only scanner
         env:
-          FETCH_UA: ${{ secrets.FETCH_UA }}
-          BAN_TICKERS: ${{ vars.BAN_TICKERS }}
-          BAN_INDUSTRIES: ${{ vars.BAN_INDUSTRIES }}
-          BAN_COMPANIES: ${{ vars.BAN_COMPANIES }}
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
         run: |
-          mkdir -p data
           python sec_only.py
-
-      - name: Commit and push results
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/sec_filings_snapshot.json data/sec_filings_snapshot.csv data/sec_filings_raw.json data/sec_debug_stats.json || true
-          git commit -m "Step6 v17: SEC SIC-aligned bans + enrichment [skip ci]" || echo "No changes to commit"
-          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${GITHUB_REF##*/}
-
-      - name: Deploy to Hostinger via HTTPS webhook (verbose)
-        if: always()
-        env:
-          DEPLOY_ENDPOINT: ${{ secrets.DEPLOY_ENDPOINT }}
-          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-        run: |
-          set -e
-          echo "Posting to $DEPLOY_ENDPOINT"
-          curl -sS -w "\nHTTP_STATUS:%{http_code}\n" -o resp.txt             -X POST             -F "token=$DEPLOY_TOKEN"             -F "path=data"             -F "file1=@data/sec_filings_snapshot.json;type=application/json"             -F "file2=@data/sec_filings_snapshot.csv;type=text/csv"             -F "file3=@data/sec_filings_raw.json;type=application/json"             -F "file4=@data/sec_debug_stats.json;type=application/json"             "$DEPLOY_ENDPOINT"
-          echo "----- Response body -----"
-          cat resp.txt || true
-          echo "-------------------------"
