@@ -1,5 +1,4 @@
 name: run-sec-scan
-
 on:
   workflow_dispatch: {}
   schedule:
@@ -9,55 +8,33 @@ on:
     - cron: "5 14 * * 1-5"
     - cron: "20 14 * * 1-5"
     - cron: "35 14 * * 1-5"
-
 concurrency:
   group: sec-scan
   cancel-in-progress: true
-
 jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
-
-      - name: Show repo layout (diagnostics)
-        run: |
-          pwd
-          ls -la
-          echo "----- .github/workflows -----"
-          ls -la .github/workflows || true
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install feedparser pandas python-dateutil requests
-
       - name: Ensure outputs folder exists
         run: mkdir -p outputs
-
-      - name: Run until boundary (time-aware, unbuffered)
+      - name: Run until boundary (time-aware)
+        continue-on-error: true
         env:
           RUNNER_MAX_ATTEMPTS: "10"
           RUNNER_BACKOFFS: "0,60,120,180,240,300,420,600,900,1200"
-          RUNNER_MAX_WALL_SECS: "6600"
+          RUNNER_MAX_WALL_SECS: "7800"
         run: |
           python -u run_until_boundary.py
-
-      - name: Show stats snapshot (if present)
-        run: |
-          echo "------ outputs listing ------"
-          ls -la outputs || true
-          echo "------ sec_debug_stats.json ------"
-          test -f outputs/sec_debug_stats.json && cat outputs/sec_debug_stats.json || echo "no stats yet"
-          echo "------ sec_filings_snapshot.json (head) ------"
-          test -f outputs/sec_filings_snapshot.json && head -n 80 outputs/sec_filings_snapshot.json || true
-
       - name: Upload outputs as artifact (always)
         if: always()
         uses: actions/upload-artifact@v4
