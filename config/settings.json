@@ -9,10 +9,12 @@
   "max_empty_pages": 40,
   "page_pause_sec": 2.0,
   "scan_extend_days": 3,
+  "seek_mode": true,
+  "attempt_page_budget": 250,
   "min_score_for_recommend": 60,
   "enable_webhook_deploy": true,
   "webhook_url": "https://royalblue-lion-727879.hostingersite.com/deploy/receiver.php",
-  "webhook_secret": "CHANGE_ME",
+  "webhook_secret": "Asgar_GrandMaster_2049!",
   "hostinger_allowed_filenames": [
     "sec_filings_snapshot.json",
     "sec_filings_snapshot.csv",
