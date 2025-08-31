@@ -40,22 +40,34 @@ def main():
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
         start_et, end_et = compute_et_window()
+        print(f"[INFO] Window ET: {start_et.isoformat()} -> {end_et.isoformat()}")
+
         ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=30)
         stats["fulltext_used"]=True
+        print(f"[INFO] Full-Text returned: {len(ft_entries)} entries before window filter")
 
-        def within_window(et_dt, start, end): return (et_dt>=start) and (et_dt<end)
-        strict=[]
+        # strict filter + capture min/max for boundary debug
+        strict=[]; min_et=None; max_et=None
         for e in ft_entries:
-            try: dt_et=parse_edgar_datetime_et(e.get("updated",""))
-            except: continue
-            if within_window(dt_et, start_et, end_et):
+            try:
+                dt_et=parse_edgar_datetime_et(e.get("updated",""))
+            except Exception as pe:
+                continue
+            if (min_et is None) or (dt_et < min_et): min_et = dt_et
+            if (max_et is None) or (dt_et > max_et): max_et = dt_et
+            if (dt_et>=start_et) and (dt_et<end_et):
                 e["updated_et"]=dt_et.isoformat(); strict.append(e)
+        if min_et: print(f"[INFO] FT min datetime (ET): {min_et.isoformat()}")
+        if max_et: print(f"[INFO] FT max datetime (ET): {max_et.isoformat()}")
+        print(f"[INFO] After window filter: {len(strict)} entries")
+
         if strict:
             stats["hit_boundary"]=True
             stats["last_oldest_et_scanned"]=min([x["updated_et"] for x in strict])
 
         forms_ok=set(cfg.get("forms_supported",[]))
         strict=[e for e in strict if e.get("form","") in forms_ok]
+        print(f"[INFO] After form filter: {len(strict)} entries")
 
         def minimal_doc(entry):
             link=entry.get("link","")
