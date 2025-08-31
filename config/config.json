@@ -1,8 +1,8 @@
 {
-  "contact_email": "changeme@example.com",
+  "contact_email": "chrisjohnson11835@gmail.com",
   "user_agent_org": "GrandMasterSEC-v23.1b",
-  "hostinger_upload_url": "https://YOUR_DOMAIN/receiver.php",
-  "hostinger_secret": "CHANGE_ME",
+  "hostinger_upload_url": "https://royalblue-lion-727879.hostingersite.com/receiver.php",
+  "hostinger_secret": "Asgar_GrandMaster_2049!",
   "max_pages": 80,
   "count_per_page": 100,
   "request_spacing_seconds": 1.5,
