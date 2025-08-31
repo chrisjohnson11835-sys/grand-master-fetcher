@@ -1,42 +1,117 @@
-import requests
+import requests, time
 from typing import List, Dict
 from .rate_limiter import RateLimiter
 
 SEARCH_URL = "https://efts.sec.gov/LATEST/search-index"
-HEADERS = lambda ua: {"User-Agent": ua, "Accept-Encoding":"gzip, deflate", "Host":"efts.sec.gov"}
 
 def fmt_dt(d): return d.strftime("%Y-%m-%d")
 
-def fetch_fulltext_window(ua:str, start_dt_et, end_dt_et, forms:List[str], page_size:int=400, max_pages:int=30) -> List[Dict]:
-    rl=RateLimiter(1.5); out=[]; forms_param=",".join(forms)
-    for page in range(max_pages):
-        rl.wait((0.2,0.6))
-        params = {
-            "keys":"",
-            "category":"custom",
-            "forms": forms_param,
+def _req(session, ua, params):
+    headers = {"User-Agent": ua, "Accept-Encoding": "gzip, deflate", "Host": "efts.sec.gov"}
+    r = session.get(SEARCH_URL, params=params, headers=headers, timeout=30)
+    return r
+
+def fetch_fulltext_window(ua: str, start_dt_et, end_dt_et, forms, page_size: int = 400, max_pages: int = 30):
+    rl = RateLimiter(1.5)
+    out = []
+    s = requests.Session()
+    forms_csv = ",".join(forms)
+
+    def strat_a(page):
+        return {
+            "q": "*",
+            "dateRange": "custom",
             "startdt": fmt_dt(start_dt_et),
             "enddt": fmt_dt(end_dt_et),
-            "from": page*page_size,
+            "forms": forms_csv,
+            "from": page * page_size,
             "size": page_size,
-            "sort":"date",
-            "order":"desc"
+            "sort": "filedAt",
+            "order": "desc",
         }
-        r=requests.get(SEARCH_URL, params=params, headers=HEADERS(ua), timeout=30)
-        if r.status_code==429:
-            rl.wait((2,3)); r=requests.get(SEARCH_URL, params=params, headers=HEADERS(ua), timeout=30)
-        r.raise_for_status()
-        js=r.json()
-        hits=(js.get("hits") or {}).get("hits") or js.get("hits", [])
-        if not hits: break
-        for h in hits:
-            src = h.get("_source") or h
-            filed = src.get("filedAt") or src.get("filed")
-            form = src.get("formType") or src.get("form")
-            cik = str(src.get("ciks",[ ""])[0]).zfill(10) if src.get("ciks") else str(src.get("cik","")).zfill(10)
-            comp = (src.get("display_names") or src.get("companyName") or [""])[0] if isinstance(src.get("display_names"), list) else (src.get("companyName") or "")
-            link = src.get("linkToHtml") or src.get("linkToFilingDetails") or ""
-            ticker = (src.get("tickers") or [""])[0] if src.get("tickers") else ""
-            out.append({"title": f"{form} - {comp}","form": form,"company": comp,"cik": cik,"updated": filed.replace("T"," ").replace("Z","") if filed else "","link": link,"summary": "","ticker_hint": ticker})
-        if len(hits) < page_size: break
+
+    def strat_b(page):
+        return {
+            "q": "*",
+            "from": fmt_dt(start_dt_et),
+            "to": fmt_dt(end_dt_et),
+            "type": forms_csv,
+            "start": page * page_size,
+            "count": page_size,
+        }
+
+    def strat_c(page):
+        return {
+            "q": "*",
+            "forms": forms_csv,
+            "startdt": fmt_dt(start_dt_et),
+            "enddt": fmt_dt(end_dt_et),
+            "from": page * page_size,
+            "size": page_size,
+        }
+
+    strategies = [("A", strat_a), ("B", strat_b), ("C", strat_c)]
+
+    for label, strat in strategies:
+        page = 0
+        local_hits = 0
+        while page < max_pages:
+            rl.wait((0.2, 0.6))
+            params = strat(page)
+            r = _req(s, ua, params)
+            if r.status_code == 429:
+                time.sleep(2)
+                r = _req(s, ua, params)
+            try:
+                r.raise_for_status()
+                js = r.json()
+            except Exception:
+                break
+
+            hits = []
+            if isinstance(js, dict):
+                if "hits" in js and isinstance(js["hits"], dict) and "hits" in js["hits"]:
+                    hits = js["hits"]["hits"]
+                elif "results" in js and isinstance(js["results"], list):
+                    hits = js["results"]
+            if not hits:
+                break
+
+            for h in hits:
+                src = h.get("_source") or h
+                filed = src.get("filedAt") or src.get("filed") or src.get("filedAtDate")
+                form = src.get("formType") or src.get("form") or src.get("type")
+                if isinstance(src.get("ciks"), list) and src.get("ciks"):
+                    cik = str(src["ciks"][0]).zfill(10)
+                else:
+                    cik = str(src.get("cik", "")).zfill(10)
+                if isinstance(src.get("display_names"), list) and src.get("display_names"):
+                    comp = src["display_names"][0]
+                else:
+                    comp = src.get("companyName") or src.get("name") or ""
+                link = src.get("linkToHtml") or src.get("linkToFilingDetails") or src.get("link") or ""
+                if isinstance(src.get("tickers"), list) and src.get("tickers"):
+                    ticker = src["tickers"][0]
+                else:
+                    ticker = src.get("ticker", "")
+
+                out.append({
+                    "title": f"{form} - {comp}",
+                    "form": form or "",
+                    "company": comp or "",
+                    "cik": cik or "",
+                    "updated": (filed or "").replace("T"," ").replace("Z","") if filed else "",
+                    "link": link or "",
+                    "summary": "",
+                    "ticker_hint": ticker or ""
+                })
+                local_hits += 1
+
+            if len(hits) < page_size:
+                break
+            page += 1
+
+        if local_hits > 0:
+            break
+
     return out
