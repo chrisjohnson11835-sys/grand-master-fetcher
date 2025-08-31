@@ -1,0 +1,46 @@
+name: GrandMaster SEC | 09:30→09:30 Boundary Scan (Self-Healing, v23.1 FT)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "10-50/10 13 * * 1-5"
+    - cron: "0-50/10 14 * * 1-5"
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Patch config from secrets (optional)
+        run: |
+          python - << 'PY'
+          import json, os, pathlib
+          p=pathlib.Path("configs/config.json"); cfg=json.loads(p.read_text())
+          for k in ("CONTACT_EMAIL","UA_ORG","HOSTINGER_UPLOAD_URL","HOSTINGER_SECRET"):
+            v=os.getenv(k)
+            if not v: continue
+            if k=="CONTACT_EMAIL": cfg["contact_email"]=v
+            elif k=="UA_ORG": cfg["user_agent_org"]=v
+            elif k=="HOSTINGER_UPLOAD_URL": cfg["hostinger_upload_url"]=v
+            elif k=="HOSTINGER_SECRET": cfg["hostinger_secret"]=v
+          p.write_text(json.dumps(cfg, indent=2)); print("Config patched")
+          PY
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Grand Master SEC v23.1 (Full-Text forced)
+        run: |
+          python scripts/sec/grandmaster_sec_v23.py
+      - name: Show artifacts
+        if: always()
+        run: |
+          ls -l data || true
+          echo "--- sec_debug_stats.json ---"; cat data/sec_debug_stats.json || true
+          echo "--- snapshot head ---"; head -n 50 data/sec_filings_snapshot.csv || true
