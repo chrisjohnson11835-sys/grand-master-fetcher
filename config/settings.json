@@ -7,7 +7,7 @@
   "retry_503": 10,
   "retry_sleep_sec": 2.0,
   "max_empty_pages": 40,
-  "page_pause_sec": 2.0,
+  "page_pause_sec": 1.2,
   "scan_extend_days": 3,
   "seek_mode": true,
   "attempt_page_budget": 600,
