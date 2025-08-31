@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-# sec_only.py (v21.1 hotfix-fetch)
-# Hardened fetch (Retry adapter + jitter + dynamic slow-down) + same 09:30→09:30 logic.
-import os, json, time, random, feedparser, pandas as pd, hashlib
+# sec_only.py (v22 dual-source fallback)
+import os, json, time, random, feedparser, pandas as pd, hashlib, requests
 from typing import Any, Dict, List
 from utils_sec import (
     SEC_ATOM, new_session, et_window_prev0930_to_latest0930, parse_entry_time, entry_form,
     extract_cik_from_link, load_json, within_window, fetch_submissions_for_cik,
     map_company_meta, banned_by_sic, banned_by_keywords, score_record, fallback_company_from_title
 )
+from sec_sources import fetch_atom_page, fetch_html_page
 
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
 def cfg(c,k,d): return c.get(k,d)
@@ -35,6 +35,7 @@ def main():
     seen_path = os.path.join(outdir,"sec_seen_keys.json")
 
     start_et, end_et = et_window_prev0930_to_latest0930(tz, 9, 30, True)
+
     session = new_session(ua)
 
     from datetime import timedelta
@@ -42,7 +43,7 @@ def main():
     extended_stop_et = start_et - timedelta(days=scan_extend_days)
 
     max_pages = int(cfg(cfgj,"max_pages",2000))
-    base_count = min(max(int(cfg(cfgj,"count_per_page",100)),1),100)
+    count = min(max(int(cfg(cfgj,"count_per_page",100)),1),100)
     pause = float(cfg(cfgj,"page_pause_sec",1.6))
     max_empty = int(cfg(cfgj,"max_empty_pages",40))
     use_seek = bool(cfg(cfgj,"seek_mode",True))
@@ -61,9 +62,9 @@ def main():
         "banned_sic":0,"banned_kw":0,"errors":0,
         "hit_boundary":False,"hit_extended_boundary":False,"hit_page_limit":False,
         "atom_fetch_errors":0,"atom_http_codes":[],
-        "pages_debug":[],"last_oldest_et_scanned":None,"effective_count_used": base_count,
+        "pages_debug":[],"last_oldest_et_scanned":None,"effective_count_used": count,
         "scan_extend_days":scan_extend_days,"extended_stop_et":extended_stop_et.isoformat(),
-        "seek_mode":use_seek
+        "seek_mode":use_seek, "fallback_used": False
     }
 
     # resume
@@ -82,81 +83,82 @@ def main():
         seen = set()
 
     raw_rows=[]; kept_rows=[]
-
-    def fetch(url):
-        nonlocal pause, base_count
-        http_codes_local=[]
-        txt=None
-        for attempt in range(1, retry_503+1):
-            try:
-                r = session.get(url, timeout=30)
-                http_codes_local.append(r.status_code)
-                if r.status_code == 200 and r.text.strip():
-                    txt = r.text; break
-            except Exception:
-                http_codes_local.append("EXC")
-            # jittered backoff
-            time.sleep(retry_sleep * attempt + random.uniform(0.2,0.6))
-        stats["atom_http_codes"].extend(http_codes_local)
-        if txt is None:
-            stats["atom_fetch_errors"] += 1
-            # slow down globally on persistent errors
-            pause = min(3.0, pause * 1.25)
-            # reduce page size to be extra polite
-            base_count = max(50, base_count - 10)
-        return txt
-
-    def to_et(dt):
-        if dt is None: return None
-        try:
-            from zoneinfo import ZoneInfo
-        except Exception:
-            from backports.zoneinfo import ZoneInfo
-        return dt.astimezone(ZoneInfo(tz)).isoformat()
-
-    def bounds(entries):
-        oldest=newest=None
-        for e in entries:
-            t = parse_entry_time(e)
-            if not t: continue
-            if oldest is None or t < oldest: oldest = t
-            if newest is None or t > newest: newest = t
-        return newest, oldest
-
-    # main loop
     empty_streak=0; pages_this_attempt=0; crossed_end=False
+    consecutive_fail=0
+    FALLBACK_THRESHOLD = 8
+
+    def fetch_text(url):
+        nonlocal consecutive_fail, pause
+        try:
+            r = session.get(url, timeout=30)
+            stats["atom_http_codes"].append(r.status_code)
+            if r.status_code == 200 and r.text.strip():
+                consecutive_fail = 0
+                return r.text
+        except Exception:
+            stats["atom_http_codes"].append("EXC")
+        stats["atom_fetch_errors"] += 1
+        consecutive_fail += 1
+        pause = min(3.2, pause * 1.2)
+        return None
+
     for p in range(max_pages):
         if pages_this_attempt >= page_budget:
             print(f"[worker] Page budget hit ({page_budget}). Checkpoint + exit attempt.")
             break
-        count = base_count
-        url = f"https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&output=atom&start={start_idx}&count={count}"
-        stats["pages_fetched"] += 1; pages_this_attempt += 1
-        text = fetch(url)
-        if text is None:
-            empty_streak += 1
-            ck={"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
-                "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
-            safe_write(ckpt_path, ck)
-            if empty_streak >= max_empty: break
-            time.sleep(pause); continue
-        empty_streak = 0
-        feed = feedparser.parse(text)
-        entries = feed.get("entries",[]) or []
-        n=len(entries)
-        if n==0:
-            empty_streak += 1
-            ck={"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
-                "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
-            safe_write(ckpt_path, ck)
-            if empty_streak >= max_empty: break
-            time.sleep(pause); continue
 
-        newest, oldest = bounds(entries)
-        stats["pages_debug"].append({"page":p,"start_idx":start_idx,"returned_entries":n,"newest_et":to_et(newest),"oldest_et":to_et(oldest)})
+        url = SEC_ATOM.format(start=start_idx, count=count)
+        stats["pages_fetched"] += 1; pages_this_attempt += 1
+
+        text = fetch_text(url)
+        entries = []
+        mode = "atom"
+        if text is None and consecutive_fail >= FALLBACK_THRESHOLD:
+            html_text = fetch_text(url.replace("output=atom",""))
+            if html_text:
+                entries = fetch_html_page(html_text)
+                stats["fallback_used"] = True
+                mode = "html"
+                consecutive_fail = 0
+        elif text:
+            entries = fetch_atom_page(feedparser, text)
+
+        if not entries:
+            empty_streak += 1
+            ck={"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
+                "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
+            tmp = os.path.join(outdir,"sec_checkpoint.json")
+            safe_write(tmp, ck)
+            if empty_streak >= max_empty: break
+            time.sleep(pause + random.uniform(0.1,0.3)); continue
+        empty_streak = 0
+
+        newest=None; oldest=None
+        for e in entries:
+            t = e.get("updated")
+            try:
+                from dateutil import parser as dtp
+                if t: dt = dtp.parse(t)
+                else: dt = None
+            except Exception:
+                dt = None
+            if dt:
+                if oldest is None or dt < oldest: oldest=dt
+                if newest is None or dt > newest: newest=dt
+
+        def to_iso(dt):
+            if not dt: return None
+            try:
+                from zoneinfo import ZoneInfo
+            except Exception:
+                from backports.zoneinfo import ZoneInfo
+            return dt.astimezone(ZoneInfo(tz)).isoformat()
+
+        stats["pages_debug"].append({"page":p,"start_idx":start_idx,"returned_entries":len(entries),
+                                     "newest_et": to_iso(newest), "oldest_et": to_iso(oldest), "mode": mode})
         stats["last_oldest_et_scanned"] = stats["pages_debug"][-1]["oldest_et"]
         if p % 10 == 0:
-            print(f"[worker] p={p} start_idx={start_idx} newest={stats['pages_debug'][-1]['newest_et']} oldest={stats['pages_debug'][-1]['oldest_et']}")
+            print(f"[worker] p={p} start_idx={start_idx} newest={stats['pages_debug'][-1]['newest_et']} oldest={stats['pages_debug'][-1]['oldest_et']} mode={mode}")
 
         if not crossed_end and oldest is not None:
             try:
@@ -170,20 +172,34 @@ def main():
                 start_idx += jump
                 ck={"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
                     "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
-                safe_write(ckpt_path, ck)
+                safe_write(os.path.join(outdir,"sec_checkpoint.json"), ck)
                 time.sleep(pause); continue
             else:
                 crossed_end = True
                 stats["hit_boundary"] = True
 
         for e in entries:
-            t = parse_entry_time(e)
-            if not t or not within_window(t, start_et, end_et, tz): continue
-            form = entry_form(e)
-            if form not in allowed: continue
-            title = e.get("title","")
-            summary = e.get("summary","") or e.get("content",[{"value":""}])[0].get("value","")
-            link = e.get("link","")
+            faux = {
+                "title": e.get("title",""),
+                "summary": e.get("summary",""),
+                "link": e.get("link",""),
+                "updated": e.get("updated"),
+                "tags": e.get("tags"),
+                "category": e.get("category"),
+                "updated_parsed": None
+            }
+            from dateutil import parser as dtp
+            try:
+                dt = dtp.parse(faux["updated"]) if faux["updated"] else None
+            except Exception:
+                dt = None
+            if not dt or not within_window(dt, start_et, end_et, tz): 
+                continue
+
+            form = entry_form(faux)
+            if form not in allowed: 
+                continue
+            title = faux["title"]; summary = faux["summary"]; link = faux["link"]
             cik = extract_cik_from_link(link)
             ticker=None; sic=None; industry=None; company=None
             if cik:
@@ -194,7 +210,7 @@ def main():
                     pass
             if not company:
                 company = fallback_company_from_title(title)
-            rec={"filing_datetime": t.isoformat(), "form": form, "company": company, "ticker": ticker, "cik": cik,
+            rec={"filing_datetime": dt.isoformat(), "form": form, "company": company, "ticker": ticker, "cik": cik,
                  "industry": industry, "sic": sic, "title": title, "summary": summary, "link": link}
             key = hashlib.sha256((link or title).encode("utf-8","ignore")).hexdigest()
             if key in seen: continue
@@ -213,10 +229,10 @@ def main():
             if oldest.astimezone(ZoneInfo(tz)) < extended_stop_et:
                 stats["hit_extended_boundary"] = True; break
 
-        start_idx += n
-        ck={"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
-            "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
-        safe_write(ckpt_path, ck)
+        start_idx += len(entries)
+        safe_write(os.path.join(outdir,"sec_checkpoint.json"),
+                   {"status":"incomplete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
+                    "next_start_idx": start_idx,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]})
         time.sleep(pause + random.uniform(0.1,0.3))
 
     stats["entries_seen"] = len(raw_rows); stats["entries_kept"] = len(kept_rows)
@@ -233,9 +249,9 @@ def main():
         json.dump(sorted(list(seen)), open(seen_path,"w",encoding="utf-8"))
     except Exception:
         pass
-    ck={"status":"complete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
-       "next_start_idx": 0,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]}
-    safe_write(ckpt_path, ck)
+    safe_write(os.path.join(outdir,"sec_checkpoint.json"),
+               {"status":"complete","window_start_et":stats["window_start_et"],"window_end_et":stats["window_end_et"],
+                "next_start_idx": 0,"last_oldest_et_scanned": stats["last_oldest_et_scanned"]})
     if cfgj.get("enable_webhook_deploy"):
         try:
             from deploy.webhook_deploy import deploy_files
