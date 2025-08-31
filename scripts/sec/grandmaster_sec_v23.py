@@ -18,9 +18,10 @@ def ensure_dir(p): os.makedirs(p, exist_ok=True)
 def main():
     ensure_dir(DATA_DIR)
     stats={
-        "version":"v23.1b",
+        "version":"v23.1c",
         "started_utc":datetime.utcnow().isoformat()+"Z",
         "hit_boundary":False,
+        "hit_extended_boundary":False,
         "fallback_used":False,
         "fulltext_used":False,
         "entries_seen":0,
@@ -35,12 +36,13 @@ def main():
 
     try:
         cfg=json.load(open(CONFIG_PATH,"r",encoding="utf-8"))
-        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1b')} | {cfg.get('contact_email','changeme@example.com')}"
+        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1c')} | {cfg.get('contact_email','changeme@example.com')}"
         client=SECClient(ua, cfg.get('request_spacing_seconds',1.5), cfg.get('max_retries',5), cfg.get('retry_backoff_base',2.0), tuple(cfg.get('retry_jitter_range',[0.2,0.6])))
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
-        start_et, end_et = compute_et_window()
-        print(f"[INFO] Window ET: {start_et.isoformat()} -> {end_et.isoformat()}")
+        start_et, end_et, guard = compute_et_window()
+        stats["hit_extended_boundary"] = bool(guard)
+        print(f"[INFO] Window ET: {start_et.isoformat()} -> {end_et.isoformat()}  (weekend_guard={bool(guard)})")
 
         ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=30)
         stats["fulltext_used"]=True
@@ -51,7 +53,7 @@ def main():
         for e in ft_entries:
             try:
                 dt_et=parse_edgar_datetime_et(e.get("updated",""))
-            except Exception as pe:
+            except Exception:
                 continue
             if (min_et is None) or (dt_et < min_et): min_et = dt_et
             if (max_et is None) or (dt_et > max_et): max_et = dt_et
