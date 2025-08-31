@@ -1,6 +1,6 @@
 {
   "contact_email": "changeme@example.com",
-  "user_agent_org": "GrandMasterSEC-v23.1",
+  "user_agent_org": "GrandMasterSEC-v23.1b",
   "hostinger_upload_url": "https://YOUR_DOMAIN/receiver.php",
   "hostinger_secret": "CHANGE_ME",
   "max_pages": 80,
