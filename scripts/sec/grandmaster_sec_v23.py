@@ -3,7 +3,7 @@
 import os, sys, json, csv
 from datetime import datetime
 from scripts.util.time_utils import compute_et_window, parse_edgar_datetime_et
-from scripts.util.fetchers import SECClient
+from scripts.util.fetchers import SECClient, parse_html_entries
 from scripts.util.fulltext import fetch_fulltext_window
 from scripts.util.enrichment import Enricher
 from scripts.util.bans import is_banned
@@ -18,7 +18,7 @@ def ensure_dir(p): os.makedirs(p, exist_ok=True)
 def main():
     ensure_dir(DATA_DIR)
     stats={
-        "version":"v23.1c",
+        "version":"v23.1d",
         "started_utc":datetime.utcnow().isoformat()+"Z",
         "hit_boundary":False,
         "hit_extended_boundary":False,
@@ -36,7 +36,7 @@ def main():
 
     try:
         cfg=json.load(open(CONFIG_PATH,"r",encoding="utf-8"))
-        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1c')} | {cfg.get('contact_email','changeme@example.com')}"
+        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1d')} | {cfg.get('contact_email','changeme@example.com')}"
         client=SECClient(ua, cfg.get('request_spacing_seconds',1.5), cfg.get('max_retries',5), cfg.get('retry_backoff_base',2.0), tuple(cfg.get('retry_jitter_range',[0.2,0.6])))
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
@@ -44,33 +44,61 @@ def main():
         stats["hit_extended_boundary"] = bool(guard)
         print(f"[INFO] Window ET: {start_et.isoformat()} -> {end_et.isoformat()}  (weekend_guard={bool(guard)})")
 
-        ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=30)
+        # 1) Full-Text
+        ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=int(cfg.get('max_pages',30)))
         stats["fulltext_used"]=True
         print(f"[INFO] Full-Text returned: {len(ft_entries)} entries before window filter")
 
+        entries = ft_entries
+
+        # 2) Fallback to HTML Latest Filings if FT came back empty
+        if not entries:
+            print("[WARN] Full-Text empty — falling back to HTML Latest Filings…")
+            stats["fallback_used"]=True
+            count_per_page=int(cfg.get('count_per_page',100))
+            max_pages=int(cfg.get('max_pages',30))
+            start_idx=0
+            html_entries=[]
+            page=0
+            while page < max_pages:
+                try:
+                    html=client.fetch_html_page(start=start_idx, count=count_per_page)
+                except Exception as e:
+                    print("[WARN] HTML fetch error:", e); break
+                parsed = parse_html_entries(html)
+                if not parsed: break
+                html_entries.extend(parsed)
+                # if last entry older than start_et by date, we can early break
+                page+=1; start_idx += count_per_page
+            print(f"[INFO] HTML fallback total entries scraped: {len(html_entries)}")
+            entries = html_entries
+
         # strict filter + capture min/max for boundary debug
         strict=[]; min_et=None; max_et=None
-        for e in ft_entries:
+        from scripts.util.time_utils import parse_edgar_datetime_et as parse_dt
+        for e in entries:
             try:
-                dt_et=parse_edgar_datetime_et(e.get("updated",""))
+                dt_et=parse_dt(e.get("updated",""))
             except Exception:
                 continue
             if (min_et is None) or (dt_et < min_et): min_et = dt_et
             if (max_et is None) or (dt_et > max_et): max_et = dt_et
             if (dt_et>=start_et) and (dt_et<end_et):
                 e["updated_et"]=dt_et.isoformat(); strict.append(e)
-        if min_et: print(f"[INFO] FT min datetime (ET): {min_et.isoformat()}")
-        if max_et: print(f"[INFO] FT max datetime (ET): {max_et.isoformat()}")
+        if min_et: print(f"[INFO] Source min datetime (ET): {min_et.isoformat()}")
+        if max_et: print(f"[INFO] Source max datetime (ET): {max_et.isoformat()}")
         print(f"[INFO] After window filter: {len(strict)} entries")
 
         if strict:
             stats["hit_boundary"]=True
             stats["last_oldest_et_scanned"]=min([x["updated_et"] for x in strict])
 
+        # Form filter
         forms_ok=set(cfg.get("forms_supported",[]))
         strict=[e for e in strict if e.get("form","") in forms_ok]
         print(f"[INFO] After form filter: {len(strict)} entries")
 
+        # Minimal doc fetch for scoring enrichments
         def minimal_doc(entry):
             link=entry.get("link","")
             if not link: return ""
@@ -92,6 +120,7 @@ def main():
             if entry.get("form")=="4": entry["form4_codes"]=extract_form4_codes(doc)
             return doc[:5000]
 
+        # Enrichment + bans + scoring
         enriched=[]
         for e in strict:
             cik = e.get("cik","").zfill(10) if e.get("cik") else ""
