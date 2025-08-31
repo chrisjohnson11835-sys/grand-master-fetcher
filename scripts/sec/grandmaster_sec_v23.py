@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import os, sys, json, csv
 from datetime import datetime
-from typing import Dict, List
 from scripts.util.time_utils import compute_et_window, parse_edgar_datetime_et
 from scripts.util.fetchers import SECClient
 from scripts.util.fulltext import fetch_fulltext_window
@@ -12,33 +11,38 @@ from scripts.util.scoring import score_entry, extract_eightk_items, extract_form
 from scripts.util.uploader import post_file
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data")
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "configs", "config.json")
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "config", "config.json")
 
-def load_config():
-    with open(CONFIG_PATH,"r",encoding="utf-8") as f: return json.load(f)
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
 
 def main():
     ensure_dir(DATA_DIR)
-    stats={"version":"v23.1","started_utc":datetime.utcnow().isoformat()+"Z","hit_boundary":False,"fallback_used":False,"fulltext_used":False,"entries_seen":0,"entries_kept":0,"last_oldest_et_scanned":None,"last_error":None}
+    stats={
+        "version":"v23.1b",
+        "started_utc":datetime.utcnow().isoformat()+"Z",
+        "hit_boundary":False,
+        "fallback_used":False,
+        "fulltext_used":False,
+        "entries_seen":0,
+        "entries_kept":0,
+        "last_oldest_et_scanned":None,
+        "last_error":None
+    }
     raw_path=os.path.join(DATA_DIR,"sec_filings_raw.json")
     snap_json_path=os.path.join(DATA_DIR,"sec_filings_snapshot.json")
     snap_csv_path=os.path.join(DATA_DIR,"sec_filings_snapshot.csv")
     stats_path=os.path.join(DATA_DIR,"sec_debug_stats.json")
 
     try:
-        cfg=load_config()
-        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1')} | {cfg.get('contact_email','changeme@example.com')}"
+        cfg=json.load(open(CONFIG_PATH,"r",encoding="utf-8"))
+        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1b')} | {cfg.get('contact_email','changeme@example.com')}"
         client=SECClient(ua, cfg.get('request_spacing_seconds',1.5), cfg.get('max_retries',5), cfg.get('retry_backoff_base',2.0), tuple(cfg.get('retry_jitter_range',[0.2,0.6])))
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
-        # Full-Text only path (forced ON by default)
-        start_et, end_et = __import__('scripts.util.time_utils', fromlist=['compute_et_window']).compute_et_window()
-        ft_entries = __import__('scripts.util.fulltext', fromlist=['fetch_fulltext_window']).fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=30)
+        start_et, end_et = compute_et_window()
+        ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=30)
         stats["fulltext_used"]=True
 
-        # strict filter and enrich
-        from scripts.util.time_utils import parse_edgar_datetime_et
         def within_window(et_dt, start, end): return (et_dt>=start) and (et_dt<end)
         strict=[]
         for e in ft_entries:
@@ -46,7 +50,9 @@ def main():
             except: continue
             if within_window(dt_et, start_et, end_et):
                 e["updated_et"]=dt_et.isoformat(); strict.append(e)
-        if strict: stats["hit_boundary"]=True; stats["last_oldest_et_scanned"]=min([x["updated_et"] for x in strict])
+        if strict:
+            stats["hit_boundary"]=True
+            stats["last_oldest_et_scanned"]=min([x["updated_et"] for x in strict])
 
         forms_ok=set(cfg.get("forms_supported",[]))
         strict=[e for e in strict if e.get("form","") in forms_ok]
@@ -84,14 +90,12 @@ def main():
             enriched.append(e)
 
         kept=[]
-        from scripts.util.bans import is_banned
-        from scripts.util.scoring import score_entry
         for e in enriched:
             if is_banned(e, cfg): e["banned"]=True; continue
             e["banned"]=False; e["score"]=score_entry(e, cfg); kept.append(e)
         kept.sort(key=lambda x:(x.get("score",0), x.get("updated_et","")), reverse=True)
 
-        with open(raw_path,"w",encoding="utf-8") as f: json.dump(kept,f,indent=2,ensure_ascii=False)
+        json.dump(kept, open(raw_path,"w",encoding="utf-8"), indent=2, ensure_ascii=False)
 
         snap_rows=[{
             "filing_datetime": e.get("updated_et") or e.get("updated",""),
@@ -105,20 +109,19 @@ def main():
             "score": e.get("score",0),
             "link": e.get("link","")
         } for e in kept]
-        with open(snap_json_path,"w",encoding="utf-8") as f: json.dump(snap_rows,f,indent=2,ensure_ascii=False)
-        import csv
+        json.dump(snap_rows, open(snap_json_path,"w",encoding="utf-8"), indent=2, ensure_ascii=False)
         with open(snap_csv_path,"w",newline="",encoding="utf-8") as f:
             cols=["filing_datetime","form","company","ticker","cik","industry","sic","title","score","link"]
             w=csv.DictWriter(f, fieldnames=cols); w.writeheader()
             for r in snap_rows: w.writerow(r)
 
         stats["entries_seen"]=len(strict); stats["entries_kept"]=len(kept); stats["finished_utc"]=datetime.utcnow().isoformat()+"Z"
-        with open(stats_path,"w",encoding="utf-8") as f: json.dump(stats,f,indent=2)
+        json.dump(stats, open(stats_path,"w",encoding="utf-8"), indent=2)
 
         h_url=cfg.get("hostinger_upload_url","").strip(); secret=cfg.get("hostinger_secret","").strip()
         if h_url and secret and h_url.startswith("http"):
             for p in (raw_path, snap_json_path, snap_csv_path, stats_path):
-                try: __import__('scripts.util.uploader', fromlist=['post_file']).post_file(h_url, secret, p, "/public_html/data")
+                try: post_file(h_url, secret, p, "/public_html/data")
                 except Exception as ue: print("[UPLOAD WARN]", ue)
 
         passed = bool(stats.get("hit_boundary")) and stats.get("entries_kept",0) > 0
@@ -127,8 +130,7 @@ def main():
 
     except Exception as ex:
         stats["last_error"]=str(ex); stats["finished_utc"]=datetime.utcnow().isoformat()+"Z"
-        try: open(stats_path,"w",encoding="utf-8").write(json.dumps(stats, indent=2))
-        except: pass
+        json.dump(stats, open(stats_path,"w",encoding="utf-8"), indent=2)
         raise
 
 if __name__=="__main__":
