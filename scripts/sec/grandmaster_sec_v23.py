@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import os, sys, json, csv
 from datetime import datetime
-from scripts.util.time_utils import compute_et_window, parse_edgar_datetime_et
-from scripts.util.fetchers import SECClient, parse_html_entries
+from scripts.util.time_utils import compute_windows, parse_edgar_datetime_et
+from scripts.util.fetchers import SECClient, parse_html_entries, parse_atom_entries
 from scripts.util.fulltext import fetch_fulltext_window
 from scripts.util.enrichment import Enricher
 from scripts.util.bans import is_banned
@@ -15,15 +15,49 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "config", "con
 
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
 
+def gather_for_window(client, cfg, ua, start_et, end_et):
+    # Full-Text
+    ft = fetch_fulltext_window(ua, start_et, end_et, cfg.get('forms_supported',[]),
+                               page_size=int(cfg.get('fulltext_page_size',400)),
+                               max_pages=int(cfg.get('max_pages',30)))
+    if ft:
+        return ft, "fulltext"
+    # HTML
+    html_entries=[]; start_idx=0; page=0
+    while page < int(cfg.get('max_pages',30)):
+        try:
+            html=client.fetch_html_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
+        except Exception:
+            break
+        parsed = parse_html_entries(html)
+        if not parsed: break
+        html_entries.extend(parsed)
+        page+=1; start_idx+=int(cfg.get('count_per_page',100))
+    if html_entries:
+        return html_entries, "html"
+    # Atom
+    atom_entries=[]; start_idx=0; page=0
+    while page < int(cfg.get('max_pages',30)):
+        try:
+            xml=client.fetch_atom_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
+        except Exception:
+            break
+        parsed = parse_atom_entries(xml)
+        if not parsed: break
+        atom_entries.extend(parsed)
+        page+=1; start_idx+=int(cfg.get('count_per_page',100))
+    return atom_entries, "atom" if atom_entries else "none"
+
 def main():
     ensure_dir(DATA_DIR)
     stats={
-        "version":"v23.1d",
+        "version":"v23.1f",
         "started_utc":datetime.utcnow().isoformat()+"Z",
         "hit_boundary":False,
         "hit_extended_boundary":False,
-        "fallback_used":False,
-        "fulltext_used":False,
+        "weekend_tail_scanned":False,
+        "source_primary":"none",
+        "source_tail":"none",
         "entries_seen":0,
         "entries_kept":0,
         "last_oldest_et_scanned":None,
@@ -36,54 +70,44 @@ def main():
 
     try:
         cfg=json.load(open(CONFIG_PATH,"r",encoding="utf-8"))
-        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1d')} | {cfg.get('contact_email','changeme@example.com')}"
+        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1f')} | {cfg.get('contact_email','changeme@example.com')}"
         client=SECClient(ua, cfg.get('request_spacing_seconds',1.5), cfg.get('max_retries',5), cfg.get('retry_backoff_base',2.0), tuple(cfg.get('retry_jitter_range',[0.2,0.6])))
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
-        start_et, end_et, guard = compute_et_window()
+        p_start, p_end, t_start, t_end, guard = compute_windows()
         stats["hit_extended_boundary"] = bool(guard)
-        print(f"[INFO] Window ET: {start_et.isoformat()} -> {end_et.isoformat()}  (weekend_guard={bool(guard)})")
+        print(f"[INFO] Primary window ET: {p_start.isoformat()} -> {p_end.isoformat()}  (weekend_guard={bool(guard)})")
+        if t_start and t_end:
+            print(f"[INFO] Weekend tail ET: {t_start.isoformat()} -> {t_end.isoformat()}")
 
-        # 1) Full-Text
-        ft_entries = fetch_fulltext_window(client.ua, start_et, end_et, cfg.get('forms_supported',[]), page_size=int(cfg.get('fulltext_page_size',400)), max_pages=int(cfg.get('max_pages',30)))
-        stats["fulltext_used"]=True
-        print(f"[INFO] Full-Text returned: {len(ft_entries)} entries before window filter")
+        # Gather primary
+        primary_entries, source_primary = gather_for_window(client, cfg, ua, p_start, p_end)
+        stats["source_primary"] = source_primary
+        print(f"[INFO] Primary collected: {len(primary_entries)} from {source_primary}")
 
-        entries = ft_entries
+        # Optional tail (weekend only)
+        tail_entries = []
+        if t_start and t_end:
+            stats["weekend_tail_scanned"]=True
+            tail_entries, source_tail = gather_for_window(client, cfg, ua, t_start, t_end)
+            stats["source_tail"] = source_tail
+            print(f"[INFO] Tail collected: {len(tail_entries)} from {source_tail}")
 
-        # 2) Fallback to HTML Latest Filings if FT came back empty
-        if not entries:
-            print("[WARN] Full-Text empty — falling back to HTML Latest Filings…")
-            stats["fallback_used"]=True
-            count_per_page=int(cfg.get('count_per_page',100))
-            max_pages=int(cfg.get('max_pages',30))
-            start_idx=0
-            html_entries=[]
-            page=0
-            while page < max_pages:
-                try:
-                    html=client.fetch_html_page(start=start_idx, count=count_per_page)
-                except Exception as e:
-                    print("[WARN] HTML fetch error:", e); break
-                parsed = parse_html_entries(html)
-                if not parsed: break
-                html_entries.extend(parsed)
-                # if last entry older than start_et by date, we can early break
-                page+=1; start_idx += count_per_page
-            print(f"[INFO] HTML fallback total entries scraped: {len(html_entries)}")
-            entries = html_entries
+        entries = primary_entries + tail_entries
 
         # strict filter + capture min/max for boundary debug
         strict=[]; min_et=None; max_et=None
-        from scripts.util.time_utils import parse_edgar_datetime_et as parse_dt
         for e in entries:
             try:
-                dt_et=parse_dt(e.get("updated",""))
+                dt_et=parse_edgar_datetime_et(e.get("updated",""))
             except Exception:
                 continue
             if (min_et is None) or (dt_et < min_et): min_et = dt_et
             if (max_et is None) or (dt_et > max_et): max_et = dt_et
-            if (dt_et>=start_et) and (dt_et<end_et):
+            # Check both windows
+            in_primary = (dt_et>=p_start) and (dt_et<p_end)
+            in_tail = (t_start is not None and (dt_et>=t_start) and (dt_et<t_end))
+            if in_primary or in_tail:
                 e["updated_et"]=dt_et.isoformat(); strict.append(e)
         if min_et: print(f"[INFO] Source min datetime (ET): {min_et.isoformat()}")
         if max_et: print(f"[INFO] Source max datetime (ET): {max_et.isoformat()}")
