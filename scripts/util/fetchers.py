@@ -59,17 +59,21 @@ def parse_atom_entries(xml: str) -> List[Dict]:
 
 def parse_html_entries(html: str) -> List[Dict]:
     soup = BeautifulSoup(html, "lxml")
-    table = soup.find("table", {"class": "tableFile2"})
+    table = soup.select_one("table.tableFile2") or soup.select_one("table.tableFile")
     out: List[Dict] = []
     if not table:
         return out
-    rows = table.find_all("tr")[1:]
+    rows = table.find_all("tr")
+    if rows and rows[0].find_all(["th","td"]):
+        header_text = rows[0].get_text(" ", strip=True).lower()
+        if any(k in header_text for k in ("form", "company", "file", "date")):
+            rows = rows[1:]
     for tr in rows:
         tds = tr.find_all("td")
-        if len(tds) < 5:
+        if len(tds) < 4:
             continue
-        company_col = tds[1].get_text(" ", strip=True)
         form = tds[0].get_text(" ", strip=True)
+        company_col = tds[1].get_text(" ", strip=True)
         link_el = tds[1].find("a", href=True)
         link = "https://www.sec.gov" + link_el["href"] if link_el else ""
         date_time = tds[3].get_text(" ", strip=True)
