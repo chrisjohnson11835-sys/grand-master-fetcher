@@ -1,0 +1,47 @@
+name: GrandMaster SEC | 09:30→09:30 Boundary Scan (Self-Healing)
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "5 13 * * 1-5"
+    - cron: "20 13 * * 1-5"
+    - cron: "35 13 * * 1-5"
+    - cron: "5 14 * * 1-5"
+    - cron: "20 14 * * 1-5"
+    - cron: "35 14 * * 1-5"
+
+concurrency:
+  group: grandmaster-sec
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install feedparser pandas python-dateutil requests
+      - name: Ensure outputs folder exists
+        run: mkdir -p outputs
+      - name: Run until boundary (time-aware)
+        continue-on-error: true
+        env:
+          RUNNER_MAX_ATTEMPTS: "10"
+          RUNNER_BACKOFFS: "0,60,120,180,240,300,420,600,900,1200"
+          RUNNER_MAX_WALL_SECS: "7800"
+        run: |
+          python -u run_until_boundary.py
+      - name: Upload outputs as artifact (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sec-outputs
+          path: outputs/*
+          if-no-files-found: warn
