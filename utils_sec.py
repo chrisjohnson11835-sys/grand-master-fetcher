@@ -1,5 +1,7 @@
-# utils_sec.py (v21)
+# utils_sec.py (v21.1 hotfix-fetch)
 import re, json, requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Tuple, Dict, Any, List
 from dateutil import parser as dtparser
@@ -12,7 +14,26 @@ SEC_ATOM = "https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&output=at
 
 def new_session(user_agent: str):
     s = requests.Session()
-    s.headers.update({"User-Agent": user_agent, "Accept-Encoding":"gzip, deflate", "Accept":"*/*"})
+    s.headers.update({
+        "User-Agent": user_agent,
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate",
+        "Connection": "keep-alive",
+        "Cache-Control": "no-cache"
+    })
+    retry = Retry(
+        total=12,
+        read=12,
+        connect=12,
+        backoff_factor=1.2,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=frozenset(["GET"]),
+        respect_retry_after_header=True,
+        raise_on_status=False
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    s.mount("https://", adapter)
+    s.mount("http://", adapter)
     return s
 
 def _prev_business_date(d: datetime) -> datetime:
@@ -64,7 +85,7 @@ def _match_form(s: str) -> Optional[str]:
         if m:
             val = m.group(0).upper()
             if val in ("FORM 3","3"): return "Form 3"
-            if val in ("FORM 4","4"): return "Form 4"
+            if val in ("FORM 4","4"): return "Form  4".replace("  ", " ")
             return val
     return None
 
@@ -109,7 +130,7 @@ def fallback_company_from_title(title: str) -> Optional[str]:
 def fetch_submissions_for_cik(session: requests.Session, cik: str) -> Optional[Dict[str,Any]]:
     url = f"https://data.sec.gov/submissions/CIK{cik}.json"
     try:
-        r = session.get(url, timeout=20)
+        r = session.get(url, timeout=25)
         if r.status_code != 200:
             return None
         return r.json()
