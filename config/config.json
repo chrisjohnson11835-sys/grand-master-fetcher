@@ -1,0 +1,100 @@
+{
+  "contact_email": "changeme@example.com",
+  "user_agent_org": "GrandMasterSEC-v23.1",
+  "hostinger_upload_url": "https://YOUR_DOMAIN/receiver.php",
+  "hostinger_secret": "CHANGE_ME",
+  "max_pages": 80,
+  "count_per_page": 100,
+  "request_spacing_seconds": 1.5,
+  "max_retries": 5,
+  "retry_backoff_base": 2.0,
+  "retry_jitter_range": [
+    0.2,
+    0.6
+  ],
+  "forms_supported": [
+    "8-K",
+    "6-K",
+    "10-Q",
+    "10-K",
+    "3",
+    "4",
+    "SC 13D",
+    "SC 13G",
+    "SC 13D/A",
+    "SC 13G/A"
+  ],
+  "banned_sic_prefixes": [
+    "21",
+    "36",
+    "39",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64"
+  ],
+  "banned_keywords": [
+    "payday",
+    "loan shark",
+    "adult entertainment",
+    "casino",
+    "gambling",
+    "tobacco",
+    "weapon",
+    "insurer",
+    "lender",
+    "bank"
+  ],
+  "positive_keywords": [
+    "guidance raise",
+    "upgraded outlook",
+    "contract award",
+    "strategic partnership",
+    "acquisition"
+  ],
+  "negative_keywords": [
+    "at the market",
+    "ATM offering",
+    "dilution",
+    "warrant",
+    "registered direct",
+    "convertible",
+    "shelf"
+  ],
+  "weights": {
+    "base": {
+      "8-K": 5,
+      "6-K": 2,
+      "10-Q": 4,
+      "10-K": 3,
+      "3": 1,
+      "4": 3,
+      "SC 13D": 5,
+      "SC 13G": 4
+    },
+    "eightk_items": {
+      "2.02": 4,
+      "1.01": 2,
+      "5.02": 1,
+      "8.01": 1,
+      "1.02": 1,
+      "2.01": 2,
+      "7.01": 1
+    },
+    "form4": {
+      "P": 5,
+      "S": -3,
+      "M": -1
+    },
+    "keywords": {
+      "positive": 2,
+      "negative": -3
+    }
+  },
+  "force_html": false,
+  "force_fulltext": true,
+  "atom_error_threshold": 6,
+  "html_promotion_threshold_pages": 4,
+  "fulltext_page_size": 400
+}
