@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os, sys, json, csv
 from datetime import datetime
-from scripts.util.time_utils import compute_windows, parse_edgar_datetime_et
+from scripts.util.time_utils import compute_windows, compute_prev_bday_windows, parse_edgar_datetime_et
 from scripts.util.fetchers import SECClient, parse_html_entries, parse_atom_entries
 from scripts.util.fulltext import fetch_fulltext_window
 from scripts.util.enrichment import Enricher
@@ -16,45 +16,50 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "config", "con
 def ensure_dir(p): os.makedirs(p, exist_ok=True)
 
 def gather_for_window(client, cfg, ua, start_et, end_et):
-    # Full-Text
+    # Full-Text first
     ft = fetch_fulltext_window(ua, start_et, end_et, cfg.get('forms_supported',[]),
                                page_size=int(cfg.get('fulltext_page_size',400)),
                                max_pages=int(cfg.get('max_pages',30)))
-    if ft:
-        return ft, "fulltext"
-    # HTML
-    html_entries=[]; start_idx=0; page=0
-    while page < int(cfg.get('max_pages',30)):
-        try:
-            html=client.fetch_html_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
-        except Exception:
-            break
-        parsed = parse_html_entries(html)
-        if not parsed: break
-        html_entries.extend(parsed)
-        page+=1; start_idx+=int(cfg.get('count_per_page',100))
-    if html_entries:
-        return html_entries, "html"
-    # Atom
-    atom_entries=[]; start_idx=0; page=0
-    while page < int(cfg.get('max_pages',30)):
-        try:
-            xml=client.fetch_atom_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
-        except Exception:
-            break
-        parsed = parse_atom_entries(xml)
-        if not parsed: break
-        atom_entries.extend(parsed)
-        page+=1; start_idx+=int(cfg.get('count_per_page',100))
-    return atom_entries, "atom" if atom_entries else "none"
+    source = "fulltext" if ft else None
+    entries = ft
+    if not entries:
+        # HTML fallback
+        html_entries=[]; start_idx=0; page=0
+        while page < int(cfg.get('max_pages',30)):
+            try:
+                html=client.fetch_html_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
+            except Exception:
+                break
+            parsed = parse_html_entries(html)
+            if not parsed: break
+            html_entries.extend(parsed)
+            page+=1; start_idx+=int(cfg.get('count_per_page',100))
+        if html_entries:
+            source = "html"; entries = html_entries
+    if not entries:
+        # Atom fallback
+        atom_entries=[]; start_idx=0; page=0
+        while page < int(cfg.get('max_pages',30)):
+            try:
+                xml=client.fetch_atom_page(start=start_idx, count=int(cfg.get('count_per_page',100)))
+            except Exception:
+                break
+            parsed = parse_atom_entries(xml)
+            if not parsed: break
+            atom_entries.extend(parsed)
+            page+=1; start_idx+=int(cfg.get('count_per_page',100))
+        if atom_entries:
+            source = "atom"; entries = atom_entries
+    return entries or [], (source or "none")
 
 def main():
     ensure_dir(DATA_DIR)
     stats={
-        "version":"v23.1f",
+        "version":"v23.1g",
         "started_utc":datetime.utcnow().isoformat()+"Z",
         "hit_boundary":False,
         "hit_extended_boundary":False,
+        "auto_shifted_prev_bday":False,
         "weekend_tail_scanned":False,
         "source_primary":"none",
         "source_tail":"none",
@@ -70,7 +75,7 @@ def main():
 
     try:
         cfg=json.load(open(CONFIG_PATH,"r",encoding="utf-8"))
-        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1f')} | {cfg.get('contact_email','changeme@example.com')}"
+        ua=f"{cfg.get('user_agent_org','GrandMasterSEC-v23.1g')} | {cfg.get('contact_email','changeme@example.com')}"
         client=SECClient(ua, cfg.get('request_spacing_seconds',1.5), cfg.get('max_retries',5), cfg.get('retry_backoff_base',2.0), tuple(cfg.get('retry_jitter_range',[0.2,0.6])))
         enr=Enricher(ua, cfg.get('request_spacing_seconds',1.5))
 
@@ -112,6 +117,42 @@ def main():
         if min_et: print(f"[INFO] Source min datetime (ET): {min_et.isoformat()}")
         if max_et: print(f"[INFO] Source max datetime (ET): {max_et.isoformat()}")
         print(f"[INFO] After window filter: {len(strict)} entries")
+
+        # Auto-shift to previous business day if weekday run yielded 0 within window
+        if not strict and not guard:
+            print("[WARN] No entries in weekday window — auto-shifting to previous business day window(s)…")
+            stats["auto_shifted_prev_bday"] = True
+            pb_start, pb_end, pb_tail_start, pb_tail_end = compute_prev_bday_windows()
+            print(f"[INFO] Prev bday primary ET: {pb_start.isoformat()} -> {pb_end.isoformat()}")
+            if pb_tail_start and pb_tail_end:
+                print(f"[INFO] Prev bday tail ET: {pb_tail_start.isoformat()} -> {pb_tail_end.isoformat()}")
+            # Gather again
+            primary_entries, source_primary = gather_for_window(client, cfg, ua, pb_start, pb_end)
+            stats["source_primary"] = source_primary
+            print(f"[INFO] Primary collected (prev bday): {len(primary_entries)} from {source_primary}")
+            tail_entries = []
+            if pb_tail_start and pb_tail_end:
+                tail_entries, source_tail = gather_for_window(client, cfg, ua, pb_tail_start, pb_tail_end)
+                stats["source_tail"] = source_tail
+                print(f"[INFO] Tail collected (prev bday): {len(tail_entries)} from {source_tail}")
+            entries = primary_entries + tail_entries
+
+            # Re-filter
+            strict=[]; min_et=None; max_et=None
+            for e in entries:
+                try:
+                    dt_et=parse_edgar_datetime_et(e.get("updated",""))
+                except Exception:
+                    continue
+                if (min_et is None) or (dt_et < min_et): min_et = dt_et
+                if (max_et is None) or (dt_et > max_et): max_et = dt_et
+                in_primary = (dt_et>=pb_start) and (dt_et<pb_end)
+                in_tail = (pb_tail_start is not None and (dt_et>=pb_tail_start) and (dt_et<pb_tail_end))
+                if in_primary or in_tail:
+                    e["updated_et"]=dt_et.isoformat(); strict.append(e)
+            if min_et: print(f"[INFO] Source min datetime (ET) [shifted]: {min_et.isoformat()}")
+            if max_et: print(f"[INFO] Source max datetime (ET) [shifted]: {max_et.isoformat()}")
+            print(f"[INFO] After window filter [shifted]: {len(strict)} entries")
 
         if strict:
             stats["hit_boundary"]=True
