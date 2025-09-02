@@ -1,58 +1,30 @@
 # -*- coding: utf-8 -*-
-"""
-ONE-ATTEMPT FIX:
-- Deterministic coverage via Daily Index for prev working day 09:30 → next day 09:00 ET
-- Supported forms: 8-K, 6-K, 10-Q, 10-K, 3, 4, SC 13D/G (+/A)
-- Enrichment: ticker + SIC/industry via submissions API
-- Bans: finance/insurance/RE, alcohol/tobacco/gambling/weapons/adult/payday/credit/bank/lending
-- Outputs: snapshot/json/csv/raw + debug stats
-"""
 import os, json, csv, time, re
 from datetime import datetime, timedelta
 import requests
-from dateutil.relativedelta import relativedelta
-
-from scripts.util.time_utils import ET, UTC, now_et, window_prev_day_0930_to_next_0900, parse_acceptance_datetime, iso_et
+from scripts.util.time_utils import ET, now_et, window_prev_day_0930_to_next_0900, parse_acceptance_datetime, iso_et
 from scripts.util.daily_index import fetch_master_idx, parse_master_idx
 from scripts.util.rate_limiter import RateLimiter
 from scripts.util.enrichment import get_company_profile
 from scripts.util.bans import is_banned
 from scripts.util.uploader import maybe_upload
+from scripts.util.atom import fetch_atom_page, parse_atom_entries
 
-SUPPORTED_FORMS = {
-    "8-K", "8-K/A",
-    "6-K",
-    "10-Q", "10-Q/A",
-    "10-K", "10-K/A",
-    "3", "3/A",
-    "4", "4/A",
-    "SC 13D", "SC 13D/A",
-    "SC 13G", "SC 13G/A",
-}
+SUPPORTED_FORMS = {"8-K","8-K/A","6-K","10-Q","10-Q/A","10-K","10-K/A","3","3/A","4","4/A","SC 13D","SC 13D/A","SC 13G","SC 13G/A"}
 
 def load_config():
-    with open("config/config.json", "r", encoding="utf-8") as f:
-        return json.load(f)
+    with open("config/config.json","r",encoding="utf-8") as f: return json.load(f)
 
-def qtr_of_month(m):
-    return (m - 1) // 3 + 1
+def qtr_of_month(m): return (m-1)//3+1
 
 def derive_txt_url(filename: str):
-    # master idx "filename" often like: edgar/data/0000000000/0000000000-25-000123/primary-document
-    # or "...-index.htm" -> replace with ".txt"
     path = filename.strip()
-    if path.endswith("-index.htm"):
-        return f"https://www.sec.gov/Archives/{path.replace('-index.htm', '.txt')}"
-    if path.endswith(".txt"):
-        return f"https://www.sec.gov/Archives/{path}"
-    # fallback: try to append .txt at the folder level
-    if path.endswith("/"):
-        path = path[:-1]
+    if path.endswith("-index.htm"): return f"https://www.sec.gov/Archives/{path.replace('-index.htm','.txt')}"
+    if path.endswith(".txt"): return f"https://www.sec.gov/Archives/{path}"
+    if path.endswith("/"): path = path[:-1]
     if "/" in path:
-        base = path.rsplit("/", 1)[0]
-        acc = path.rsplit("/", 1)[1]
-        if acc.endswith(".htm"):
-            acc = acc.replace(".htm", ".txt")
+        base = path.rsplit("/",1)[0]; acc = path.rsplit("/",1)[1]
+        if acc.endswith(".htm"): acc = acc.replace(".htm",".txt")
         return f"https://www.sec.gov/Archives/{base}/{acc}"
     return f"https://www.sec.gov/Archives/{path}"
 
@@ -62,169 +34,134 @@ def get_acceptance_dt_et(txt_url: str, ua: str, timeout: int, rl: RateLimiter):
         try:
             r = requests.get(txt_url, headers=headers, timeout=timeout)
             if r.status_code == 200:
-                # Find ACCEPTANCE-DATETIME: YYYYMMDDHHMMSS
                 m = re.search(r"ACCEPTANCE-DATETIME:\s*([0-9]{14})", r.text)
-                if m:
-                    dt = parse_acceptance_datetime(m.group(1))
-                    return dt
-                # Sometimes header block slightly different casing
-                m2 = re.search(r"ACCEPTANCE-DATE\s*:\s*([0-9]{8})\s*ACCEPTANCE-TIME\s*:\s*([0-9]{6})", r.text, flags=re.IGNORECASE)
-                if m2:
-                    dt = parse_acceptance_datetime(m2.group(1) + m2.group(2))
-                    return dt
+                if m: return parse_acceptance_datetime(m.group(1))
+                m2 = re.search(r"ACCEPTANCE-DATE\s*:\s*([0-9]{8})\s*ACCEPTANCE-TIME\s*:\s*([0-9]{6})", r.text, flags=re.I)
+                if m2: return parse_acceptance_datetime(m2.group(1)+m2.group(2))
                 return None
-            if r.status_code in (429, 503):
-                retry_after = int(r.headers.get("Retry-After", "3"))
-                time.sleep(max(3, retry_after))
-                continue
+            if r.status_code in (429,503):
+                retry_after = int(r.headers.get("Retry-After","3")); time.sleep(max(3,retry_after)); continue
         except requests.RequestException:
-            time.sleep(2 * (attempt + 1))
+            time.sleep(2*(attempt+1))
         finally:
             rl.wait()
     return None
 
-def in_window(dt_et: datetime, start_et: datetime, end_et: datetime) -> bool:
-    return (dt_et is not None) and (start_et <= dt_et < end_et)
+def in_window(dt_et, start_et, end_et): return (dt_et is not None) and (start_et <= dt_et < end_et)
+
+def fetch_daily_index_entries(yyyymmdd, ua, timeout, rl):
+    year=int(yyyymmdd[:4]); mon=int(yyyymmdd[4:6]); qtr=(mon-1)//3+1
+    txt = fetch_master_idx(year, qtr, yyyymmdd, ua, timeout, rl)
+    return parse_master_idx(txt) if txt else []
+
+def auto_shift_prev_bday_until_index(nowET, ua, timeout, rl, max_back=7):
+    base_start, base_end = window_prev_day_0930_to_next_0900(nowET)
+    prev_day = base_start.date()
+    for i in range(max_back):
+        ymd = prev_day.strftime("%Y%m%d")
+        entries = fetch_daily_index_entries(ymd, ua, timeout, rl)
+        if entries is not None:  # found index (may be empty on weekend/holiday, but exists)
+            # Use this prev_day; construct new start/end for that day
+            start = base_start.replace(year=prev_day.year, month=prev_day.month, day=prev_day.day)
+            end = (start + timedelta(days=1)).replace(hour=9, minute=0, second=0)
+            return prev_day, start, end, (i>0)
+        prev_day = prev_day - timedelta(days=1)
+    return base_start.date(), base_start, base_end, False
 
 def main():
     os.makedirs("data", exist_ok=True)
-    started_utc = datetime.utcnow().isoformat() + "Z"
+    started_utc = datetime.utcnow().isoformat()+"Z"
     cfg = load_config()
-    ua = cfg.get("user_agent", "GrandMasterSEC/23.2M (+contact)")
-    timeout = int(cfg.get("timeout_sec", 20))
-    rl = RateLimiter(reqs_per_sec=float(cfg.get("reqs_per_sec", 0.7)))
+    ua = cfg.get("user_agent","GrandMasterSEC/23.2M (+contact)")
+    timeout = int(cfg.get("timeout_sec",20))
+    rl = RateLimiter(reqs_per_sec=float(cfg.get("reqs_per_sec",0.7)))
 
     nowET = now_et()
-    start_et, end_et = window_prev_day_0930_to_next_0900(nowET)
+    base_start_et, base_end_et = window_prev_day_0930_to_next_0900(nowET)
+    prev_day, start_et, end_et, shifted = auto_shift_prev_bday_until_index(nowET, ua, timeout, rl, max_back=7)
 
-    # Determine which daily indexes to fetch
-    prev_day = start_et.date()
-    next_day = (start_et + timedelta(days=1)).date()
-    year1, qtr1, ymd1 = prev_day.year, qtr_of_month(prev_day.month), prev_day.strftime("%Y%m%d")
-    year2, qtr2, ymd2 = next_day.year, qtr_of_month(next_day.month), next_day.strftime("%Y%m%d")
+    ymd_prev = prev_day.strftime("%Y%m%d")
+    next_day = prev_day + timedelta(days=1)
+    ymd_next = next_day.strftime("%Y%m%d")
 
-    source_primary = "daily-index"
-    entries_seen = 0
-    kept = []
+    entries_prev = fetch_daily_index_entries(ymd_prev, ua, timeout, rl)
+    entries_next = fetch_daily_index_entries(ymd_next, ua, timeout, rl)
 
-    # Fetch and parse prev_day index
-    txt1 = fetch_master_idx(year1, qtr1, ymd1, ua, timeout, rl)
-    entries1 = parse_master_idx(txt1) if txt1 else []
-    # Fetch and parse next_day index (for 00:00-09:00)
-    txt2 = fetch_master_idx(year2, qtr2, ymd2, ua, timeout, rl)
-    entries2 = parse_master_idx(txt2) if txt2 else []
+    tail_from_atom = []
+    now_date = nowET.date()
+    tail_used = "none"
+    if next_day == now_date:
+        tail_used = "atom"
+        start, count = 0, 100
+        for _ in range(12):
+            xml = fetch_atom_page(start=start, count=count, ua=ua, timeout=timeout, rl=rl)
+            page = parse_atom_entries(xml)
+            if not page: break
+            tail_from_atom.extend(page)
+            start += count
 
     candidates = []
-    for ent in entries1 + entries2:
-        entries_seen += 1
+    def add_from_dailyidx(ent):
         form = ent["form"].upper()
-        if form not in SUPPORTED_FORMS:
-            continue
-        candidates.append(ent)
+        if form not in SUPPORTED_FORMS: return
+        candidates.append({"src":"daily-index","company":ent["company"],"form":form,"cik":ent["cik"],"filename":ent["filename"]})
 
-    # Dedup by (cik, filename, form)
-    seen = set()
-    filtered = []
+    for e in entries_prev: add_from_dailyidx(e)
+    for e in entries_next: add_from_dailyidx(e)
+
+    for a in tail_from_atom:
+        form = (a.get("form") or "").upper()
+        if form not in SUPPORTED_FORMS: continue
+        link = a.get("link") or ""
+        if not link: continue
+        txt_url = link.replace("-index.htm",".txt") if link.endswith("-index.htm") else link
+        candidates.append({"src":"atom","company":a.get("title") or "","form":form,"cik":(a.get("cik") or ""), "filename": txt_url.replace("https://www.sec.gov/Archives/","")})
+
+    seen = set(); uniq = []
     for e in candidates:
         key = (e["cik"], e["filename"], e["form"])
-        if key in seen: 
-            continue
-        seen.add(key)
-        filtered.append(e)
+        if key in seen: continue
+        seen.add(key); uniq.append(e)
 
-    # Enrichment cache by CIK
     profile_cache = {}
+    raw_records = []; min_scanned_et = None; entries_seen = 0
 
-    raw_records = []
-    min_scanned_et = None
-
-    for e in filtered:
-        txt_url = derive_txt_url(e["filename"])
+    for e in uniq:
+        entries_seen += 1
+        fn = e["filename"]
+        txt_url = fn if fn.startswith("http") else f"https://www.sec.gov/Archives/{fn}"
         acc_dt_et = get_acceptance_dt_et(txt_url, ua, timeout, rl)
-        if acc_dt_et is not None:
-            if (min_scanned_et is None) or (acc_dt_et < min_scanned_et):
-                min_scanned_et = acc_dt_et
-        if not in_window(acc_dt_et, start_et, end_et):
-            continue
+        if acc_dt_et is not None and (min_scanned_et is None or acc_dt_et < min_scanned_et):
+            min_scanned_et = acc_dt_et
+        if not in_window(acc_dt_et, start_et, end_et): continue
 
-        cik = e["cik"]
-        if cik not in profile_cache:
+        cik = (e.get("cik") or "").lstrip("0")
+        if cik and cik not in profile_cache:
             profile_cache[cik] = get_company_profile(cik, ua, timeout, rl)
-        prof = profile_cache[cik]
+        prof = profile_cache.get(cik, {"ticker":"","sic":"","sic_desc":"","name":""})
 
-        company = e["company"]
+        company = e["company"] or prof.get("name") or ""
         ticker = prof.get("ticker") or ""
         sic = prof.get("sic") or ""
         sic_desc = prof.get("sic_desc") or ""
 
-        if is_banned(company, sic, sic_desc):
-            continue
+        if is_banned(company, sic, sic_desc): continue
 
-        rec = {
-            "cik": cik,
-            "company": company,
-            "form": e["form"],
-            "ticker": ticker,
-            "sic": sic,
-            "industry": sic_desc,
-            "accepted_et": iso_et(acc_dt_et) if acc_dt_et else "",
-            "txt_url": txt_url,
-        }
-        raw_records.append(rec)
+        raw_records.append({"cik":cik,"company":company,"form":e["form"],"ticker":ticker,"sic":sic,"industry":sic_desc,"accepted_et":acc_dt_et.astimezone(ET).isoformat(),"txt_url":txt_url,"source":e.get("src","")})
 
-    # Snapshot = only required columns
-    snapshot = [
-        {
-            "company": r["company"],
-            "ticker": r["ticker"],
-            "industry": r["industry"],
-            "form": r["form"],
-            "accepted_et": r["accepted_et"],
-            "cik": r["cik"],
-        }
-        for r in raw_records
-    ]
+    snapshot = [{"company":r["company"],"ticker":r["ticker"],"industry":r["industry"],"form":r["form"],"accepted_et":r["accepted_et"],"cik":r["cik"]} for r in raw_records]
 
-    # Write outputs
-    with open("data/sec_filings_raw.json", "w", encoding="utf-8") as f:
-        json.dump(raw_records, f, indent=2)
+    with open("data/sec_filings_raw.json","w",encoding="utf-8") as f: json.dump(raw_records,f,indent=2)
+    with open("data/sec_filings_snapshot.json","w",encoding="utf-8") as f: json.dump(snapshot,f,indent=2)
+    with open("data/sec_filings_snapshot.csv","w",newline="",encoding="utf-8") as f:
+        w = csv.writer(f); w.writerow(["company","ticker","industry","form","accepted_et","cik"])
+        for r in snapshot: w.writerow([r["company"],r["ticker"],r["industry"],r["form"],r["accepted_et"],r["cik"]])
 
-    with open("data/sec_filings_snapshot.json", "w", encoding="utf-8") as f:
-        json.dump(snapshot, f, indent=2)
+    finished_utc = datetime.utcnow().isoformat()+"Z"
+    debug_stats = {"version":"v23.2M","started_utc":started_utc,"hit_boundary":bool(len(snapshot)>0),"auto_shifted_prev_bday":bool(shifted),"weekend_tail_scanned":False,"source_primary":"daily-index","source_tail":tail_used,"entries_seen":entries_seen,"entries_kept":len(snapshot),"last_oldest_et_scanned": iso_et(min_scanned_et) if min_scanned_et else None,"window_start_et": iso_et(start_et),"window_end_et": iso_et(end_et),"finished_utc":finished_utc}
+    with open("data/sec_debug_stats.json","w",encoding="utf-8") as f: json.dump(debug_stats,f,indent=2)
 
-    with open("data/sec_filings_snapshot.csv", "w", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        w.writerow(["company", "ticker", "industry", "form", "accepted_et", "cik"])
-        for r in snapshot:
-            w.writerow([r["company"], r["ticker"], r["industry"], r["form"], r["accepted_et"], r["cik"]])
-
-    finished_utc = datetime.utcnow().isoformat() + "Z"
-
-    debug_stats = {
-        "version": cfg.get("version", "v23.2M"),
-        "started_utc": started_utc,
-        "hit_boundary": bool(len(snapshot) > 0),
-        "auto_shifted_prev_bday": False,  # separate logic could be added for holidays if needed
-        "weekend_tail_scanned": False,
-        "source_primary": source_primary,
-        "source_tail": "none",
-        "entries_seen": entries_seen,
-        "entries_kept": len(snapshot),
-        "last_oldest_et_scanned": iso_et(min_scanned_et) if min_scanned_et else None,
-        "window_start_et": iso_et(start_et),
-        "window_end_et": iso_et(end_et),
-        "finished_utc": finished_utc,
-    }
-    with open("data/sec_debug_stats.json", "w", encoding="utf-8") as f:
-        json.dump(debug_stats, f, indent=2)
-
-    # Optional upload
-    _ = maybe_upload([
-        "data/sec_filings_raw.json",
-        "data/sec_filings_snapshot.json",
-        "data/sec_filings_snapshot.csv",
-        "data/sec_debug_stats.json",
-    ], cfg)
+    _ = maybe_upload(["data/sec_filings_raw.json","data/sec_filings_snapshot.json","data/sec_filings_snapshot.csv","data/sec_debug_stats.json"], cfg)
 
 if __name__ == "__main__":
     main()
