@@ -1,42 +1,32 @@
-import time, requests
+# -*- coding: utf-8 -*-
+import requests, time, json
 from .rate_limiter import RateLimiter
-SUBMISSIONS = "https://data.sec.gov/submissions/CIK{cik}.json"
-TICKERS_MAP = "https://www.sec.gov/files/company_tickers.json"
-class Enricher:
-    def __init__(self, ua:str, spacing_seconds:float=1.5):
-        self.ua=ua; self.rl=RateLimiter(spacing_seconds); self._map=None
-        self.s=requests.Session(); self.s.headers.update({"User-Agent":ua,"Accept-Encoding":"gzip, deflate"})
-    def _get(self,u):
-        self.rl.wait(); r=self.s.get(u, timeout=30)
-        if r.status_code in (429,503): time.sleep(2); r=self.s.get(u, timeout=30)
-        r.raise_for_status(); return r
-    def load_tickers_map(self):
-        if self._map is None:
-            data=self._get(TICKERS_MAP).json(); m={}
-            if isinstance(data, dict) and "data" in data:
-                for row in data["data"]:
-                    try: idx,cik,ticker,name=row; m[str(cik).zfill(10)]={"ticker":ticker,"name":name}
-                    except: pass
-            elif isinstance(data, list):
-                for row in data:
-                    try: m[str(row.get("cik_str","")).zfill(10)]={"ticker":row.get("ticker",""),"name":row.get("title","")}
-                    except: pass
-            else:
-                for k,v in data.items():
-                    try: m[str(v.get("cik_str","")).zfill(10)]={"ticker":v.get("ticker",""),"name":v.get("title","")}
-                    except: pass
-            self._map=m
-        return self._map
-    def enrich(self, cik:str):
-        out={"ticker":"","company":"","sic":""}
+
+SUB_BASE = "https://data.sec.gov/submissions/CIK{cik_padded}.json"
+
+def get_company_profile(cik: str, ua: str, timeout: int, rl: RateLimiter):
+    # Pad CIK to 10 digits
+    cik_padded = cik.zfill(10)
+    url = SUB_BASE.format(cik_padded=cik_padded)
+    headers = {"User-Agent": ua, "Accept-Encoding": "gzip, deflate"}
+    for attempt in range(5):
         try:
-            tm=self.load_tickers_map()
-            if cik in tm: out["ticker"]=tm[cik]["ticker"]; out["company"]=tm[cik]["name"]
-        except: pass
-        try:
-            js=self._get(SUBMISSIONS.format(cik=cik)).json()
-            if not out["ticker"]: out["ticker"]=(js.get("tickers") or [""])[0] if js.get("tickers") else ""
-            if not out["company"]: out["company"]=js.get("name","")
-            out["sic"]=js.get("sic","") or ""
-        except: pass
-        return out
+            r = requests.get(url, headers=headers, timeout=timeout)
+            if r.status_code == 200:
+                data = r.json()
+                # 'tickers' might be present; fall back to 'ticker' if available
+                tickers = data.get("tickers") or []
+                ticker = tickers[0] if tickers else (data.get("ticker") or "")
+                sic = data.get("sic") or ""
+                sic_desc = data.get("sicDescription") or ""
+                name = data.get("name") or ""
+                return {"ticker": ticker, "sic": str(sic), "sic_desc": sic_desc, "name": name}
+            if r.status_code in (429, 503):
+                retry_after = int(r.headers.get("Retry-After", "3"))
+                time.sleep(max(3, retry_after))
+                continue
+        except requests.RequestException:
+            time.sleep(2 * (attempt + 1))
+        finally:
+            rl.wait()
+    return {"ticker": "", "sic": "", "sic_desc": "", "name": ""}
