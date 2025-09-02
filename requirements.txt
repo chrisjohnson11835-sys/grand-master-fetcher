@@ -1,6 +1,3 @@
-requests
-beautifulsoup4
-lxml
-python-dateutil
-pytz
-pandas
+requests>=2.31.0
+python-dateutil>=2.9.0
+pytz>=2024.1
