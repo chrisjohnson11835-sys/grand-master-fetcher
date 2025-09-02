@@ -1,7 +1,7 @@
 {
   "version": "v23.2M",
   "contact_email": "chrisjohnson11835@gmail.com",
-  "user_agent": "GrandMasterSEC/23.2M (+ops@example.com)",
+  "user_agent": "GrandMasterSEC/23.2M (+chrisjohnson11835@gmail.com)",
   "reqs_per_sec": 0.7,
   "timeout_sec": 20,
   "hostinger_upload_url": "https://royalblue-lion-727879.hostingersite.com/receiver.php?",
