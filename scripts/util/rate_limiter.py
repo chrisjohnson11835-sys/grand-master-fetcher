@@ -1,10 +1,9 @@
-import time, random
+import random, time
 class RateLimiter:
     def __init__(self, spacing_seconds: float = 1.5):
-        self.spacing = max(0.0, spacing_seconds); self._last = 0.0
-    def wait(self, jitter_range=(0.0,0.0)):
-        now=time.time(); due=self._last+self.spacing
-        if now<due: time.sleep(due-now)
-        if jitter_range and (jitter_range[0]>0 or jitter_range[1]>0):
-            time.sleep(random.uniform(jitter_range[0], jitter_range[1]))
-        self._last=time.time()
+        self.spacing = float(spacing_seconds); self._next = 0.0
+    def wait(self, jitter_range=(0.2, 0.6)):
+        now = time.time()
+        if now < self._next: time.sleep(self._next - now)
+        j = random.uniform(*jitter_range) if jitter_range and len(jitter_range)==2 else 0.0
+        self._next = time.time() + self.spacing + j
