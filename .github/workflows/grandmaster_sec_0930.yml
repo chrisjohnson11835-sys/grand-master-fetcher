@@ -1,65 +1,20 @@
-name: GrandMaster SEC | 09:30→09:30 Boundary Scan (Self-Healing, v23.1b FT)
-
+name: GrandMaster SEC | 09:30→09:30 Boundary Scan (Self-Healing)
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
   schedule:
-    - cron: "10-50/10 13 * * 1-5"
-    - cron: "0-50/10 14 * * 1-5"
-
+    - cron: "35 13 * * 1-5"
 jobs:
-  scan:
+  run:
     runs-on: ubuntu-latest
-    env:
-      CI: "true"
+    timeout-minutes: 45
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Patch config from secrets (optional)
-        run: |
-          python - << 'PY'
-          import json, os, pathlib
-          p = pathlib.Path("config/config.json")
-          if not p.exists():
-              raise SystemExit(f"config not found at {p}")
-          cfg = json.loads(p.read_text())
-          mapping = {
-            "CONTACT_EMAIL": "contact_email",
-            "UA_ORG": "user_agent_org",
-            "HOSTINGER_UPLOAD_URL": "hostinger_upload_url",
-            "HOSTINGER_SECRET": "hostinger_secret",
-          }
-          changed = False
-          for env_key, cfg_key in mapping.items():
-              v = os.getenv(env_key)
-              if v:
-                  cfg[cfg_key] = v
-                  changed = True
-          if changed:
-              p.write_text(json.dumps(cfg, indent=2))
-              print("Config patched from secrets.")
-          else:
-              print("No secrets provided; using repo config.json.")
-          PY
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: "pip" }
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Run Grand Master SEC v23.1b (Full-Text forced)
-        timeout-minutes: 45
-        run: |
-          python -u -m scripts.sec.grandmaster_sec_v23
-
-      - name: Show artifacts
-        if: always()
-        run: |
-          ls -l data || true
-          echo "--- sec_debug_stats.json ---"; cat data/sec_debug_stats.json || true
-          echo "--- snapshot head ---"; head -n 50 data/sec_filings_snapshot.csv || true
+      - name: Run Grand Master SEC v23.2M
+        env: { CI: "true" }
+        run: python -u -m scripts.sec.grandmaster_sec_v23
